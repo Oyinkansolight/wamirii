@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import { AuthService } from '@/firebase/auth/auth-service';
 
@@ -11,7 +12,16 @@ export default function SignUp() {
   } = useForm({ mode: 'onChange', reValidateMode: 'onChange' });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
-    await AuthService.signUpWithEmail(data.email, data.password, data.username);
+    try {
+      await AuthService.signUpWithEmail(
+        data.email,
+        data.password,
+        data.username
+      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
   return (
     <div className='flex h-screen items-center justify-center'>

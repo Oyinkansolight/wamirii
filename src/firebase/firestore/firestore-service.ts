@@ -1,15 +1,22 @@
 import {
+  addDoc,
+  collection,
   doc,
   FirestoreError,
   getDoc,
   onSnapshot,
+  orderBy,
+  query,
+  QueryConstraint,
   serverTimestamp,
   setDoc,
+  where,
 } from 'firebase/firestore';
 
 import { db } from '@/firebase/init';
 
-import { User } from '@/types/user';
+import { Listing } from '@/types/listing';
+import { Role, User } from '@/types/user';
 
 export class FirestoreService {
   static async createNewUserDocument(
@@ -26,8 +33,32 @@ export class FirestoreService {
     });
   }
 
+  static async createListing(listing: Listing) {
+    return await addDoc(collection(db, 'listings'), listing);
+  }
+
   static async userDocExists(id: string) {
     return (await getDoc(doc(db, `users/${id}`))).exists;
+  }
+
+  static getUsersQuery(role?: Role) {
+    const constraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
+    if (role) {
+      constraints.push(where('role', '==', role));
+    }
+    return query(collection(db, 'users'), ...constraints);
+  }
+
+  static getMyDocsQuery(id: string) {
+    return query(
+      collection(db, 'listings'),
+      where('createdBy', '==', `${id}`),
+      orderBy('createdAt', 'desc')
+    );
+  }
+
+  static getAllDocsQuery() {
+    return query(collection(db, 'listings'), orderBy('createdAt', 'desc'));
   }
 
   static async getUserDoc(

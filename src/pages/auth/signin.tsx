@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import { AuthService } from '@/firebase/auth/auth-service';
 
@@ -12,8 +13,13 @@ export default function SignUp() {
   const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
-    await AuthService.signInWithEmail(data.email, data.password);
-    router.push('/home');
+    try {
+      await AuthService.signInWithEmail(data.email, data.password);
+      router.push('/home');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
   return (
     <div className='flex h-screen items-center justify-center'>
