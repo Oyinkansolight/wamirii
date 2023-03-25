@@ -1,20 +1,20 @@
 import { Timestamp } from 'firebase/firestore';
 
 export class Listing {
+  createdBy?: string;
   person?: MissingPerson;
   contact?: Contact;
   reporter?: ReporterInformation;
+  createdAt?: Timestamp;
 }
 
 class MissingPerson {
-  createdBy?: string;
   firstName?: string;
   lastName?: string;
   imageUrl?: string;
   gender?: 'male' | 'female';
   age?: number;
   missingSince?: Timestamp;
-  createdAt?: Timestamp;
   occupation?: string;
   lastSeenState?: string;
   dateReported?: Timestamp;

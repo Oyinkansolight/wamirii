@@ -34,7 +34,10 @@ export class FirestoreService {
   }
 
   static async createListing(listing: Listing) {
-    return await addDoc(collection(db, 'listings'), listing);
+    return await addDoc(collection(db, 'listings'), {
+      ...listing,
+      createdAt: serverTimestamp(),
+    });
   }
 
   static async userDocExists(id: string) {
@@ -59,6 +62,14 @@ export class FirestoreService {
 
   static getAllDocsQuery() {
     return query(collection(db, 'listings'), orderBy('createdAt', 'desc'));
+  }
+
+  static getListings(createdBy?: string) {
+    const constraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
+    if (createdBy) {
+      constraints.push(where('createdBy', '==', createdBy));
+    }
+    return query(collection(db, 'listings'), ...constraints);
   }
 
   static async getUserDoc(
