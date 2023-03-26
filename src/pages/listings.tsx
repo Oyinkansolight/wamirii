@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Banner from '@/components/layout/Banner';
+import { ListingCard } from '@/components/cards';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
@@ -20,9 +20,17 @@ export default function HomePage() {
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
-      <Seo />
+      <Seo templateTitle='Wamirii Listings' />
 
-      <Banner />
+      <div className='mx-auto px-4 py-16 sm:max-w-xl md:max-w-full md:px-24 lg:max-w-screen-xl lg:px-8 lg:py-20'>
+        <div className='grid gap-8 sm:mx-auto sm:max-w-sm lg:max-w-full lg:grid-cols-3'>
+          <ListingCard />
+          <ListingCard />
+          <ListingCard />
+          <ListingCard />
+          <ListingCard />
+        </div>
+      </div>
     </Layout>
   );
 }
