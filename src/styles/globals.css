@@ -5,16 +5,16 @@
 :root {
   /* #region  /**=========== Primary Color =========== */
   /* !STARTERCONF Customize these variable, copy and paste from /styles/colors.css for list of colors */
-  --tw-color-primary-50: 240 249 255;
-  --tw-color-primary-100: 224 242 254;
-  --tw-color-primary-200: 186 230 253;
-  --tw-color-primary-300: 125 211 252;
-  --tw-color-primary-400: 56 189 248;
-  --tw-color-primary-500: 14 165 233;
-  --tw-color-primary-600: 2 132 199;
-  --tw-color-primary-700: 3 105 161;
-  --tw-color-primary-800: 7 89 133;
-  --tw-color-primary-900: 12 74 110;
+  --tw-color-primary-50: 255 216 216;
+  --tw-color-primary-100: 255 195 196;
+  --tw-color-primary-200: 255 155 155;
+  --tw-color-primary-300: 254 114 115;
+  --tw-color-primary-400: 254 74 74;
+  --tw-color-primary-500: 254 33 34;
+  --tw-color-primary-600: 230 1 2;
+  --tw-color-primary-700: 174 1 2;
+  --tw-color-primary-800: 118 1 1;
+  --tw-color-primary-900: 62 0 1;
   --color-primary-50: rgb(var(--tw-color-primary-50)); /* #f0f9ff */
   --color-primary-100: rgb(var(--tw-color-primary-100)); /* #e0f2fe */
   --color-primary-200: rgb(var(--tw-color-primary-200)); /* #bae6fd */
