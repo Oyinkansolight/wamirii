@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import logger from '@/lib/logger';
+import { useCollectionInfinite } from '@/hooks/useCollectionInfinite';
 
 import { ListingCard } from '@/components/cards';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
-
-import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
 import { Listing } from '@/types/listing';
 
@@ -24,12 +22,8 @@ import { Listing } from '@/types/listing';
 // to customize the default configuration.
 
 export default function HomePage() {
-  const [listings, isLoading, error] = useCollectionData<Listing>(
-    FirestoreService.getListings()
-  );
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const [listings, isLoading, error, loadMore, isLastPage] =
+    useCollectionInfinite<Listing>('listings', 5);
   if (error) {
     return <div>{error.message}</div>;
   }
@@ -45,6 +39,18 @@ export default function HomePage() {
             <ListingCard key={i} listing={listing} />
           ))}
         </div>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          !isLastPage && (
+            <div
+              onClick={loadMore}
+              className='flex cursor-pointer items-center p-10 font-bold'
+            >
+              <div>Load More</div>
+            </div>
+          )
+        )}
       </div>
     </Layout>
   );
