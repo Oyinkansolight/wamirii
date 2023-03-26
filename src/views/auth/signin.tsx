@@ -2,9 +2,12 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+import Button from '@/components/buttons/Button';
+
+import { inputClass } from '@/constant/classnames';
 import { AuthService } from '@/firebase/auth/auth-service';
 
-export default function SignUp() {
+export default function SignInView() {
   const {
     register,
     handleSubmit,
@@ -22,21 +25,28 @@ export default function SignUp() {
     }
   };
   return (
-    <div className='flex h-screen items-center justify-center'>
+    <div className='flex items-center justify-center'>
       <form
         className='flex h-full flex-col justify-center'
         onSubmit={handleSubmit(onSubmit)}
       >
         <input
+          className={inputClass}
           placeholder='Enter email address'
           {...register('email', { required: true })}
         ></input>
         <input
+          className={inputClass}
           placeholder='Enter your password'
           {...register('password', { required: true })}
         ></input>
         {errors.password && <div>{errors.password.message?.toString()}</div>}
-        <input type='submit' value='Sign In'></input>
+        <Button
+          type='submit'
+          className='inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide text-white transition duration-200'
+        >
+          Sign In
+        </Button>
       </form>
     </div>
   );

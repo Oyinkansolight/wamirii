@@ -29,7 +29,7 @@ export default function AuthGuard({ children }: { children: JSX.Element }) {
                 <div>You must be logged in to view this page</div>
                 <button
                   className='rounded-md bg-green-300 px-4 py-1'
-                  onClick={() => router.push('/auth/signin')}
+                  onClick={() => router.push('/?auth=0')}
                 >
                   Log In
                 </button>

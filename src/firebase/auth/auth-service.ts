@@ -43,6 +43,10 @@ export class AuthService {
         return 'No user with this email address exists. Create account to continue.';
       case 'auth/email-already-in-use':
         return 'This email address is already in use';
+      case 'auth/invalid-email':
+        return 'Invalid email address';
+      case 'auth/weak-password':
+        return 'Password is too weak';
       default:
         logger(code);
         return 'Unknown error';

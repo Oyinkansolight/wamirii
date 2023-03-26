@@ -16,6 +16,7 @@ type ButtonProps = {
   rightIcon?: IconType;
   leftIconClassName?: string;
   rightIconClassName?: string;
+  type?: 'button' | 'submit' | 'reset';
 } & React.ComponentPropsWithRef<'button'>;
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -32,6 +33,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       rightIcon: RightIcon,
       leftIconClassName,
       rightIconClassName,
+      type = 'button',
       ...rest
     },
     ref
@@ -41,7 +43,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        type='button'
+        type={type}
         disabled={disabled}
         className={clsxm(
           'inline-flex items-center rounded font-medium',

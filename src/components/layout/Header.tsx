@@ -42,7 +42,7 @@ const Nav = () => {
               Wamirii
             </span>
           </Link>
-          <ul className='flex hidden items-center space-x-8 lg:flex'>
+          <ul className='hidden items-center space-x-8 lg:flex'>
             {links.map((link, idx) => (
               <li key={idx}>
                 <Link
@@ -57,7 +57,7 @@ const Nav = () => {
             ))}
           </ul>
         </div>
-        <ul className='flex hidden items-center space-x-8 lg:flex'>
+        <ul className='hidden items-center space-x-8 lg:flex'>
           <li>
             <BasicModal>
               <Button className='focus:shadow-outline inline-flex h-12 items-center justify-center rounded bg-primary px-6 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>

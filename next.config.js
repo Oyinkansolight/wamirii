@@ -9,7 +9,7 @@ const nextConfig = {
 
   // Uncoment to add domain whitelist
   images: {
-    domains: ['images.pexels.com'],
+    domains: ['images.pexels.com', 'localhost'],
   },
 
   // SVGR

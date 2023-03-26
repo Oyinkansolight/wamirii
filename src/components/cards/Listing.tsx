@@ -1,14 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { useDownloadURL } from 'react-firebase-hooks/storage';
 
-const ListingCard = () => {
+import { StorageService } from '@/firebase/storage/storage-service';
+
+import { Listing } from '@/types/listing';
+
+const ListingCard = ({ listing }: { listing: Listing }) => {
+  const [url] = useDownloadURL(StorageService.getRef(listing.person?.imageUrl));
   return (
     <div className='min-w-[400px] overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
       <Image
         width={1260}
         height={750}
-        src='https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2&amp;w=500'
+        src={`${
+          url ??
+          'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2&amp;w=500'
+        }`}
         className='h-64 w-full object-cover transition-all duration-500 ease-in hover:h-96'
         alt=''
       />
@@ -30,7 +39,7 @@ const ListingCard = () => {
           title='Person Name'
           className='mb-3 inline-block text-2xl font-bold leading-5 transition-colors duration-200 hover:text-primary'
         >
-          Person Name
+          {listing.person?.lastName} {listing.person?.firstName}
         </Link>
         <p className='mb-2 text-gray-700'>Last seen at Yale ave.</p>
         <Link

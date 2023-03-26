@@ -14,6 +14,7 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '@/firebase/init';
+import { StorageService } from '@/firebase/storage/storage-service';
 
 import { Listing } from '@/types/listing';
 import { Role, User } from '@/types/user';
@@ -34,6 +35,11 @@ export class FirestoreService {
   }
 
   static async createListing(listing: Listing) {
+    if (listing.person?.imageUrl) {
+      const f = listing.person.imageUrl as unknown as FileList;
+      const r = await StorageService.uploadFile(f);
+      listing.person.imageUrl = r.ref.fullPath;
+    }
     return await addDoc(collection(db, 'listings'), {
       ...listing,
       createdAt: serverTimestamp(),

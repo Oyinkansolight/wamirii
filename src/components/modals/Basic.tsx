@@ -1,5 +1,11 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { useRouter } from 'next/router';
+import { Fragment, useEffect, useState } from 'react';
+
+import { GroupButton } from '@/components/buttons/GroupButton';
+
+import SignInView from '@/views/auth/signin';
+import SignUpView from '@/views/auth/signup';
 
 interface BasicModalProps {
   children: JSX.Element;
@@ -7,6 +13,15 @@ interface BasicModalProps {
 
 export default function BasicModal({ children }: BasicModalProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [page, setPage] = useState(0);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query['auth']) {
+      setIsOpen(true);
+      setPage(Number.parseInt(router.query['auth'] as string));
+    }
+  }, [router.query]);
 
   function closeModal() {
     setIsOpen(false);
@@ -52,17 +67,18 @@ export default function BasicModal({ children }: BasicModalProps) {
                     as='h3'
                     className='text-lg font-medium leading-6 text-gray-900'
                   >
-                    Modal
+                    {page === 0 ? 'Welcome Back!!!' : 'Register'}
                   </Dialog.Title>
 
-                  <div className='mt-4'>
-                    <button
-                      type='button'
-                      className='inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
-                      onClick={closeModal}
-                    >
-                      Close
-                    </button>
+                  <div className='flex min-h-[30rem] flex-col'>
+                    <GroupButton
+                      buttons={[{ label: 'Sign In' }, { label: 'Sign Up' }]}
+                      selected={page}
+                      onSelected={setPage}
+                    />
+                    <div className='flex flex-1 flex-col justify-center'>
+                      {page == 0 ? <SignInView /> : <SignUpView />}
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
