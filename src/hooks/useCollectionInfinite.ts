@@ -21,16 +21,18 @@ export function useCollectionInfinite<T>(
   const [isLoading, setIsLoading] = useState(true);
   const [docs, setDocs] = useState<DocumentData>();
   const [error, setError] = useState<FirestoreError>();
+  const [isLastPage, setIsLastPage] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
-    const constraints: QueryConstraint[] = [orderBy('createdAt'), limit(l)];
+    const constraints: QueryConstraint[] = [orderBy('createdAt'), limit(l + 1)];
     const unsubscribe = onSnapshot(
       query(collection(db, collectionPath), ...constraints),
       (snap) => {
-        setDocs(snap.docs.map((d) => d.data()));
+        setDocs(snap.docs.map((d) => d.data()).slice(0, l));
         setError(undefined);
         setIsLoading(false);
+        setIsLastPage(snap.docs.length < l + 1);
       },
       (error) => {
         setError(error);
@@ -41,7 +43,7 @@ export function useCollectionInfinite<T>(
   }, [l, collectionPath]);
 
   const more = () => {
-    if ((docs?.length ?? 0) >= l) {
+    if (!isLastPage) {
       setL(l + perPage);
     }
   };
@@ -50,6 +52,6 @@ export function useCollectionInfinite<T>(
     isLoading,
     error,
     more,
-    l > (docs?.length ?? 0),
+    isLastPage,
   ];
 }

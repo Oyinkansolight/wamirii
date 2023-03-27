@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import logger from '@/lib/logger';
 import { useCollectionInfinite } from '@/hooks/useCollectionInfinite';
 
 import { ListingCard } from '@/components/cards';
@@ -27,7 +26,6 @@ export default function HomePage() {
   if (error) {
     return <div>{error.message}</div>;
   }
-  logger(listings, 'All listings');
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
