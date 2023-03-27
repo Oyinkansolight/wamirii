@@ -7,5 +7,7 @@
   },
   "headwind.runOnSave": false,
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "cSpell.words": ["appspot", "firebaseapp", "Firestore", "wamirii"]
+  "cSpell.words": ["appspot", "firebaseapp", "Firestore", "wamirii"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
