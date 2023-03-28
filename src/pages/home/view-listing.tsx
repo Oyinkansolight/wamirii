@@ -1,7 +1,8 @@
 import { useContext } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-import { UserContext } from '@/components/layout/AuthGuard';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import { UserContext } from '@/components/layout/GetAuthStatus';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
@@ -16,14 +17,16 @@ export default AuthGuardHOC(() => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
   return (
-    <div>
-      {docs?.map((doc, i) => (
-        <div key={i}>
-          <div>
-            {doc.person?.lastName} {doc.person?.firstName}
+    <DashboardLayout>
+      <div>
+        {docs?.map((doc, i) => (
+          <div key={i}>
+            <div>
+              {doc?.missingLastName} {doc.missingFirstName}
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </DashboardLayout>
   );
 });

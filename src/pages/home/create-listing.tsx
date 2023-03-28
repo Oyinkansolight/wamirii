@@ -1,7 +1,8 @@
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { UserContext } from '@/components/layout/AuthGuard';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import { UserContext } from '@/components/layout/GetAuthStatus';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
@@ -35,29 +36,31 @@ export default AuthGuardHOC(() => {
     });
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>Missing Person Info</div>
-      <input {...register('missing-first-name')} />
-      <input {...register('missing-last-name')} />
-      <input type='file' {...register('missing-image-url')} />
-      <input {...register('missing-gender')} />
-      <input {...register('missing-age')} />
-      <input {...register('missing-since')} />
-      <input {...register('missing-occupation')} />
-      <input {...register('missing-last-seen-state')} />
-      <input {...register('missing-date-reported')} />
-      <input {...register('missing-more-information')} />
-      <div>Contact Info</div>
-      <input {...register('contact-name')} />
-      <input {...register('contact-email')} />
-      <input {...register('contact-phone')} />
-      <input {...register('contact-address')} />
-      <div>Reporter Info</div>
-      <input {...register('reporter-name')} />
-      <input {...register('reporter-email')} />
-      <input {...register('reporter-phone')} />
-      <input {...register('reporter-relationship')} />
-      <button>Submit</button>
-    </form>
+    <DashboardLayout>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>Missing Person Info</div>
+        <input {...register('missing-first-name')} />
+        <input {...register('missing-last-name')} />
+        <input type='file' {...register('missing-image-url')} />
+        <input {...register('missing-gender')} />
+        <input {...register('missing-age')} />
+        <input {...register('missing-since')} />
+        <input {...register('missing-occupation')} />
+        <input {...register('missing-last-seen-state')} />
+        <input {...register('missing-date-reported')} />
+        <input {...register('missing-more-information')} />
+        <div>Contact Info</div>
+        <input {...register('contact-name')} />
+        <input {...register('contact-email')} />
+        <input {...register('contact-phone')} />
+        <input {...register('contact-address')} />
+        <div>Reporter Info</div>
+        <input {...register('reporter-name')} />
+        <input {...register('reporter-email')} />
+        <input {...register('reporter-phone')} />
+        <input {...register('reporter-relationship')} />
+        <button>Submit</button>
+      </form>
+    </DashboardLayout>
   );
 });
