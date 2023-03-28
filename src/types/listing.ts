@@ -2,35 +2,23 @@ import { Timestamp } from 'firebase/firestore';
 
 export class Listing {
   createdBy?: string;
-  person?: MissingPerson;
-  contact?: Contact;
-  reporter?: ReporterInformation;
-  createdAt?: Timestamp;
-}
-
-class MissingPerson {
-  firstName?: string;
-  lastName?: string;
-  imageUrl?: string;
-  gender?: 'male' | 'female';
-  age?: number;
+  missingFirstName?: string;
+  missingLastName?: string;
+  missingImageUrl?: string;
+  missingGender?: string;
+  missingAge?: string;
   missingSince?: Timestamp;
-  occupation?: string;
-  lastSeenState?: string;
-  dateReported?: Timestamp;
-  moreInformation?: string;
-}
-
-class Contact {
-  name?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-}
-
-class ReporterInformation {
-  name?: string;
-  email?: string;
-  phone?: string;
-  relationship?: string;
+  missingOccupation?: string;
+  missingLastSeenSate?: string;
+  missingDateReported?: Timestamp;
+  missingMoreInformation?: string;
+  contactName?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactAddress?: string;
+  reporterName?: string;
+  reporterEmail?: string;
+  reporterPhone?: string;
+  reporterRelationship?: string;
+  createdAt?: Timestamp;
 }

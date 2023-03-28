@@ -14,29 +14,24 @@ export default AuthGuardHOC(() => {
   const onSubmit = async (data: any) => {
     await FirestoreService.createListing({
       createdBy: user?.id,
-      person: {
-        firstName: data['missing-first-name'],
-        lastName: data['missing-last-name'],
-        imageUrl: data['missing-image-url'],
-        age: data['missing-age'],
-        missingSince: data['missing-since'],
-        occupation: data['missing-occupation'],
-        lastSeenState: data['missing-last-seen-state'],
-        dateReported: data['missing-date-reported'],
-        moreInformation: data['missing-more-information'],
-      },
-      contact: {
-        name: data['contact-name'],
-        email: data['contact-email'],
-        phone: data['contact-phone'],
-        address: data['contact-address'],
-      },
-      reporter: {
-        name: data['reporter-name'],
-        email: data['reporter-email'],
-        phone: data['reporter-phone'],
-        relationship: data['reporter-relationship'],
-      },
+      missingFirstName: data['missing-first-name'],
+      missingLastName: data['missing-last-name'],
+      missingImageUrl: data['missing-image-url'],
+      missingGender: data['missing-gender'],
+      missingAge: data['missing-age'],
+      missingSince: data['missing-since'],
+      missingOccupation: data['missing-occupation'],
+      missingLastSeenSate: data['missing-last-seen-state'],
+      missingDateReported: data['missing-date-reported'],
+      missingMoreInformation: data['missing-more-information'],
+      contactName: data['contact-name'],
+      contactEmail: data['contact-email'],
+      contactPhone: data['contact-phone'],
+      contactAddress: data['contact-address'],
+      reporterName: data['reporter-name'],
+      reporterEmail: data['reporter-email'],
+      reporterPhone: data['reporter-phone'],
+      reporterRelationship: data['reporter-relationship'],
     });
   };
   return (
