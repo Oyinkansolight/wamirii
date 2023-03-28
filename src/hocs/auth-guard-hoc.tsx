@@ -1,3 +1,4 @@
+'use client';
 import AuthGuard from '@/components/layout/AuthGuard';
 
 export default function AuthGuardHOC<T_PROPS extends JSX.IntrinsicAttributes>(
