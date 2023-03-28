@@ -44,7 +44,7 @@ export default AuthGuardHOC(() => {
       <div>Missing Person Info</div>
       <input {...register('missing-first-name')} />
       <input {...register('missing-last-name')} />
-      <input {...register('missing-image-url')} />
+      <input type='file' {...register('missing-image-url')} />
       <input {...register('missing-gender')} />
       <input {...register('missing-age')} />
       <input {...register('missing-since')} />

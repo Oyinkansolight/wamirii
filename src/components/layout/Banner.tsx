@@ -13,7 +13,7 @@ const Banner = () => {
         className='absolute inset-0 h-full w-full object-cover'
         alt=''
       />
-      <div className='relative bg-red-600 bg-opacity-75'>
+      <div className='relative bg-gray-800 bg-opacity-75'>
         <svg
           className='absolute inset-x-0 bottom-0 text-white'
           viewBox='0 0 1160 163'
