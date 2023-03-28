@@ -11,6 +11,7 @@ import {
   serverTimestamp,
   setDoc,
   where,
+  WhereFilterOp,
 } from 'firebase/firestore';
 
 import { db } from '@/firebase/init';
@@ -35,10 +36,10 @@ export class FirestoreService {
   }
 
   static async createListing(listing: Listing) {
-    if (listing.person?.imageUrl) {
-      const f = listing.person.imageUrl as unknown as FileList;
+    if (listing?.missingImageUrl) {
+      const f = listing.missingImageUrl as unknown as FileList;
       const r = await StorageService.uploadFile(f);
-      listing.person.imageUrl = r.ref.fullPath;
+      listing.missingImageUrl = r.ref.fullPath;
     }
     return await addDoc(collection(db, 'listings'), {
       ...listing,
@@ -70,10 +71,23 @@ export class FirestoreService {
     return query(collection(db, 'listings'), orderBy('createdAt', 'desc'));
   }
 
-  static getListings(createdBy?: string) {
+  static getListings(
+    createdBy?: string,
+    orderByField?: string,
+    filterBy: FilterByField[] = []
+  ) {
     const constraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
     if (createdBy) {
       constraints.push(where('createdBy', '==', createdBy));
+    }
+    if (orderByField) {
+      constraints.push(orderBy(orderByField));
+    }
+    if (filterBy.length !== 0) {
+      for (let i = 0; i < filterBy.length; i++) {
+        const f = filterBy[i];
+        constraints.push(where(f.fieldName, f.opr, f.fieldValue));
+      }
     }
     return query(collection(db, 'listings'), ...constraints);
   }
@@ -91,4 +105,10 @@ export class FirestoreService {
       onError
     );
   }
+}
+
+export interface FilterByField {
+  fieldName: string;
+  fieldValue: string;
+  opr: WhereFilterOp;
 }
