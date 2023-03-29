@@ -13,7 +13,7 @@ const Banner = () => {
         className='absolute inset-0 h-full w-full object-cover'
         alt=''
       />
-      <div className='relative bg-gray-800 bg-opacity-75'>
+      <div className='relative bg-primary-600 bg-opacity-75'>
         <svg
           className='absolute inset-x-0 bottom-0 text-white'
           viewBox='0 0 1160 163'
@@ -27,16 +27,15 @@ const Banner = () => {
           <div className='flex flex-col items-center justify-between xl:flex-row'>
             <div className='mb-12 w-full max-w-xl xl:mb-0 xl:w-7/12 xl:pr-16'>
               <h2 className='h1 mb-6 tracking-tight text-white'>
-                Wamirii <br className='hidden md:block' />
-                initiative
+                Wamirii Initiative
               </h2>
-              <p className='mb-4 max-w-xl text-base text-gray-200 md:text-lg'>
+              <p className='mb-4 max-w-xl text-base text-primary-50 md:text-lg'>
                 National database for missing persons in Nigeria.
               </p>
               <Link
                 href='/'
                 aria-label=''
-                className='hover:text-teal-accent-700 inline-flex items-center font-semibold tracking-wider text-primary-900 transition-colors duration-200'
+                className='hover:text-teal-accent-700 inline-flex items-center font-semibold tracking-wider text-white transition-colors duration-200'
               >
                 Learn more
                 <svg

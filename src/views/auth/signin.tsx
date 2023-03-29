@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import Button from '@/components/buttons/Button';
+import PrimaryLink from '@/components/links/PrimaryLink';
 
 import { inputClass } from '@/constant/classnames';
 import { AuthService } from '@/firebase/auth/auth-service';
@@ -27,7 +28,7 @@ export default function SignInView() {
   return (
     <div className='flex items-center justify-center'>
       <form
-        className='flex h-full flex-col justify-center'
+        className='flex h-full w-full flex-col justify-center'
         onSubmit={handleSubmit(onSubmit)}
       >
         <input
@@ -36,14 +37,19 @@ export default function SignInView() {
           {...register('email', { required: true })}
         ></input>
         <input
+          type='password'
           className={inputClass}
           placeholder='Enter your password'
           {...register('password', { required: true })}
         ></input>
+
+        <PrimaryLink href='/' className='text-xs'>
+          Forgot your password?
+        </PrimaryLink>
         {errors.password && <div>{errors.password.message?.toString()}</div>}
         <Button
           type='submit'
-          className='inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide text-white transition duration-200'
+          className='mt-4 inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide text-white transition duration-200'
         >
           Sign In
         </Button>

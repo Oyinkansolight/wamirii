@@ -1,14 +1,10 @@
-import {
-  Button,
-  Card,
-  FileInput,
-  TextInput,
-  TextInputProps,
-} from 'flowbite-react';
+import { Card, FileInput, TextInput, TextInputProps } from 'flowbite-react';
+import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+import Button from '@/components/buttons/Button';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 
@@ -17,6 +13,7 @@ import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
 export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
+  const router = useRouter();
   const { register, handleSubmit } = useForm({ mode: 'onChange' });
   const missingPersonInputProps: TextInputProps[] = [
     {
@@ -142,6 +139,7 @@ export default AuthGuardHOC(() => {
         reporterRelationship: data['reporter-relationship'],
       });
       toast.success('Submission Submitted');
+      router.push('/home/view-submissions');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message);
@@ -193,7 +191,9 @@ export default AuthGuardHOC(() => {
             ))}
           </div>
         </Card>
-        <Button type='submit'>Submit</Button>
+        <Button type='submit' className='justify-center'>
+          Submit
+        </Button>
       </form>
     </DashboardLayout>
   );
