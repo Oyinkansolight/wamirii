@@ -117,6 +117,12 @@ export default AuthGuardHOC(() => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     try {
+      for (let i = 0; i < Object.keys(data).length; i++) {
+        const key = Object.keys(data)[i];
+        if (data[key] === '') {
+          data[key] = null;
+        }
+      }
       await FirestoreService.createListing({
         createdBy: user?.id,
         missingFirstName: data['missing-first-name'],
