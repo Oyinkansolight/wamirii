@@ -45,6 +45,7 @@ export default AuthGuardHOC(() => {
       placeholder: 'Enter the date the missing person was last seen',
       title: 'Missing Since',
       name: 'missing-since',
+      type: 'datetime-local',
     },
     {
       placeholder: 'Enter occupation of missing person',
@@ -60,6 +61,7 @@ export default AuthGuardHOC(() => {
       placeholder: 'Enter the date the  missing person was reported missing',
       title: 'Date Reported',
       name: 'missing-date-reported',
+      type: 'datetime-local',
     },
     {
       placeholder: 'Enter more information about the missing person',
