@@ -1,6 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
 
 export class Listing {
+  _id?: string;
   createdBy?: string;
   missingFirstName?: string;
   missingLastName?: string;

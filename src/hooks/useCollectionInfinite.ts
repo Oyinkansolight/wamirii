@@ -15,7 +15,13 @@ import { db } from '@/firebase/init';
 export function useCollectionInfinite<T>(
   collectionPath: string,
   perPage = 5
-): [T[] | undefined, boolean, FirestoreError | undefined, () => void, boolean] {
+): [
+  (T & { _id: string }[]) | undefined,
+  boolean,
+  FirestoreError | undefined,
+  () => void,
+  boolean
+] {
   const [l, setL] = useState(perPage);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +38,7 @@ export function useCollectionInfinite<T>(
     const unsubscribe = onSnapshot(
       query(collection(db, collectionPath), ...constraints),
       (snap) => {
-        setDocs(snap.docs.map((d) => d.data()).slice(0, l));
+        setDocs(snap.docs.map((d) => ({ _id: d.id, ...d.data() })).slice(0, l));
         setError(undefined);
         setIsLoading(false);
         setIsLastPage(snap.docs.length < l + 1);
@@ -51,7 +57,7 @@ export function useCollectionInfinite<T>(
     }
   };
   return [
-    docs as unknown as T[] | undefined,
+    docs as unknown as (T & { _id: string }[]) | undefined,
     isLoading,
     error,
     more,

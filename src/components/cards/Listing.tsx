@@ -10,7 +10,7 @@ import { Listing } from '@/types/listing';
 const ListingCard = ({ listing }: { listing: Listing }) => {
   const [url] = useDownloadURL(StorageService.getRef(listing?.missingImageUrl));
 
-  const path = `/submissions/${listing.contactName}`;
+  const path = `/submissions/${listing._id}`;
 
   return (
     <div className='min-w-[400px] overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
@@ -35,7 +35,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
             Missing
           </Link>
           <span className='text-gray-600'>
-            <>— {listing.missingDateReported}</>
+            <>— {listing.missingDateReported?.toDate().toDateString()}</>
           </span>
         </p>
         <Link
