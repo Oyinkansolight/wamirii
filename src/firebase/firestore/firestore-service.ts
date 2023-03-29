@@ -38,8 +38,12 @@ export class FirestoreService {
   static async createListing(listing: Listing) {
     if (listing?.missingImageUrl) {
       const f = listing.missingImageUrl as unknown as FileList;
-      const r = await StorageService.uploadFile(f);
-      listing.missingImageUrl = r.ref.fullPath;
+      if (f.length > 0) {
+        const r = await StorageService.uploadFile(f);
+        listing.missingImageUrl = r.ref.fullPath;
+      } else {
+        listing.missingImageUrl = '';
+      }
     }
     return await addDoc(collection(db, 'listings'), {
       ...listing,
