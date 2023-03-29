@@ -18,16 +18,23 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@dicebear/collection": "^6.0.2",
+    "@dicebear/core": "^6.0.2",
     "@headlessui/react": "^1.7.13",
     "clsx": "^1.2.1",
     "firebase": "^9.18.0",
+    "flowbite": "^1.6.4",
+    "flowbite-react": "^0.4.2",
     "next": "^13.2.4",
     "react": "^18.2.0",
+    "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "react-hook-form": "^7.43.7",
     "react-icons": "^4.8.0",
+    "react-is": "^18.2.0",
     "react-toastify": "^9.1.2",
+    "styled-components": "^5.3.9",
     "tailwind-merge": "^1.10.0"
   },
   "devDependencies": {

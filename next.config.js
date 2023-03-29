@@ -9,7 +9,12 @@ const nextConfig = {
 
   // Uncoment to add domain whitelist
   images: {
-    domains: ['images.pexels.com', 'localhost', 'images.unsplash.com'],
+    domains: [
+      'images.pexels.com',
+      'localhost',
+      'images.unsplash.com',
+      'api.dicebear.com',
+    ],
   },
 
   // SVGR

@@ -8,7 +8,7 @@ import { StorageService } from '@/firebase/storage/storage-service';
 import { Listing } from '@/types/listing';
 
 const ListingCard = ({ listing }: { listing: Listing }) => {
-  const [url] = useDownloadURL(StorageService.getRef(listing.person?.imageUrl));
+  const [url] = useDownloadURL(StorageService.getRef(listing?.missingImageUrl));
   return (
     <div className='min-w-[400px] overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
       <Image
@@ -39,7 +39,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
           title='Person Name'
           className='mb-3 inline-block text-2xl font-bold leading-5 transition-colors duration-200 hover:text-primary'
         >
-          {listing.person?.lastName} {listing.person?.firstName}
+          {listing.missingLastName} {listing.missingFirstName}
         </Link>
         <p className='mb-2 text-gray-700'>Last seen at Yale ave.</p>
         <Link

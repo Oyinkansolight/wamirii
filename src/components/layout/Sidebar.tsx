@@ -1,9 +1,14 @@
+import { thumbs } from '@dicebear/collection';
+import { createAvatar } from '@dicebear/core';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { CiSettings } from 'react-icons/ci';
 import { MdFormatListBulletedAdd } from 'react-icons/md';
 import { RiDashboardFill, RiListCheck2 } from 'react-icons/ri';
+
+import clsxm from '@/lib/clsxm';
 
 import { UserContext } from '@/components/layout/GetAuthStatus';
 
@@ -32,6 +37,12 @@ const NavItems = [
 
 const Sidebar = () => {
   const user = useContext(UserContext);
+  const avatar = createAvatar(thumbs, {
+    seed: user?.username ?? 'NO',
+    radius: 50,
+    // fontFamily: ['Arial'],
+  });
+  const router = useRouter();
   return (
     <aside className='order-first flex h-screen w-64 flex-col overflow-y-auto border-r bg-white px-4 py-8 rtl:border-r-0 rtl:border-l'>
       <Link href='#'>
@@ -49,7 +60,10 @@ const Sidebar = () => {
           {NavItems.map((v, i) => (
             <Link
               key={i}
-              className='mt-5 flex transform items-center rounded-md px-2 py-2 text-gray-600 transition-colors duration-300 hover:text-gray-700'
+              className={clsxm([
+                'mt-5 flex transform items-center rounded-md px-2 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-200 hover:text-gray-700',
+                router.pathname === v.link && 'bg-gray-300',
+              ])}
               href={v.link}
             >
               {v.icon}
@@ -63,10 +77,11 @@ const Sidebar = () => {
 
         <Link href='#' className='-mx-2 flex items-center px-4'>
           <Image
-            width={63}
-            height={63}
-            className='mx-2 h-9 w-9 rounded-full object-cover'
-            src='https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
+            height={40}
+            width={40}
+            src={`data:image/svg+xml;utf8,${encodeURIComponent(
+              avatar.toString()
+            )}`}
             alt='avatar'
           />
           <span className='mx-2 font-medium text-gray-800 dark:text-gray-200'>
