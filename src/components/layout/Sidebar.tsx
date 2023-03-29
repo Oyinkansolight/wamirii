@@ -21,12 +21,12 @@ const NavItems = [
   {
     icon: <RiListCheck2 />,
     label: 'Submissions',
-    link: '/home/view-listing',
+    link: '/home/view-submissions',
   },
   {
     icon: <MdFormatListBulletedAdd />,
     label: 'Create Submissions',
-    link: '/home/create-listing',
+    link: '/home/create-submission',
   },
   {
     icon: <CiSettings />,

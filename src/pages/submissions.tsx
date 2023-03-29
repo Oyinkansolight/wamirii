@@ -20,7 +20,7 @@ import { Listing } from '@/types/listing';
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-export default function HomePage() {
+export default function Submissions() {
   const [listings, isLoading, error, loadMore, isLastPage] =
     useCollectionInfinite<Listing>('listings', 5);
   if (error) {

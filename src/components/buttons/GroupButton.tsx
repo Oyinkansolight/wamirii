@@ -18,7 +18,7 @@ export function GroupButton({
         <div
           key={i}
           className={clsxm([
-            'flex-1 px-8 py-2',
+            'flex-1 cursor-pointer px-8 py-2 transition-all',
             selected === i && 'bg-primary text-white',
           ])}
           onClick={() => onSelected(i)}

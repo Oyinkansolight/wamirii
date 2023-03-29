@@ -67,16 +67,16 @@ export default function BasicModal({ children }: BasicModalProps) {
                     as='h3'
                     className='text-lg font-medium leading-6 text-gray-900'
                   >
-                    {page === 0 ? 'Welcome Back!!!' : 'Register'}
+                    {page === 0 ? 'Welcome Back' : 'Register'}
                   </Dialog.Title>
 
-                  <div className='flex min-h-[30rem] flex-col'>
+                  <div className='mt-4 flex min-h-[15rem] flex-col'>
                     <GroupButton
                       buttons={[{ label: 'Sign In' }, { label: 'Sign Up' }]}
                       selected={page}
                       onSelected={setPage}
                     />
-                    <div className='flex flex-1 flex-col justify-center'>
+                    <div className='mt-6 flex flex-col justify-center transition-all delay-1000'>
                       {page == 0 ? <SignInView /> : <SignUpView />}
                     </div>
                   </div>

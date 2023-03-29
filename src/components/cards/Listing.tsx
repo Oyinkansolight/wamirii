@@ -31,7 +31,9 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
           >
             Missing
           </Link>
-          <span className='text-gray-600'>— 28 Dec 2020</span>
+          <span className='text-gray-600'>
+            <>— {listing.missingDateReported}</>
+          </span>
         </p>
         <Link
           href='/'
@@ -41,7 +43,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
         >
           {listing.missingLastName} {listing.missingFirstName}
         </Link>
-        <p className='mb-2 text-gray-700'>Last seen at Yale ave.</p>
+        <p className='mb-2 text-gray-700'>{listing.missingLastSeenSate}</p>
         <Link
           href='/'
           aria-label=''

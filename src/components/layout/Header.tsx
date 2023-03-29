@@ -8,7 +8,7 @@ import { BasicModal } from '@/components/modals';
 
 const links = [
   { href: '/', label: 'Home' },
-  { href: '/listings', label: 'Listings' },
+  { href: '/submissions', label: 'Submissions' },
 ];
 
 const Nav = () => {
