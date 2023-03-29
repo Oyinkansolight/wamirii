@@ -6,10 +6,12 @@ import {
   getDoc,
   onSnapshot,
   orderBy,
+  OrderByDirection,
   query,
   QueryConstraint,
   serverTimestamp,
   setDoc,
+  Timestamp,
   where,
   WhereFilterOp,
 } from 'firebase/firestore';
@@ -45,6 +47,16 @@ export class FirestoreService {
         listing.missingImageUrl = '';
       }
     }
+    if (listing?.missingSince) {
+      listing.missingSince = Timestamp.fromDate(
+        new Date((listing.missingSince as unknown as string) ?? '')
+      );
+    }
+    if (listing?.missingDateReported) {
+      listing.missingDateReported = Timestamp.fromDate(
+        new Date((listing.missingDateReported as unknown as string) ?? '')
+      );
+    }
     return await addDoc(collection(db, 'listings'), {
       ...listing,
       createdAt: serverTimestamp(),
@@ -77,15 +89,17 @@ export class FirestoreService {
 
   static getListings(
     createdBy?: string,
-    orderByField?: string,
+    orderByField?: OrderByField,
     filterBy: FilterByField[] = []
   ) {
-    const constraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
+    const constraints: QueryConstraint[] = [];
     if (createdBy) {
       constraints.push(where('createdBy', '==', createdBy));
     }
     if (orderByField) {
-      constraints.push(orderBy(orderByField));
+      constraints.push(orderBy(orderByField.fieldName, orderByField.direction));
+    } else {
+      constraints.push(orderBy('createdAt', 'desc'));
     }
     if (filterBy.length !== 0) {
       for (let i = 0; i < filterBy.length; i++) {
@@ -115,4 +129,9 @@ export interface FilterByField {
   fieldName: string;
   fieldValue: string;
   opr: WhereFilterOp;
+}
+
+export interface OrderByField {
+  fieldName: string;
+  direction: OrderByDirection;
 }
