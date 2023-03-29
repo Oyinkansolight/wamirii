@@ -25,7 +25,10 @@ export function useCollectionInfinite<T>(
 
   useEffect(() => {
     setIsLoading(true);
-    const constraints: QueryConstraint[] = [orderBy('createdAt'), limit(l + 1)];
+    const constraints: QueryConstraint[] = [
+      orderBy('createdAt', 'desc'),
+      limit(l + 1),
+    ];
     const unsubscribe = onSnapshot(
       query(collection(db, collectionPath), ...constraints),
       (snap) => {
