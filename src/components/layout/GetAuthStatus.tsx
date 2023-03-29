@@ -21,19 +21,21 @@ export default function GetAuthStatus({ children }: { children: JSX.Element }) {
   createContext;
   useEffect(() => {
     let unsubscribe2: Unsubscribe | undefined;
+    let t: NodeJS.Timeout | undefined;
+
     const unsubscribe = onAuthStateChanged(
       auth,
       async (u) => {
-        if (count.current > 0) {
-          if (!u) {
+        if (!u) {
+          t = setTimeout(() => {
             setIsLoggedIn('logged-out');
             setUser(null);
-          } else {
-            unsubscribe2 = await FirestoreService.getUserDoc(u.uid, (data) => {
-              setUser(data);
-            });
-            setIsLoggedIn('logged-in');
-          }
+          }, 1000);
+        } else {
+          unsubscribe2 = await FirestoreService.getUserDoc(u.uid, (data) => {
+            setUser(data);
+          });
+          setIsLoggedIn('logged-in');
         }
         count.current += 1;
       },
@@ -44,6 +46,7 @@ export default function GetAuthStatus({ children }: { children: JSX.Element }) {
     return () => {
       unsubscribe();
       if (unsubscribe2) unsubscribe2();
+      if (t) clearTimeout(t);
     };
   }, []);
   return (
