@@ -1,0 +1,76 @@
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+
+import logger from '@/lib/logger';
+
+import Layout from '@/components/layout/Layout';
+import Seo from '@/components/Seo';
+
+/**
+ * SVGR Support
+ * Caveat: No React Props Type.
+ *
+ * You can override the next-env if the type is important to you
+ * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
+ */
+
+// !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
+// Before you begin editing, follow all comments with `STARTERCONF`,
+// to customize the default configuration.
+
+export default function SingleSubmission() {
+  const router = useRouter();
+  const { id } = router.query;
+  logger(id);
+
+  return (
+    <Layout>
+      {/* <Seo templateTitle='Home' /> */}
+      <Seo templateTitle='Wamirii Listings' />
+
+      <section className='bg-white dark:bg-gray-900'>
+        <div className='relative flex'>
+          <div className='min-h-screen lg:w-1/3'></div>
+          <div className='hidden min-h-screen w-3/4 bg-gray-100 dark:bg-gray-800 lg:block'></div>
+
+          <div className='container mx-auto flex min-h-screen w-full flex-col justify-center px-6 py-10 lg:absolute lg:inset-x-0'>
+            <h1 className='text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl'>
+              Firstname <br /> <span className='text-blue-500'>Lastname</span>
+            </h1>
+
+            <div className='mt-10 lg:mt-20 lg:flex lg:items-center'>
+              <Image
+                width={880}
+                height={96}
+                alt='person'
+                src={`${'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2&amp;w=500'}`}
+                className='h-96 w-full rounded-lg object-cover object-center lg:w-[32rem]'
+              />
+
+              <div className='mt-8 lg:mt-0 lg:px-10'>
+                <h1 className='text-2xl font-semibold text-gray-800 dark:text-white lg:w-72'>
+                  Last Seen
+                </h1>
+
+                <p className='mt-6 max-w-lg text-gray-500 dark:text-gray-400'>
+                  “ Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Tempore quibusdam ducimus libero ad tempora doloribus expedita
+                  laborum saepe voluptas perferendis delectus assumenda rerum,
+                  culpa aperiam dolorum, obcaecati corrupti aspernatur a. ”
+                </p>
+
+                <h3 className='mt-6 text-lg font-medium text-blue-500'>
+                  Reporter Name
+                </h3>
+                <p className='text-gray-600 dark:text-gray-300'>
+                  Reporter contact
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+}
