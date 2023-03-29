@@ -9,6 +9,9 @@ import { Listing } from '@/types/listing';
 
 const ListingCard = ({ listing }: { listing: Listing }) => {
   const [url] = useDownloadURL(StorageService.getRef(listing?.missingImageUrl));
+
+  const path = `/submissions/${listing.contactName}`;
+
   return (
     <div className='min-w-[400px] overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
       <Image
@@ -24,7 +27,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
       <div className='border border-t-0 p-5'>
         <p className='mb-3 text-xs font-semibold uppercase tracking-wide'>
           <Link
-            href='/'
+            href={path}
             className='text-blue-gray-900 hover:text-deep-purple-accent-700 transition-colors duration-200'
             aria-label='Missing Person'
             title='Person Name'
@@ -36,16 +39,16 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
           </span>
         </p>
         <Link
-          href='/'
           aria-label='Name'
           title='Person Name'
+          href={path}
           className='mb-3 inline-block text-2xl font-bold leading-5 transition-colors duration-200 hover:text-primary'
         >
           {listing.missingLastName} {listing.missingFirstName}
         </Link>
         <p className='mb-2 text-gray-700'>{listing.missingLastSeenSate}</p>
         <Link
-          href='/'
+          href={path}
           aria-label=''
           className='inline-flex items-center text-sm font-semibold text-primary-400 transition-colors duration-200 hover:text-primary-800'
         >

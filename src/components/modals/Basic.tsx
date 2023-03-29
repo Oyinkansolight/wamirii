@@ -1,4 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 
@@ -62,12 +63,20 @@ export default function BasicModal({ children }: BasicModalProps) {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all'>
+                  <Image
+                    width={150}
+                    height={100}
+                    alt='Wamirii Logo'
+                    src='/images/logo.png'
+                    className='mx-auto'
+                  />
+
                   <Dialog.Title
                     as='h3'
                     className='text-lg font-medium leading-6 text-gray-900'
                   >
-                    {page === 0 ? 'Welcome Back' : 'Register'}
+                    {page === 0 ? 'Welcome back!' : 'Register'}
                   </Dialog.Title>
 
                   <div className='mt-4 flex min-h-[15rem] flex-col'>
