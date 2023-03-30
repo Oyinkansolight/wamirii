@@ -1,8 +1,17 @@
-import { Card, FileInput, TextInput, TextInputProps } from 'flowbite-react';
+import {
+  Card,
+  FileInput,
+  Select,
+  Textarea,
+  TextInput,
+  TextInputProps,
+} from 'flowbite-react';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import { useForm } from 'react-hook-form';
+import { useContext, useState } from 'react';
+import { FieldValues, RegisterOptions, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+
+import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -15,16 +24,21 @@ export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
   const router = useRouter();
   const { register, handleSubmit } = useForm({ mode: 'onChange' });
-  const missingPersonInputProps: TextInputProps[] = [
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const missingPersonInputProps: (TextInputProps & {
+    options?: RegisterOptions<FieldValues, string> | undefined;
+  })[] = [
     {
       placeholder: 'Enter first name of missing person',
       title: 'First name',
       name: 'missing-first-name',
+      options: { required: true },
     },
     {
       placeholder: 'Enter last name of missing person',
       title: 'Last name',
       name: 'missing-last-name',
+      options: { required: true },
     },
     {
       placeholder: 'Select image of missing person',
@@ -40,6 +54,7 @@ export default AuthGuardHOC(() => {
       placeholder: 'Enter age of missing person',
       title: 'Age',
       name: 'missing-age',
+      type: 'number',
     },
     {
       placeholder: 'Enter the date the missing person was last seen',
@@ -118,6 +133,7 @@ export default AuthGuardHOC(() => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
     try {
       for (let i = 0; i < Object.keys(data).length; i++) {
         const key = Object.keys(data)[i];
@@ -151,6 +167,8 @@ export default AuthGuardHOC(() => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -160,14 +178,46 @@ export default AuthGuardHOC(() => {
           <div className=' font-bold'>Missing Person Info</div>
           <div className='flex flex-wrap justify-between gap-x-2 gap-y-4'>
             {missingPersonInputProps.map((v, i) => (
-              <div className='min-w-[20rem] flex-1' key={i}>
-                <label htmlFor={`${i}`} className=''>
+              <div
+                className={clsxm([
+                  'min-w-[20rem] flex-1',
+                  v.name === 'missing-more-information' &&
+                    'w-full  flex-initial',
+                ])}
+                key={i}
+              >
+                <label htmlFor={v.name} className=''>
                   {v.title}
                 </label>
                 {v.name === 'missing-image-url' ? (
-                  <FileInput {...v} {...register(v.name ?? `${i}`)} />
+                  <FileInput
+                    id={v.name}
+                    placeholder={v.placeholder}
+                    {...register(v.name ?? `${i}`)}
+                  />
+                ) : v.name === 'missing-gender' ? (
+                  <Select
+                    id={v.name}
+                    placeholder={v.placeholder}
+                    {...register(v.name)}
+                  >
+                    <option></option>
+                    <option>Male</option>
+                    <option>Female</option>
+                  </Select>
+                ) : v.name === 'missing-more-information' ? (
+                  <Textarea
+                    id={v.name}
+                    placeholder={v.placeholder}
+                    {...register(v.name)}
+                  />
                 ) : (
-                  <TextInput {...v} {...register(v.name ?? `${i}`)} />
+                  <TextInput
+                    id={v.name}
+                    type={v.type}
+                    placeholder={v.placeholder}
+                    {...register(v.name ?? `${i}`)}
+                  />
                 )}
               </div>
             ))}
@@ -199,7 +249,11 @@ export default AuthGuardHOC(() => {
             ))}
           </div>
         </Card>
-        <Button type='submit' className='justify-center'>
+        <Button
+          type='submit'
+          isLoading={isSubmitting}
+          className='justify-center'
+        >
           Submit
         </Button>
       </form>

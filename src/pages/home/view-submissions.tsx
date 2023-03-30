@@ -1,10 +1,11 @@
-import { Button, Table } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import { useContext, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
 import logger from '@/lib/logger';
 
+import Loading from '@/components/generic/Loading';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import MissingAvatar from '@/components/submissions/MissingAvatar';
@@ -44,16 +45,12 @@ const tableColumns: TableColumn<Listing>[] = [
     selector: (cell) => cell.missingSince?.toDate().toDateString() ?? '',
     sortable: true,
     sortField: 'missingSince',
-    grow: 0,
-    width: 'auto',
   },
   {
     name: 'Create At',
     selector: (cell) => cell.createdAt?.toDate().toDateString() ?? '',
     sortable: true,
     sortField: 'createdAt',
-    grow: 0,
-    width: 'auto',
   },
 
   {
@@ -74,10 +71,7 @@ export default AuthGuardHOC(() => {
   );
   return (
     <DashboardLayout>
-      <div>
-        <div>
-          <Table></Table>
-        </div>
+      <div className='relative h-full'>
         {(error && <div>{error.message}</div>) || (
           <DataTable
             sortServer
@@ -91,6 +85,11 @@ export default AuthGuardHOC(() => {
               docs?.docs.map((doc) => ({ _id: doc.id, ...doc.data() })) ?? []
             }
           />
+        )}
+        {loading && (
+          <div className='absolute inset-0 flex items-center justify-center'>
+            <Loading />
+          </div>
         )}
       </div>
     </DashboardLayout>

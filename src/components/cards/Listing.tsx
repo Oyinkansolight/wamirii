@@ -1,7 +1,11 @@
+import { initials } from '@dicebear/collection';
+import { createAvatar } from '@dicebear/core';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
+
+import Loading from '@/components/generic/Loading';
 
 import { StorageService } from '@/firebase/storage/storage-service';
 
@@ -12,18 +16,36 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
 
   const path = `/submissions/${listing._id}`;
 
+  const name =
+    listing.missingFirstName || listing.missingLastName
+      ? `${listing.missingLastName} ${listing.missingFirstName}`
+      : listing._id;
+
+  const avatar = createAvatar(initials, {
+    seed: name ?? 'NO',
+    // fontFamily: ['Arial'],
+  });
+
   return (
     <div className='min-w-[400px] overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
-      <Image
-        width={1260}
-        height={750}
-        src={`${
-          url ??
-          'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2&amp;w=500'
-        }`}
-        className='h-64 w-full object-cover transition-all duration-500 ease-in hover:h-96'
-        alt=''
-      />
+      <div className='h-64 overflow-hidden'>
+        {!url && listing.missingImageUrl ? (
+          <div className='flex h-full w-full items-center justify-center'>
+            <Loading />
+          </div>
+        ) : (
+          <Image
+            width={1260}
+            height={750}
+            src={`${
+              url ??
+              `data:image/svg+xml;utf8,${encodeURIComponent(avatar.toString())}`
+            }`}
+            className='h-64 w-full object-cover transition-all duration-300 ease-in hover:scale-110'
+            alt=''
+          />
+        )}
+      </div>
       <div className='border border-t-0 p-5'>
         <p className='mb-3 text-xs font-semibold uppercase tracking-wide'>
           <Link

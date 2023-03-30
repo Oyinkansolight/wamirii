@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useCollectionInfinite } from '@/hooks/useCollectionInfinite';
 
 import { ListingCard } from '@/components/cards';
+import Loading from '@/components/generic/Loading';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
@@ -38,7 +39,11 @@ export default function Submissions() {
           ))}
         </div>
         {isLoading ? (
-          <div>Loading...</div>
+          <div className='flex items-center'>
+            <div>
+              <Loading />
+            </div>
+          </div>
         ) : (
           !isLastPage && (
             <div

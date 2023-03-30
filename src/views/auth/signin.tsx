@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -14,15 +15,19 @@ export default function SignInView() {
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: 'onChange', reValidateMode: 'onChange' });
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
+    setLoading(true);
     try {
       await AuthService.signInWithEmail(data.email, data.password);
       router.push('/home');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -48,6 +53,7 @@ export default function SignInView() {
         </PrimaryLink>
         {errors.password && <div>{errors.password.message?.toString()}</div>}
         <Button
+          isLoading={loading}
           type='submit'
           className='mt-4 inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide text-white transition duration-200'
         >

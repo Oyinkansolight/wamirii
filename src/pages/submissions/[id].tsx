@@ -85,10 +85,13 @@ export default function SingleSubmission() {
                 </p>
 
                 <h3 className='mt-6 text-lg font-medium text-blue-500'>
-                  Reporter Name - <div>{submission?.contactName}</div>
+                  Reporter Name - <span>{submission?.contactName}</span>
                 </h3>
                 <p className='text-gray-600 dark:text-gray-300'>
-                  Reporter contact - <div>{submission?.reporterName}</div>
+                  Reporter contact -{' '}
+                  <span>
+                    {submission?.reporterEmail} {submission?.reporterPhone}
+                  </span>
                 </p>
               </div>
             </div>
