@@ -13,11 +13,13 @@ import FilterModal from '@/components/modals/FilterModal';
 import MissingAvatar from '@/components/submissions/MissingAvatar';
 
 import {
+  FilterByField,
   FirestoreService,
   OrderByField,
 } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
+import { FilterListings } from '@/types/filter-listings';
 import { Listing } from '@/types/listing';
 
 const tableColumns: TableColumn<Listing>[] = [
@@ -67,11 +69,40 @@ export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
 
   const [sortBy, setSortBy] = useState<OrderByField>();
+  const [filters, setFilters] = useState<FilterByField[]>([]);
 
   // eslint-disable-next-line unused-imports/no-unused-vars
   const [docs, loading, error] = useCollection(
-    FirestoreService.getListings(user?.id, sortBy)
+    FirestoreService.getListings(user?.id, sortBy, filters)
   );
+
+  const onApplyFilter = (filter: FilterListings) => {
+    const f: FilterByField[] = [];
+    logger(filter, 'Filter');
+    if (filter.missingGender) {
+      f.push(['missingGender', '==', filter.missingGender]);
+    }
+    if (filter.ageFrom) {
+      f.push(['missingAge', '>', filter.ageFrom]);
+    }
+    if (filter.ageTo) {
+      logger(filter.ageTo);
+      f.push(['missingAge', '<', filter.ageTo]);
+    }
+    if (filter.missingSinceFrom) {
+      f.push(['missingSince', '>', filter.missingSinceFrom]);
+    }
+    if (filter.missingSinceTo) {
+      f.push(['missingSince', '<', filter.missingSinceTo]);
+    }
+    if (filter.dateReportedFrom) {
+      f.push(['missingDateReported', '>', filter.dateReportedFrom]);
+    }
+    if (filter.dateReportedTo) {
+      f.push(['missingDateReported', '<', filter.dateReportedTo]);
+    }
+    setFilters(f);
+  };
   return (
     <DashboardLayout>
       <div className='relative h-full'>
@@ -81,7 +112,7 @@ export default AuthGuardHOC(() => {
             <DataTable
               title='My Submissions'
               actions={[
-                <FilterModal key={0}>
+                <FilterModal key={0} onApplyFilter={onApplyFilter}>
                   <Button>
                     <div className='flex items-center'>
                       <MdFilterList />
@@ -94,7 +125,6 @@ export default AuthGuardHOC(() => {
               sortServer
               onSort={(col, dir) => {
                 if (!col.sortField || col.sortField === '') return;
-                logger(col.sortField);
                 setSortBy({ fieldName: col.sortField ?? '', direction: dir });
               }}
               columns={tableColumns}

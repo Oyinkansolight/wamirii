@@ -1,7 +1,5 @@
 import { useContext } from 'react';
 
-import logger from '@/lib/logger';
-
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 
@@ -17,7 +15,6 @@ export default AuthGuardHOC(() => {
         <div>
           <button
             onClick={async () => {
-              logger('Signing out');
               await AuthService.signOut();
             }}
           >

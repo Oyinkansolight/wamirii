@@ -92,22 +92,40 @@ export class FirestoreService {
     orderByField?: OrderByField,
     filterBy: FilterByField[] = []
   ) {
+    const field = this.getOrderByField(filterBy);
     const constraints: QueryConstraint[] = [];
     if (createdBy) {
       constraints.push(where('createdBy', '==', createdBy));
     }
-    if (orderByField) {
-      constraints.push(orderBy(orderByField.fieldName, orderByField.direction));
+    if (!field) {
+      if (orderByField) {
+        constraints.push(
+          orderBy(orderByField.fieldName, orderByField.direction)
+        );
+      } else {
+        constraints.push(orderBy('createdAt', 'desc'));
+      }
     } else {
-      constraints.push(orderBy('createdAt', 'desc'));
+      constraints.push(orderBy(field));
     }
     if (filterBy.length !== 0) {
       for (let i = 0; i < filterBy.length; i++) {
         const f = filterBy[i];
-        constraints.push(where(f.fieldName, f.opr, f.fieldValue));
+        constraints.push(where(f[0], f[1], f[2]));
       }
     }
     return query(collection(db, 'listings'), ...constraints);
+  }
+
+  private static getOrderByField(filters: FilterByField[]): string | null {
+    const l: WhereFilterOp[] = ['<', '<=', '!=', 'not-in', '>', '>='];
+    for (let i = 0; i < filters.length; i++) {
+      const f = filters[i];
+      if (l.includes(f[1])) {
+        return f[0];
+      }
+    }
+    return null;
   }
 
   static async getUserDoc(
@@ -125,11 +143,7 @@ export class FirestoreService {
   }
 }
 
-export interface FilterByField {
-  fieldName: string;
-  fieldValue: string;
-  opr: WhereFilterOp;
-}
+export type FilterByField = [string, WhereFilterOp, unknown];
 
 export interface OrderByField {
   fieldName: string;

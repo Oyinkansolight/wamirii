@@ -31,57 +31,57 @@ export default AuthGuardHOC(() => {
     {
       placeholder: 'Enter first name of missing person',
       title: 'First name',
-      name: 'missing-first-name',
+      name: 'missingFirstName',
       options: { required: true },
     },
     {
       placeholder: 'Enter last name of missing person',
       title: 'Last name',
-      name: 'missing-last-name',
+      name: 'missingLastName',
       options: { required: true },
     },
     {
       placeholder: 'Select image of missing person',
       title: 'Image',
-      name: 'missing-image-url',
+      name: 'missingImageUrl',
     },
     {
       placeholder: 'Select gender of missing person',
       title: 'Gender',
-      name: 'missing-gender',
+      name: 'missingGender',
     },
     {
       placeholder: 'Enter age of missing person',
       title: 'Age',
-      name: 'missing-age',
+      name: 'missingAge',
       type: 'number',
     },
     {
       placeholder: 'Enter the date the missing person was last seen',
       title: 'Missing Since',
-      name: 'missing-since',
+      name: 'missingSince',
       type: 'datetime-local',
     },
     {
       placeholder: 'Enter occupation of missing person',
       title: 'Occupation',
-      name: 'missing-occupation',
+      name: 'missingOccupation',
     },
     {
       placeholder: 'Enter the state the missing person was last seen',
       title: 'State',
-      name: 'missing-last-seen-state',
+      name: 'missingLastSeenSate',
     },
     {
       placeholder: 'Enter the date the  missing person was reported missing',
       title: 'Date Reported',
-      name: 'missing-date-reported',
+      name: 'missingDateReported',
       type: 'datetime-local',
     },
     {
       placeholder: 'Enter more information about the missing person',
       title: 'More Information',
-      name: 'missing-more-information',
+      name: 'missingMoreInformation',
     },
   ];
 
@@ -89,22 +89,22 @@ export default AuthGuardHOC(() => {
     {
       placeholder: 'Enter name of contact person',
       title: 'Name',
-      name: 'contact-name',
+      name: 'contactName',
     },
     {
       placeholder: 'Enter email address of contact person',
       title: 'Email',
-      name: 'contact-email',
+      name: 'contactEmail',
     },
     {
       placeholder: 'Enter phone number of contact person',
       title: 'Phone Number',
-      name: 'contact-phone',
+      name: 'contactPhone',
     },
     {
       placeholder: 'Enter address of contact person',
       title: 'Address',
-      name: 'contact-address',
+      name: 'contactAddress',
     },
   ];
 
@@ -112,22 +112,22 @@ export default AuthGuardHOC(() => {
     {
       placeholder: 'Enter name of reporter',
       title: 'Name',
-      name: 'reporter-name',
+      name: 'reporterName',
     },
     {
       placeholder: 'Enter email address of reporter',
       title: 'Email',
-      name: 'reporter-email',
+      name: 'reporterEmail',
     },
     {
       placeholder: 'Enter phone number of reporter',
       title: 'Phone Number',
-      name: 'reporter-phone',
+      name: 'reporterPhone',
     },
     {
       placeholder: 'Enter relation of reporter with missing person',
       title: 'Relationship',
-      name: 'reporter-relationship',
+      name: 'reporterRelationship',
     },
   ];
 
@@ -143,24 +143,8 @@ export default AuthGuardHOC(() => {
       }
       await FirestoreService.createListing({
         createdBy: user?.id,
-        missingFirstName: data['missing-first-name'],
-        missingLastName: data['missing-last-name'],
-        missingImageUrl: data['missing-image-url'],
-        missingGender: data['missing-gender'],
-        missingAge: data['missing-age'],
-        missingSince: data['missing-since'],
-        missingOccupation: data['missing-occupation'],
-        missingLastSeenSate: data['missing-last-seen-state'],
-        missingDateReported: data['missing-date-reported'],
-        missingMoreInformation: data['missing-more-information'],
-        contactName: data['contact-name'],
-        contactEmail: data['contact-email'],
-        contactPhone: data['contact-phone'],
-        contactAddress: data['contact-address'],
-        reporterName: data['reporter-name'],
-        reporterEmail: data['reporter-email'],
-        reporterPhone: data['reporter-phone'],
-        reporterRelationship: data['reporter-relationship'],
+        ...data,
+        missingAge: data.missingAge ? Number.parseInt(data.missingAge) : null,
       });
       toast.success('Submission Submitted');
       router.push('/home/view-submissions');
@@ -181,35 +165,34 @@ export default AuthGuardHOC(() => {
               <div
                 className={clsxm([
                   'min-w-[20rem] flex-1',
-                  v.name === 'missing-more-information' &&
-                    'w-full  flex-initial',
+                  v.name === 'missingMoreInformation' && 'w-full  flex-initial',
                 ])}
                 key={i}
               >
                 <label htmlFor={v.name} className=''>
                   {v.title}
                 </label>
-                {v.name === 'missing-image-url' ? (
+                {v.name === 'missingImageUrl' ? (
                   <FileInput
                     id={v.name}
                     placeholder={v.placeholder}
                     {...register(v.name ?? `${i}`)}
                   />
-                ) : v.name === 'missing-gender' ? (
+                ) : v.name === 'missingGender' ? (
                   <Select
                     id={v.name}
                     placeholder={v.placeholder}
                     {...register(v.name)}
                   >
                     <option></option>
-                    <option>Male</option>
-                    <option>Female</option>
+                    <option value='male'>Male</option>
+                    <option value='female'>Female</option>
                   </Select>
-                ) : v.name === 'missing-more-information' ? (
+                ) : v.name === 'missingMoreInformation' ? (
                   <Textarea
                     id={v.name}
                     placeholder={v.placeholder}
-                    {...register(v.name)}
+                    {...register(v.name, v.options)}
                   />
                 ) : (
                   <TextInput

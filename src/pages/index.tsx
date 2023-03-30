@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import logger from '@/lib/logger';
 import { useCollectionInfinite } from '@/hooks/useCollectionInfinite';
 
 import { ListingCard } from '@/components/cards';
@@ -23,12 +22,12 @@ import { Listing } from '@/types/listing';
 // to customize the default configuration.
 
 export default function HomePage() {
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const [listings, isLoading, error] = useCollectionInfinite<Listing>(
     'listings',
     9
   );
   if (error) {
-    logger(isLoading);
     return <div>{error.message}</div>;
   }
 

@@ -5,11 +5,15 @@ import { Fragment, useEffect, useState } from 'react';
 
 import FilteringView from '@/views/submissions/FilteringView';
 
-interface BasicModalProps {
-  children: JSX.Element;
-}
+import { FilterListings } from '@/types/filter-listings';
 
-export default function FilterModal({ children }: BasicModalProps) {
+export default function FilterModal({
+  onApplyFilter,
+  children,
+}: {
+  onApplyFilter: (filter: FilterListings) => void;
+  children: JSX.Element;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -74,7 +78,12 @@ export default function FilterModal({ children }: BasicModalProps) {
                     Filter
                   </Dialog.Title>
 
-                  <FilteringView />
+                  <FilteringView
+                    onApplyFilter={(filter) => {
+                      onApplyFilter(filter);
+                      closeModal();
+                    }}
+                  />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
