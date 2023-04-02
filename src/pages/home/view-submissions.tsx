@@ -1,4 +1,6 @@
-import { useContext, useState } from 'react';
+import { Timestamp } from 'firebase/firestore';
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { MdFilterList } from 'react-icons/md';
@@ -18,6 +20,7 @@ import {
   OrderByField,
 } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
+import { Misc } from '@/misc/misc-functions';
 
 import { FilterListings } from '@/types/filter-listings';
 import { Listing } from '@/types/listing';
@@ -66,10 +69,48 @@ const tableColumns: TableColumn<Listing>[] = [
 ];
 
 export default AuthGuardHOC(() => {
+  const router = useRouter();
   const user = useContext(UserContext);
 
   const [sortBy, setSortBy] = useState<OrderByField>();
   const [filters, setFilters] = useState<FilterByField[]>([]);
+
+  useEffect(() => {
+    const data = Misc.queryStringToJSON<FilterListings>(
+      router.asPath.split('?')[1]
+    );
+    if (data) {
+      onApplyFilter({
+        ...data,
+        ageFrom: data.ageFrom
+          ? Number.parseInt(data.ageFrom as unknown as string)
+          : null,
+        ageTo: data.ageTo
+          ? Number.parseInt(data.ageTo as unknown as string)
+          : null,
+        missingSinceTo: data.missingSinceTo
+          ? Timestamp.fromDate(
+              new Date(data.missingSinceTo as unknown as string)
+            )
+          : null,
+        missingSinceFrom: data.missingSinceFrom
+          ? Timestamp.fromDate(
+              new Date(data.missingSinceFrom as unknown as string)
+            )
+          : null,
+        dateReportedTo: data.dateReportedTo
+          ? Timestamp.fromDate(
+              new Date(data.dateReportedTo as unknown as string)
+            )
+          : null,
+        dateReportedFrom: data.dateReportedFrom
+          ? Timestamp.fromDate(
+              new Date(data.dateReportedFrom as unknown as string)
+            )
+          : null,
+      });
+    }
+  }, [router]);
 
   // eslint-disable-next-line unused-imports/no-unused-vars
   const [docs, loading, error] = useCollection(
@@ -78,7 +119,6 @@ export default AuthGuardHOC(() => {
 
   const onApplyFilter = (filter: FilterListings) => {
     const f: FilterByField[] = [];
-    logger(filter, 'Filter');
     if (filter.missingGender) {
       f.push(['missingGender', '==', filter.missingGender]);
     }
@@ -112,7 +152,7 @@ export default AuthGuardHOC(() => {
             <DataTable
               title='My Submissions'
               actions={[
-                <FilterModal key={0} onApplyFilter={onApplyFilter}>
+                <FilterModal key={0}>
                   <Button>
                     <div className='flex items-center'>
                       <MdFilterList />

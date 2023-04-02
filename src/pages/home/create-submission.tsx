@@ -137,7 +137,7 @@ export default AuthGuardHOC(() => {
     try {
       for (let i = 0; i < Object.keys(data).length; i++) {
         const key = Object.keys(data)[i];
-        if (data[key] === '') {
+        if (data[key] === '' || data[key] === 'Select Gender') {
           data[key] = null;
         }
       }
@@ -184,7 +184,7 @@ export default AuthGuardHOC(() => {
                     placeholder={v.placeholder}
                     {...register(v.name)}
                   >
-                    <option></option>
+                    <option>Select Gender</option>
                     <option value='male'>Male</option>
                     <option value='female'>Female</option>
                   </Select>

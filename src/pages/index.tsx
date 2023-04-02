@@ -7,6 +7,8 @@ import Banner from '@/components/layout/Banner';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
+import { FirestoreService } from '@/firebase/firestore/firestore-service';
+
 import { Listing } from '@/types/listing';
 
 /**
@@ -24,7 +26,7 @@ import { Listing } from '@/types/listing';
 export default function HomePage() {
   // eslint-disable-next-line unused-imports/no-unused-vars
   const [listings, isLoading, error] = useCollectionInfinite<Listing>(
-    'listings',
+    FirestoreService.getListings(),
     9
   );
   if (error) {

@@ -1,17 +1,21 @@
-import { Timestamp } from 'firebase/firestore';
 import { Select, TextInput } from 'flowbite-react';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
 import Button from '@/components/buttons/Button';
 
+import { Misc } from '@/misc/misc-functions';
+
 import { FilterListings } from '@/types/filter-listings';
 
-export default function FilteringView({
-  onApplyFilter,
-}: {
-  onApplyFilter: (filter: FilterListings) => void;
-}) {
-  const { handleSubmit, register } = useForm({ mode: 'onChange' });
+export default function FilteringView({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
+  const d = Misc.queryStringToJSON<FilterListings>(router.asPath.split('?')[1]);
+  const { handleSubmit, register } = useForm({
+    mode: 'onChange',
+    defaultValues: d,
+  });
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     for (let i = 0; i < Object.keys(data).length; i++) {
@@ -20,27 +24,14 @@ export default function FilteringView({
         data[key] = null;
       }
     }
-    onApplyFilter({
-      ...data,
-      ageFrom: data.ageFrom ? Number.parseInt(data.ageFrom) : null,
-      ageTo: data.ageTo ? Number.parseInt(data.ageTo) : null,
-      missingSinceTo: data.missingSinceTo
-        ? Timestamp.fromDate(new Date(data.missingSinceTo))
-        : null,
-      missingSinceFrom: data.missingSinceFrom
-        ? Timestamp.fromDate(new Date(data.missingSinceFrom))
-        : null,
-      dateReportedTo: data.dateReportedTo
-        ? Timestamp.fromDate(new Date(data.dateReportedTo))
-        : null,
-      dateReportedFrom: data.dateReportedFrom
-        ? Timestamp.fromDate(new Date(data.dateReportedFrom))
-        : null,
+    router.replace(router.pathname, {
+      query: data,
     });
+    onClose();
   };
   return (
     <form className='' onSubmit={handleSubmit(onSubmit)}>
-      <div className='flex flex-col gap-y-2 text-start'>
+      <div className='flex max-h-[30rem] flex-col gap-y-2 overflow-y-auto text-start'>
         <div className='rounded-md bg-white p-3 shadow-md'>
           <div>Gender</div>
           <Select {...register('missingGender')}>
