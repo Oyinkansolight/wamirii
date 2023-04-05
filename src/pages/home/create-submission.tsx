@@ -17,6 +17,7 @@ import Button from '@/components/buttons/Button';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 
+import { allStates } from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
@@ -137,7 +138,10 @@ export default AuthGuardHOC(() => {
     try {
       for (let i = 0; i < Object.keys(data).length; i++) {
         const key = Object.keys(data)[i];
-        if (data[key] === '' || data[key] === 'Select Gender') {
+        if (
+          data[key] === '' ||
+          (typeof data[key] === 'string' && data[key].split()[0] === 'Select')
+        ) {
           data[key] = null;
         }
       }
@@ -178,6 +182,19 @@ export default AuthGuardHOC(() => {
                     placeholder={v.placeholder}
                     {...register(v.name ?? `${i}`)}
                   />
+                ) : v.name === 'missingLastSeenSate' ? (
+                  <Select className='capitalize'>
+                    <option>Select State</option>
+                    {allStates.map((state, i) => (
+                      <option
+                        key={i}
+                        value={state.name.toLowerCase()}
+                        className='capitalize'
+                      >
+                        {state.name.toLowerCase()}
+                      </option>
+                    ))}
+                  </Select>
                 ) : v.name === 'missingGender' ? (
                   <Select
                     id={v.name}
