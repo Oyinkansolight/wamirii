@@ -24,7 +24,11 @@ import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
   const router = useRouter();
-  const { register, handleSubmit } = useForm({ mode: 'onChange' });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: 'onChange' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const missingPersonInputProps: (TextInputProps & {
     options?: RegisterOptions<FieldValues, string> | undefined;
@@ -33,13 +37,21 @@ export default AuthGuardHOC(() => {
       placeholder: 'Enter first name of missing person',
       title: 'First name',
       name: 'missingFirstName',
-      options: { required: true },
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
     },
     {
       placeholder: 'Enter last name of missing person',
       title: 'Last name',
       name: 'missingLastName',
-      options: { required: true },
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
     },
     {
       placeholder: 'Select image of missing person',
@@ -50,6 +62,11 @@ export default AuthGuardHOC(() => {
       placeholder: 'Select gender of missing person',
       title: 'Gender',
       name: 'missingGender',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== 's' || 'This field must not be empty',
+        },
+      },
     },
     {
       placeholder: 'Enter age of missing person',
@@ -78,6 +95,11 @@ export default AuthGuardHOC(() => {
       title: 'Date Reported',
       name: 'missingDateReported',
       type: 'datetime-local',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
     },
     {
       placeholder: 'Enter more information about the missing person',
@@ -173,7 +195,14 @@ export default AuthGuardHOC(() => {
                 ])}
                 key={i}
               >
-                <label htmlFor={v.name} className=''>
+                <label
+                  htmlFor={v.name}
+                  className={clsxm(
+                    v.name &&
+                      errors[v.name]?.message &&
+                      ' text-red-500 focus:outline-none'
+                  )}
+                >
                   {v.title}
                 </label>
                 {v.name === 'missingImageUrl' ? (
@@ -184,7 +213,7 @@ export default AuthGuardHOC(() => {
                   />
                 ) : v.name === 'missingLastSeenSate' ? (
                   <Select className='capitalize'>
-                    <option>Select State</option>
+                    <option value=''>Select State</option>
                     {allStates.map((state, i) => (
                       <option
                         key={i}
@@ -199,9 +228,9 @@ export default AuthGuardHOC(() => {
                   <Select
                     id={v.name}
                     placeholder={v.placeholder}
-                    {...register(v.name)}
+                    {...register(v.name, v.options)}
                   >
-                    <option>Select Gender</option>
+                    <option value='s'>Select Gender</option>
                     <option value='male'>Male</option>
                     <option value='female'>Female</option>
                   </Select>
@@ -216,8 +245,13 @@ export default AuthGuardHOC(() => {
                     id={v.name}
                     type={v.type}
                     placeholder={v.placeholder}
-                    {...register(v.name ?? `${i}`)}
+                    {...register(v.name ?? `${i}`, v.options)}
                   />
+                )}
+                {v.name && errors[v.name]?.message && (
+                  <div className='text-xs font-bold text-red-500'>
+                    {errors[v.name]?.message?.toString()}
+                  </div>
                 )}
               </div>
             ))}

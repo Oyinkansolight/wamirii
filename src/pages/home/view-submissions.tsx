@@ -151,6 +151,13 @@ export default AuthGuardHOC(() => {
             <div className='flex justify-end'></div>
             <DataTable
               title='My Submissions'
+              noDataComponent={
+                <div className='flex h-52 flex-col items-center justify-center'>
+                  <div>You are yet to create any submissions</div>
+                  <div className='h-5' />
+                  <Button>Create Submission</Button>
+                </div>
+              }
               actions={[
                 <FilterModal key={0}>
                   <Button>

@@ -41,6 +41,8 @@ export class AuthService {
     switch (code) {
       case 'auth/user-not-found':
         return 'No user with this email address exists. Create account to continue.';
+      case 'auth/wrong-password':
+        return 'Incorrect Password';
       case 'auth/email-already-in-use':
         return 'This email address is already in use';
       case 'auth/invalid-email':

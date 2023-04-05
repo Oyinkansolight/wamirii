@@ -148,3 +148,6 @@ export const allStates = [
     name: 'FEDERAL CAPITAL TERRITORY',
   },
 ];
+
+// eslint-disable-next-line unused-imports/no-unused-vars
+const removeDark = /`(dark:.*?)[\w\d\-:]*`/gi;
