@@ -29,15 +29,18 @@ export default function ProfilePicture({
     // fontFamily: ['Arial'],
   });
   return (
-    <Image
-      height={size}
-      width={size}
-      className='overflow-hidden rounded-full'
-      src={
-        url ??
-        `data:image/svg+xml;utf8,${encodeURIComponent(avatar.toString())}`
-      }
-      alt='avatar'
-    />
+    <div
+      style={{ position: 'relative', height: `${size}px`, width: `${size}px` }}
+    >
+      <Image
+        fill
+        className='overflow-hidden rounded-full object-cover'
+        src={
+          url ??
+          `data:image/svg+xml;utf8,${encodeURIComponent(avatar.toString())}`
+        }
+        alt='avatar'
+      />
+    </div>
   );
 }
