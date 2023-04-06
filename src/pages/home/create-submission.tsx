@@ -64,7 +64,7 @@ export default AuthGuardHOC(() => {
       name: 'missingGender',
       options: {
         validate: {
-          notEmpty: (v) => v !== 's' || 'This field must not be empty',
+          notEmpty: (v) => v !== 'select' || 'This field must not be empty',
         },
       },
     },
@@ -213,7 +213,7 @@ export default AuthGuardHOC(() => {
                   />
                 ) : v.name === 'missingLastSeenSate' ? (
                   <Select className='capitalize'>
-                    <option value=''>Select State</option>
+                    <option value='select'>Select State</option>
                     {allStates.map((state, i) => (
                       <option
                         key={i}
@@ -230,7 +230,7 @@ export default AuthGuardHOC(() => {
                     placeholder={v.placeholder}
                     {...register(v.name, v.options)}
                   >
-                    <option value='s'>Select Gender</option>
+                    <option value='select'>Select Gender</option>
                     <option value='male'>Male</option>
                     <option value='female'>Female</option>
                   </Select>

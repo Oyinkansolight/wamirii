@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   setDoc,
   Timestamp,
+  updateDoc,
   where,
   WhereFilterOp,
 } from 'firebase/firestore';
@@ -35,6 +36,19 @@ export class FirestoreService {
       role: 'visitor',
       createdAt: serverTimestamp(),
     });
+  }
+
+  static async updateUserDocument(user: User) {
+    if (user?.imageURL) {
+      const f = user.imageURL as unknown as FileList;
+      if (f.length > 0) {
+        const r = await StorageService.uploadFile(f, 'profile_images');
+        user.imageURL = r.ref.fullPath;
+      } else {
+        user.imageURL = '';
+      }
+    }
+    await updateDoc(doc(db, `users/${user.id}`), { ...user });
   }
 
   static async createListing(listing: Listing) {

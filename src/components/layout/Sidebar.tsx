@@ -1,22 +1,27 @@
-import { thumbs } from '@dicebear/collection';
-import { createAvatar } from '@dicebear/core';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { CiSettings } from 'react-icons/ci';
+import { ImProfile } from 'react-icons/im';
 import { MdFormatListBulletedAdd } from 'react-icons/md';
 import { RiDashboardFill, RiListCheck2 } from 'react-icons/ri';
 
 import clsxm from '@/lib/clsxm';
 
 import { UserContext } from '@/components/layout/GetAuthStatus';
+import ProfilePicture from '@/components/profile/ProfilePicture';
 
 const NavItems = [
   {
     icon: <RiDashboardFill />,
     label: 'Dashboard',
     link: '/home',
+  },
+  {
+    icon: <ImProfile />,
+    label: 'Profile',
+    link: '/home/profile',
   },
   {
     icon: <RiListCheck2 />,
@@ -37,11 +42,6 @@ const NavItems = [
 
 const Sidebar = () => {
   const user = useContext(UserContext);
-  const avatar = createAvatar(thumbs, {
-    seed: user?.username ?? 'NO',
-    radius: 50,
-    // fontFamily: ['Arial'],
-  });
   const router = useRouter();
   return (
     <aside className='order-first flex h-screen w-64 flex-col overflow-y-auto border-r bg-white px-4 py-8 rtl:border-r-0 rtl:border-l'>
@@ -76,14 +76,7 @@ const Sidebar = () => {
         </nav>
 
         <Link href='#' className='-mx-2 flex items-center px-4'>
-          <Image
-            height={40}
-            width={40}
-            src={`data:image/svg+xml;utf8,${encodeURIComponent(
-              avatar.toString()
-            )}`}
-            alt='avatar'
-          />
+          <ProfilePicture user={user} />
           <span className='mx-2 font-medium text-gray-800 dark:text-gray-200'>
             {user?.username}
           </span>
