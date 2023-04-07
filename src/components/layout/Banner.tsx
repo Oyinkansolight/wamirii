@@ -1,9 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { Hits, useSearchBox } from 'react-instantsearch-hooks-web';
+
+import logger from '@/lib/logger';
 
 import Button from '@/components/buttons/Button';
+import SearchResultCard from '@/components/submissions/SearchResultCard';
 
 const Banner = () => {
+  const { refine } = useSearchBox();
+  const [showHits, setShowHits] = useState(false);
   return (
     <div className='relative w-full'>
       <Image
@@ -62,12 +69,33 @@ const Banner = () => {
                     </label>
                     <input
                       placeholder='John'
+                      onChange={(v) => {
+                        const t = v.currentTarget.value;
+                        if (!t || t === '') {
+                          setShowHits(false);
+                        } else {
+                          refine(t);
+                          setShowHits(true);
+                        }
+                      }}
                       required
                       type='text'
                       className='focus:border-deep-purple-accent-400 focus:shadow-outline mb-2 h-12 w-full flex-grow appearance-none rounded border border-gray-300 bg-white px-4 shadow-sm transition duration-200 focus:outline-none'
                       id='firstName'
                       name='firstName'
                     />
+                    <div className='relative'>
+                      <Hits
+                        hidden={!showHits}
+                        className='absolute z-auto w-full rounded-md bg-white shadow-lg'
+                        classNames={{ list: 'space-y-1' }}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        hitComponent={(props: any) => {
+                          logger(props.hit);
+                          return <SearchResultCard hit={props.hit} />;
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className='mt-4 mb-2 sm:mb-4'>
                     <Button
