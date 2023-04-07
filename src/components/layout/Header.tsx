@@ -18,7 +18,7 @@ const Nav = () => {
 
   return (
     <div
-      className={clsxm(!isMenuOpen ? 'py-5' : 'w-full', 'layout z-50 mx-auto')}
+      className={clsxm(!isMenuOpen ? 'py-5' : 'w-full', 'layout z-10 mx-auto')}
     >
       <div className='relative flex items-center justify-between'>
         <div className='flex items-center'>
@@ -136,6 +136,12 @@ const Nav = () => {
                         </Link>
                       </li>
                     ))}
+
+                    <BasicModal>
+                      <Button className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
+                        Report a missing Person
+                      </Button>
+                    </BasicModal>
                   </ul>
                 </nav>
               </div>

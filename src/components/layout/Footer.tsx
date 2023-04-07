@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Footer = () => {
   return (
-    <div className='relative mt-16 bg-gray-100'>
+    <div className='relative mt-16 w-full bg-gray-100'>
       <svg
         className='absolute top-0 -mt-5 h-6 w-full text-gray-100 sm:-mt-10 sm:h-16'
         preserveAspectRatio='none'

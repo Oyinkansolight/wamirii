@@ -5,7 +5,7 @@ import Button from '@/components/buttons/Button';
 
 const Banner = () => {
   return (
-    <div className='relative'>
+    <div className='relative w-full'>
       <Image
         width={1260}
         height={750}
