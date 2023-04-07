@@ -11,6 +11,7 @@ import Button from '@/components/buttons/Button';
 import Loading from '@/components/generic/Loading';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
+import ButtonLink from '@/components/links/ButtonLink';
 import FilterModal from '@/components/modals/FilterModal';
 import MissingAvatar from '@/components/submissions/MissingAvatar';
 
@@ -155,7 +156,9 @@ export default AuthGuardHOC(() => {
                 <div className='flex h-52 flex-col items-center justify-center'>
                   <div>You are yet to create any submissions</div>
                   <div className='h-5' />
-                  <Button>Create Submission</Button>
+                  <ButtonLink href='/home/create-submission'>
+                    Create Submission
+                  </ButtonLink>
                 </div>
               }
               actions={[

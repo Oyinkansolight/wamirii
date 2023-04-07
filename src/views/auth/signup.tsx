@@ -51,11 +51,13 @@ export default function SignUpView() {
           {...register('email', { required: true })}
         ></input>
         <input
+          type='password'
           placeholder='Enter your password'
           className={inputClass}
           {...register('password', { required: true })}
         ></input>
         <input
+          type='password'
           placeholder='Re-type your password'
           className={inputClass}
           {...register('confirm-password', {

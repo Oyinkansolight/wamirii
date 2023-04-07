@@ -1,3 +1,4 @@
+import DashboardHeader from '@/components/layout/DashboardHeader';
 import Sidebar from '@/components/layout/Sidebar';
 
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -5,7 +6,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
     {/* <Header /> */}
 
     <div className='flex flex-1 flex-row overflow-y-hidden'>
-      <main className='flex-1 overflow-y-auto p-2'>{children}</main>
+      <div className='flex flex-1 flex-col overflow-x-hidden'>
+        <DashboardHeader />
+        <main className='mt-4 flex-1 overflow-y-auto overflow-x-hidden p-2 md:mt-10 md:p-10'>
+          {children}
+        </main>
+      </div>
       <Sidebar />
     </div>
   </div>

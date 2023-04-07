@@ -33,6 +33,21 @@ export default function Submissions() {
       <Seo templateTitle='Wamirii Listings' />
 
       <div className='mx-auto px-4 py-16 sm:max-w-xl md:max-w-full md:px-24 lg:max-w-screen-xl lg:px-8 lg:py-20'>
+        {listings?.length === 0 && (
+          <section className='mx-auto w-full overflow-hidden py-4'>
+            <div className='container mx-auto px-4'>
+              <div className='mx-auto max-w-md text-center'>
+                <h2 className='font-heading mb-3 text-2xl font-semibold'>
+                  No Submissions
+                </h2>
+                <p className='mb-7 text-neutral-500'>
+                  Sign up or in to create a new submission.
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
         <div className='grid gap-8 sm:mx-auto sm:max-w-sm lg:max-w-full lg:grid-cols-3'>
           {listings?.map((listing, i) => (
             <ListingCard key={i} listing={listing} />

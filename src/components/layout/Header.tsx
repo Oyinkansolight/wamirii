@@ -3,6 +3,8 @@ import Link from 'next/link';
 import * as React from 'react';
 import { useState } from 'react';
 
+import clsxm from '@/lib/clsxm';
+
 import Button from '@/components/buttons/Button';
 import { BasicModal } from '@/components/modals';
 
@@ -15,7 +17,9 @@ const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className='layout mx-auto py-5'>
+    <div
+      className={clsxm(!isMenuOpen ? 'py-5' : 'w-full', 'layout z-10 mx-auto')}
+    >
       <div className='relative flex items-center justify-between'>
         <div className='flex items-center'>
           <Link
@@ -87,27 +91,18 @@ const Nav = () => {
                   <div>
                     <Link
                       href='/'
-                      aria-label='Company'
-                      title='Company'
-                      className='inline-flex items-center'
+                      aria-label='Wamirii'
+                      title='Wamirii'
+                      className='mr-8 inline-flex items-center'
                     >
-                      <svg
-                        className='text-deep-purple-accent-400 w-8'
-                        viewBox='0 0 24 24'
-                        strokeLinejoin='round'
-                        strokeWidth='2'
-                        strokeLinecap='round'
-                        strokeMiterlimit='10'
-                        stroke='currentColor'
-                        fill='none'
-                      >
-                        <rect x='3' y='1' width='7' height='12' />
-                        <rect x='3' y='17' width='7' height='6' />
-                        <rect x='14' y='1' width='7' height='6' />
-                        <rect x='14' y='11' width='7' height='12' />
-                      </svg>
+                      <Image
+                        width={100}
+                        height={50}
+                        alt='Wamirii Logo'
+                        src='/images/logo.png'
+                      />
                       <span className='ml-2 text-xl font-bold uppercase tracking-wide text-gray-800'>
-                        Company
+                        Wamirii
                       </span>
                     </Link>
                   </div>
@@ -129,66 +124,24 @@ const Nav = () => {
                 </div>
                 <nav>
                   <ul className='space-y-4'>
-                    <li>
-                      <Link
-                        href='/'
-                        aria-label='Our product'
-                        title='Our product'
-                        className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
-                      >
-                        Product
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href='/'
-                        aria-label='Our product'
-                        title='Our product'
-                        className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
-                      >
-                        Features
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href='/'
-                        aria-label='Product pricing'
-                        title='Product pricing'
-                        className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
-                      >
-                        Pricing
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href='/'
-                        aria-label='About us'
-                        title='About us'
-                        className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
-                      >
-                        About us
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href='/'
-                        aria-label='Sign in'
-                        title='Sign in'
-                        className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
-                      >
-                        Sign in
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href='/'
-                        className='bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline inline-flex h-12 w-full items-center justify-center rounded px-6 font-medium tracking-wide text-white shadow-md transition duration-200 focus:outline-none'
-                        aria-label='Sign up'
-                        title='Sign up'
-                      >
-                        Sign up
-                      </Link>
-                    </li>
+                    {links.map((link, idx) => (
+                      <li key={idx}>
+                        <Link
+                          href={link.href}
+                          aria-label='Our product'
+                          title='Our product'
+                          className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+
+                    <BasicModal>
+                      <Button className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
+                        Report a missing Person
+                      </Button>
+                    </BasicModal>
                   </ul>
                 </nav>
               </div>
