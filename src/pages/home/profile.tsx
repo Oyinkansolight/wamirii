@@ -108,7 +108,7 @@ export default AuthGuardHOC(() => {
             {profileInputProps.map((v, i) => (
               <div
                 className={clsxm([
-                  'min-w-[20rem] flex-1',
+                  'min-w-[15rem] flex-1',
                   v.name === 'missingMoreInformation' && 'w-full  flex-initial',
                 ])}
                 key={i}

@@ -14,27 +14,27 @@ import ProfilePicture from '@/components/profile/ProfilePicture';
 
 const NavItems = [
   {
-    icon: <RiDashboardFill />,
+    icon: <RiDashboardFill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Dashboard',
     link: '/home',
   },
   {
-    icon: <ImProfile />,
+    icon: <ImProfile className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Profile',
     link: '/home/profile',
   },
   {
-    icon: <RiListCheck2 />,
+    icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Submissions',
     link: '/home/view-submissions',
   },
   {
-    icon: <MdFormatListBulletedAdd />,
+    icon: <MdFormatListBulletedAdd className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Create Submissions',
     link: '/home/create-submission',
   },
   {
-    icon: <CiSettings />,
+    icon: <CiSettings className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Settings',
     link: '#',
   },
@@ -44,7 +44,7 @@ const Sidebar = () => {
   const user = useContext(UserContext);
   const router = useRouter();
   return (
-    <aside className='order-first flex h-screen w-64 flex-col overflow-y-auto border-r bg-white px-4 py-8 rtl:border-r-0 rtl:border-l'>
+    <aside className='order-first flex h-screen w-20 min-w-[80px] flex-col overflow-y-auto border-r bg-white px-2 py-8 rtl:border-r-0 rtl:border-l md:w-64 md:px-4'>
       <Link href='#'>
         <Image
           width={200}
@@ -68,14 +68,16 @@ const Sidebar = () => {
             >
               {v.icon}
 
-              <span className='mx-4 font-medium'>{v.label}</span>
+              <span className='mx-4 hidden font-medium md:block'>
+                {v.label}
+              </span>
             </Link>
           ))}
 
           <hr className='my-6 border-gray-200 dark:border-gray-600' />
         </nav>
 
-        <Link href='#' className='-mx-2 flex items-center px-4'>
+        <Link href='#' className='-mx-2 hidden items-center px-4 md:flex'>
           <ProfilePicture user={user} />
           <span className='mx-2 font-medium text-gray-800 dark:text-gray-200'>
             {user?.username}

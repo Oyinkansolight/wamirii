@@ -79,6 +79,11 @@ export default AuthGuardHOC(() => {
       title: 'Missing Since',
       name: 'missingSince',
       type: 'date',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
     },
     {
       placeholder: 'Enter occupation of missing person',
@@ -156,7 +161,7 @@ export default AuthGuardHOC(() => {
             {missingPersonInputProps.map((v, i) => (
               <div
                 className={clsxm([
-                  'min-w-[20rem] flex-1',
+                  'min-w-[15rem] flex-1',
                   v.name === 'missingMoreInformation' && 'w-full  flex-initial',
                 ])}
                 key={i}
@@ -227,7 +232,7 @@ export default AuthGuardHOC(() => {
           <div className=' font-bold'>Contact Information (If found)</div>
           <div className='flex flex-wrap justify-between gap-x-2 gap-y-4'>
             {contactPersonInputProps.map((v, i) => (
-              <div className='min-w-[20rem] flex-1' key={i}>
+              <div className='min-w-[15rem] flex-1' key={i}>
                 <label htmlFor={`${i}`} className=''>
                   {v.title}
                 </label>

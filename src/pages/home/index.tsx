@@ -10,7 +10,7 @@ export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
   return (
     <DashboardLayout>
-      <div className='flex h-screen flex-col items-center justify-center'>
+      <div className='flex h-1/2 flex-col items-center justify-center md:h-screen'>
         {user && <div> Logged in as {user.username}</div>}
         <div>
           <button
