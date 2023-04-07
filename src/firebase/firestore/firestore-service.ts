@@ -42,7 +42,10 @@ export class FirestoreService {
     if (user?.imageURL) {
       const f = user.imageURL as unknown as FileList;
       if (f.length > 0) {
-        const r = await StorageService.uploadFile(f, 'profile_images');
+        const r = await StorageService.uploadFile(
+          f,
+          `profile_images/${user.id}`
+        );
         user.imageURL = r.ref.fullPath;
       } else {
         user.imageURL = '';

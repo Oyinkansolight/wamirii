@@ -32,15 +32,19 @@ export default function ProfilePicture({
     <div
       style={{ position: 'relative', height: `${size}px`, width: `${size}px` }}
     >
-      <Image
-        fill
-        className='overflow-hidden rounded-full object-cover'
-        src={
-          url ??
-          `data:image/svg+xml;utf8,${encodeURIComponent(avatar.toString())}`
-        }
-        alt='avatar'
-      />
+      {user?.imageURL && !url ? (
+        <div />
+      ) : (
+        <Image
+          fill
+          className='overflow-hidden rounded-full object-cover'
+          src={
+            url ??
+            `data:image/svg+xml;utf8,${encodeURIComponent(avatar.toString())}`
+          }
+          alt='avatar'
+        />
+      )}
     </div>
   );
 }

@@ -78,7 +78,7 @@ export default AuthGuardHOC(() => {
       placeholder: 'Enter the date the missing person was last seen',
       title: 'Missing Since',
       name: 'missingSince',
-      type: 'datetime-local',
+      type: 'date',
     },
     {
       placeholder: 'Enter occupation of missing person',
@@ -89,17 +89,6 @@ export default AuthGuardHOC(() => {
       placeholder: 'Enter the state the missing person was last seen',
       title: 'State',
       name: 'missingLastSeenSate',
-    },
-    {
-      placeholder: 'Enter the date the  missing person was reported missing',
-      title: 'Date Reported',
-      name: 'missingDateReported',
-      type: 'datetime-local',
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
     },
     {
       placeholder: 'Enter more information about the missing person',
@@ -128,29 +117,6 @@ export default AuthGuardHOC(() => {
       placeholder: 'Enter address of contact person',
       title: 'Address',
       name: 'contactAddress',
-    },
-  ];
-
-  const reporterInputProps: TextInputProps[] = [
-    {
-      placeholder: 'Enter name of reporter',
-      title: 'Name',
-      name: 'reporterName',
-    },
-    {
-      placeholder: 'Enter email address of reporter',
-      title: 'Email',
-      name: 'reporterEmail',
-    },
-    {
-      placeholder: 'Enter phone number of reporter',
-      title: 'Phone Number',
-      name: 'reporterPhone',
-    },
-    {
-      placeholder: 'Enter relation of reporter with missing person',
-      title: 'Relationship',
-      name: 'reporterRelationship',
     },
   ];
 
@@ -185,7 +151,7 @@ export default AuthGuardHOC(() => {
     <DashboardLayout>
       <form className='flex flex-col gap-y-8' onSubmit={handleSubmit(onSubmit)}>
         <Card>
-          <div className=' font-bold'>Missing Person Info</div>
+          <div className=' font-bold'>Missing Person Information</div>
           <div className='flex flex-wrap justify-between gap-x-2 gap-y-4'>
             {missingPersonInputProps.map((v, i) => (
               <div
@@ -258,22 +224,9 @@ export default AuthGuardHOC(() => {
           </div>
         </Card>
         <Card>
-          <div className=' font-bold'>Contact Info</div>
+          <div className=' font-bold'>Contact Information (If found)</div>
           <div className='flex flex-wrap justify-between gap-x-2 gap-y-4'>
             {contactPersonInputProps.map((v, i) => (
-              <div className='min-w-[20rem] flex-1' key={i}>
-                <label htmlFor={`${i}`} className=''>
-                  {v.title}
-                </label>
-                <TextInput {...v} {...register(v.name ?? `${i}`)} />
-              </div>
-            ))}
-          </div>
-        </Card>
-        <Card>
-          <div className=' font-bold'>Reporter Info</div>
-          <div className='flex flex-wrap justify-between gap-x-2 gap-y-4'>
-            {reporterInputProps.map((v, i) => (
               <div className='min-w-[20rem] flex-1' key={i}>
                 <label htmlFor={`${i}`} className=''>
                   {v.title}
