@@ -1,0 +1,60 @@
+import * as React from 'react';
+
+import { useCollectionInfinite } from '@/hooks/useCollectionInfinite';
+
+import { ListingCard } from '@/components/cards';
+import Loading from '@/components/generic/Loading';
+import Layout from '@/components/layout/Layout';
+import Seo from '@/components/Seo';
+
+import { Listing } from '@/types/listing';
+
+/**
+ * SVGR Support
+ * Caveat: No React Props Type.
+ *
+ * You can override the next-env if the type is important to you
+ * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
+ */
+
+// !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
+// Before you begin editing, follow all comments with `STARTERCONF`,
+// to customize the default configuration.
+
+export default function Submissions() {
+  const [listings, isLoading, error, loadMore, isLastPage] =
+    useCollectionInfinite<Listing>('listings', 5);
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+  return (
+    <Layout>
+      {/* <Seo templateTitle='Home' /> */}
+      <Seo templateTitle='Wamirii Listings' />
+
+      <div className='mx-auto px-4 py-16 sm:max-w-xl md:max-w-full md:px-24 lg:max-w-screen-xl lg:px-8 lg:py-20'>
+        <div className='grid gap-8 sm:mx-auto sm:max-w-sm lg:max-w-full lg:grid-cols-3'>
+          {listings?.map((listing, i) => (
+            <ListingCard key={i} listing={listing} />
+          ))}
+        </div>
+        {isLoading ? (
+          <div className='flex items-center'>
+            <div>
+              <Loading />
+            </div>
+          </div>
+        ) : (
+          !isLastPage && (
+            <div
+              onClick={loadMore}
+              className='flex cursor-pointer items-center p-10 font-bold'
+            >
+              <div>Load More</div>
+            </div>
+          )
+        )}
+      </div>
+    </Layout>
+  );
+}
