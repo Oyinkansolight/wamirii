@@ -10,7 +10,6 @@ import { FieldValues, RegisterOptions, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import clsxm from '@/lib/clsxm';
-import logger from '@/lib/logger';
 
 import Button from '@/components/buttons/Button';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -64,7 +63,6 @@ export default AuthGuardHOC(() => {
   ];
 
   useEffect(() => {
-    logger('Setting user profile inputs');
     if (user) {
       const keys = Object.keys(user) as (keyof User)[];
       for (let i = 0; i < keys.length; i++) {

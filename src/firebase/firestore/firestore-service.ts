@@ -104,6 +104,10 @@ export class FirestoreService {
     return query(collection(db, 'listings'), orderBy('createdAt', 'desc'));
   }
 
+  static getDocRef(path: string) {
+    return doc(db, path);
+  }
+
   static getListings(
     createdBy?: string,
     orderByField?: OrderByField,

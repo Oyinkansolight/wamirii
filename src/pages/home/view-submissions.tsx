@@ -5,8 +5,6 @@ import DataTable, { TableColumn } from 'react-data-table-component';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { MdFilterList } from 'react-icons/md';
 
-import logger from '@/lib/logger';
-
 import Button from '@/components/buttons/Button';
 import Loading from '@/components/generic/Loading';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -127,7 +125,6 @@ export default AuthGuardHOC(() => {
       f.push(['missingAge', '>', filter.ageFrom]);
     }
     if (filter.ageTo) {
-      logger(filter.ageTo);
       f.push(['missingAge', '<', filter.ageTo]);
     }
     if (filter.missingSinceFrom) {

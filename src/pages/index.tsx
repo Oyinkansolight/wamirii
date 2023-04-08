@@ -44,7 +44,7 @@ export default function HomePage() {
         ) : (
           <div className='h3 mb-4'>Recent Submissions</div>
         )}
-        <div className='grid gap-8 sm:mx-auto sm:max-w-sm lg:max-w-full lg:grid-cols-3'>
+        <div className='grid w-screen gap-8 sm:mx-auto sm:max-w-sm lg:max-w-full lg:grid-cols-3'>
           {listings?.map((listing, i) => (
             <ListingCard key={i} listing={listing} />
           ))}
