@@ -3,8 +3,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Hits, useSearchBox } from 'react-instantsearch-hooks-web';
 
-import logger from '@/lib/logger';
-
 import Button from '@/components/buttons/Button';
 import SearchResultCard from '@/components/submissions/SearchResultCard';
 
@@ -68,7 +66,7 @@ const Banner = () => {
                       Enter Name
                     </label>
                     <input
-                      placeholder='John'
+                      placeholder='Search for name, location or age'
                       onChange={(v) => {
                         const t = v.currentTarget.value;
                         if (!t || t === '') {
@@ -78,11 +76,12 @@ const Banner = () => {
                           setShowHits(true);
                         }
                       }}
+                      autoComplete='off'
                       required
                       type='text'
-                      className='focus:border-deep-purple-accent-400 focus:shadow-outline mb-2 h-12 w-full flex-grow appearance-none rounded border border-gray-300 bg-white px-4 shadow-sm transition duration-200 focus:outline-none'
-                      id='firstName'
-                      name='firstName'
+                      className='focus:shadow-outline mb-2 h-12 w-full flex-grow appearance-none rounded border border-gray-300 bg-white px-4 shadow-sm transition duration-200 focus:border-primary-400 focus:outline-none'
+                      id='search'
+                      name='missing_search'
                     />
                     <div className='relative'>
                       <Hits
@@ -91,7 +90,6 @@ const Banner = () => {
                         classNames={{ list: 'space-y-1' }}
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         hitComponent={(props: any) => {
-                          logger(props.hit);
                           return <SearchResultCard hit={props.hit} />;
                         }}
                       />
