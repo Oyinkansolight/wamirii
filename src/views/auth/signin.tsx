@@ -37,6 +37,7 @@ export default function SignInView() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <input
+          type='email'
           className={inputClass}
           placeholder='Enter email address'
           {...register('email', { required: true })}

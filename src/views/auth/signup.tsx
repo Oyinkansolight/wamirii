@@ -41,11 +41,13 @@ export default function SignUpView() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <input
+          type='text'
           placeholder='Enter username'
           className={inputClass}
           {...register('username', { required: true })}
         ></input>
         <input
+          type='email'
           placeholder='Enter email address'
           className={inputClass}
           {...register('email', { required: true })}
