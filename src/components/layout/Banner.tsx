@@ -76,12 +76,12 @@ const Banner = () => {
                           setShowHits(true);
                         }
                       }}
-                      autoComplete='off'
                       required
                       type='text'
-                      className='focus:shadow-outline mb-2 h-12 w-full flex-grow appearance-none rounded border border-gray-300 bg-white px-4 shadow-sm transition duration-200 focus:border-primary-400 focus:outline-none'
                       id='search'
+                      autoComplete='off'
                       name='missing_search'
+                      className='focus:shadow-outline mb-2 h-12 w-full flex-grow appearance-none rounded border border-gray-300 bg-white px-4 shadow-sm transition duration-200 focus:border-primary-400 focus:outline-none'
                     />
                     <div className='relative'>
                       <Hits
