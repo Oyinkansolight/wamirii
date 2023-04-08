@@ -61,7 +61,7 @@ export default function Submissions() {
           </section>
         )}
 
-        <div className='grid gap-8 sm:mx-auto sm:max-w-sm lg:max-w-full lg:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
           {listings?.map((listing, i) => (
             <ListingCard key={i} listing={listing} />
           ))}
