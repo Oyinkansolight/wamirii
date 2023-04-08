@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Hits, useSearchBox } from 'react-instantsearch-hooks-web';
 
@@ -7,6 +8,8 @@ import Button from '@/components/buttons/Button';
 import SearchResultCard from '@/components/submissions/SearchResultCard';
 
 const Banner = () => {
+  const router = useRouter();
+  const [searchString, setSearchString] = useState('');
   const { refine } = useSearchBox();
   const [showHits, setShowHits] = useState(false);
   return (
@@ -57,7 +60,13 @@ const Banner = () => {
                 <h3 className='mb-4 text-xl font-semibold sm:mb-6 sm:text-center sm:text-2xl'>
                   Who are you looking for?
                 </h3>
-                <form>
+                <form
+                  onSubmit={() => {
+                    router.push(
+                      `/submissions-search-results?search=${searchString}`
+                    );
+                  }}
+                >
                   <div className='mb-1 sm:mb-2'>
                     <label
                       htmlFor='firstName'
@@ -74,6 +83,7 @@ const Banner = () => {
                         } else {
                           refine(t);
                           setShowHits(true);
+                          setSearchString(t);
                         }
                       }}
                       required
