@@ -61,7 +61,8 @@ const Banner = () => {
                   Who are you looking for?
                 </h3>
                 <form
-                  onSubmit={() => {
+                  onSubmit={(v) => {
+                    v.preventDefault();
                     router.push(
                       `/submissions-search-results?search=${searchString}`
                     );
