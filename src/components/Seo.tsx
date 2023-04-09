@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 
 // !STARTERCONF Change these default meta
 const defaultMeta = {
-  title: '‘Wamirii',
-  siteName: '‘Wamirii',
-  description: 'Database for missing persons in Nigeria’',
+  title: 'Wamirii',
+  siteName: 'Wamirii',
+  description: 'Database for missing persons in Nigeria',
   /** Without additional '/' on the end, e.g. https://theodorusclarence.com */
   url: 'https://www.wamirii.com',
   type: 'website',
