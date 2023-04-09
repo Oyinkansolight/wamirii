@@ -39,7 +39,7 @@ export default function SingleSubmission() {
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
-      <Seo templateTitle='Wamirii Listings' />
+      <Seo templateTitle='Wamirii Single Submission View' />
 
       <section className='bg-white dark:bg-gray-900'>
         <div className='relative flex'>

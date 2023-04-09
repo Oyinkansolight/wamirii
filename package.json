@@ -21,6 +21,7 @@
     "@dicebear/collection": "^6.0.2",
     "@dicebear/core": "^6.0.2",
     "@headlessui/react": "^1.7.13",
+    "@vercel/analytics": "^0.1.11",
     "algoliasearch": "^4.17.0",
     "clsx": "^1.2.1",
     "firebase": "^9.18.0",

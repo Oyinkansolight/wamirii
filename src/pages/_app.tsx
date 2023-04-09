@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import algoliasearch from 'algoliasearch/lite';
 import { AppProps } from 'next/app';
 import { InstantSearch } from 'react-instantsearch-hooks-web';
@@ -29,6 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </GetAuthStatus>
       </InstantSearch>
       <ToastContainer />
+      <Analytics />
     </>
   );
 }

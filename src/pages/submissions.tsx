@@ -35,7 +35,7 @@ export default function Submissions() {
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
-      <Seo templateTitle='Wamirii Listings' />
+      <Seo templateTitle='Wamirii Submissions' />
 
       <div className='mx-auto w-full py-6 px-4 sm:max-w-xl md:max-w-full md:px-24 lg:max-w-screen-xl lg:px-8 lg:py-6'>
         <SearchInput
