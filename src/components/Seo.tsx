@@ -72,9 +72,9 @@ export default function Seo(props: SeoProps) {
           />
           {/* // !STARTERCONF Remove or change to your name */}
           <meta
-            name='author'
+            name='Wamirii'
             property='article:author'
-            content='Theodorus Clarence'
+            content='Babatunde Oyinkansola'
           />
         </>
       )}
