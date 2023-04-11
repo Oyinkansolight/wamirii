@@ -49,9 +49,11 @@ export default function SingleSubmission() {
           <div className='container mx-auto flex min-h-screen w-full flex-col justify-center px-6 py-10 lg:absolute lg:inset-x-0'>
             <h1 className='text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl'>
               {submission?.missingFirstName} <br />{' '}
-              <span className='text-blue-500'>
+              <span className='text-primary-500'>
                 {submission?.missingLastName}
               </span>
+              <span> - </span>
+              <span>{submission?.missingAge}</span>
             </h1>
 
             <div className='mt-10 lg:mt-20 lg:flex lg:items-center'>
@@ -83,6 +85,35 @@ export default function SingleSubmission() {
                   culpa aperiam dolorum, obcaecati corrupti aspernatur a. `}
                   ”
                 </p>
+                <div className='h-10' />
+                <div>
+                  <span className='font-bold text-primary-500'>
+                    {' '}
+                    Last Know Location
+                  </span>{' '}
+                  - <span>{submission?.missingLastSeenSate}</span>
+                </div>
+                <div>
+                  <span className='font-bold text-primary-500'>
+                    {' '}
+                    Contact Name
+                  </span>{' '}
+                  - <span>{submission?.contactName}</span>
+                </div>
+                <div>
+                  <span className='font-bold text-primary-500'>
+                    {' '}
+                    Contact Email
+                  </span>{' '}
+                  - <span>{submission?.contactEmail}</span>
+                </div>
+                <div>
+                  <span className='font-bold text-primary-500'>
+                    {' '}
+                    Contact Phone
+                  </span>{' '}
+                  - <span>{submission?.contactPhone}</span>
+                </div>
               </div>
             </div>
           </div>
