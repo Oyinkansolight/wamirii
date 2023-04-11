@@ -42,7 +42,7 @@ export default function SignUpView() {
       >
         <input
           type='text'
-          placeholder='Enter username'
+          placeholder='Enter Full Name'
           className={inputClass}
           {...register('username', { required: true })}
         ></input>

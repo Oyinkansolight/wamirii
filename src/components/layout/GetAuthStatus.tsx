@@ -33,7 +33,7 @@ export default function GetAuthStatus({ children }: { children: JSX.Element }) {
           }, 1000);
         } else {
           unsubscribe2 = await FirestoreService.getUserDoc(u.uid, (data) => {
-            setUser(data);
+            setUser({ ...data, email: u.email ?? undefined });
           });
           setIsLoggedIn('logged-in');
         }
