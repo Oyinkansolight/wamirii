@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { AiFillEdit } from 'react-icons/ai';
 import { GrFormView } from 'react-icons/gr';
 import { MdFilterList } from 'react-icons/md';
 
@@ -39,13 +38,16 @@ const tableColumns: TableColumn<Listing>[] = [
         <div className='font-bold'>
           {cell.missingFirstName} {cell.missingLastName}
         </div>
-        <div className='text-xs tracking-widest'>
-          {cell.missingAge ? `${cell.missingAge} yo` : ''}
-        </div>
       </div>
     ),
     sortable: true,
     sortField: 'missingFirstName',
+  },
+  {
+    name: 'Age',
+    selector: (cell) => cell.missingAge ?? '',
+    sortable: true,
+    sortField: 'missingAge',
   },
   {
     name: 'Missing Since',
@@ -62,11 +64,14 @@ const tableColumns: TableColumn<Listing>[] = [
 
   {
     name: 'Action',
-    cell: () => (
+    cell: (cell) => (
       <div className='flex items-center'>
-        <GrFormView className='h-5 w-5 cursor-pointer' />
-        <div className='h-full w-px bg-black' />
-        <AiFillEdit className='h-5 w-5 cursor-pointer' />
+        <GrFormView
+          onClick={() => {
+            window.location.replace(`/home/submission/${cell._id}`);
+          }}
+          className='h-5 w-5 cursor-pointer'
+        />
       </div>
     ),
     width: '150px',

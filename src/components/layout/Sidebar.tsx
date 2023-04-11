@@ -58,7 +58,7 @@ const Sidebar = () => {
   logger(router.pathname);
   return (
     <Bar>
-      <Link href='#'>
+      <Link href='/'>
         <Image
           width={200}
           height={100}

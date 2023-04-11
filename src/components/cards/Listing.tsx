@@ -76,7 +76,7 @@ const ListingCard = ({
               aria-label='Missing Person'
               title='Person Name'
             >
-              Missing
+              Missing Since
             </Link>
             <span className='text-gray-600'>
               <>
@@ -93,15 +93,21 @@ const ListingCard = ({
               </>
             </span>
           </p>
-          <Link
-            aria-label='Name'
-            title='Person Name'
-            href={path}
-            className='mb-3 inline-block text-2xl font-bold leading-5 transition-colors duration-200 hover:text-primary'
-          >
-            {listing?.missingLastName} {listing?.missingFirstName}
-          </Link>
+          <div className='flex items-baseline gap-x-4'>
+            <Link
+              aria-label='Name'
+              title='Person Name'
+              href={path}
+              className='mb-3 inline-block text-2xl font-bold leading-5 transition-colors duration-200 hover:text-primary'
+            >
+              {listing?.missingLastName} {listing?.missingFirstName}
+            </Link>
+            <p className='mb-2 text-2xl font-bold text-gray-500'>
+              {listing?.missingAge}
+            </p>
+          </div>
           <p className='mb-2 text-gray-700'>{listing?.missingLastSeenSate}</p>
+
           <Link
             href={path}
             aria-label=''

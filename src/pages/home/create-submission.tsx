@@ -82,6 +82,8 @@ export default AuthGuardHOC(() => {
       options: {
         validate: {
           notEmpty: (v) => v !== '' || 'This field must not be empty',
+          notFuture: (v) =>
+            new Date(v) < new Date() || 'Date must not be in the future',
         },
       },
     },

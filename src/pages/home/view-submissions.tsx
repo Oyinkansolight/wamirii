@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { AiFillEdit } from 'react-icons/ai';
+import { GrFormView } from 'react-icons/gr';
 import { MdFilterList } from 'react-icons/md';
 
 import Button from '@/components/buttons/Button';
@@ -61,7 +63,18 @@ const tableColumns: TableColumn<Listing>[] = [
 
   {
     name: 'Action',
-    cell: () => <Button className='w-24'>View</Button>,
+    cell: (cell) => (
+      <div className='flex items-center'>
+        <GrFormView
+          onClick={() => {
+            window.location.replace(`/home/submission/${cell._id}`);
+          }}
+          className='h-5 w-5 cursor-pointer'
+        />
+        <div className='h-full w-px bg-black' />
+        <AiFillEdit className='h-5 w-5 cursor-pointer' />
+      </div>
+    ),
     width: '150px',
     grow: 0,
   },
