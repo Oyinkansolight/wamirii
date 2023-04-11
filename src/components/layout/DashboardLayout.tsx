@@ -6,13 +6,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
     {/* <Header /> */}
 
     <div className='flex flex-1 flex-row overflow-y-hidden'>
+      <Sidebar />
       <div className='flex flex-1 flex-col overflow-x-hidden'>
         <DashboardHeader />
         <main className='mt-4 flex-1 overflow-y-auto overflow-x-hidden p-2 md:mt-10 md:p-10'>
           {children}
         </main>
       </div>
-      <Sidebar />
     </div>
   </div>
 );

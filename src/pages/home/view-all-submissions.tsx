@@ -1,14 +1,15 @@
 import { Timestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { AiFillEdit } from 'react-icons/ai';
+import { GrFormView } from 'react-icons/gr';
 import { MdFilterList } from 'react-icons/md';
 
 import Button from '@/components/buttons/Button';
 import Loading from '@/components/generic/Loading';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import { UserContext } from '@/components/layout/GetAuthStatus';
 import ButtonLink from '@/components/links/ButtonLink';
 import FilterModal from '@/components/modals/FilterModal';
 import MissingAvatar from '@/components/submissions/MissingAvatar';
@@ -61,7 +62,13 @@ const tableColumns: TableColumn<Listing>[] = [
 
   {
     name: 'Action',
-    cell: () => <Button className='w-24'>View</Button>,
+    cell: () => (
+      <div className='flex items-center'>
+        <GrFormView className='h-5 w-5 cursor-pointer' />
+        <div className='h-full w-px bg-black' />
+        <AiFillEdit className='h-5 w-5 cursor-pointer' />
+      </div>
+    ),
     width: '150px',
     grow: 0,
   },
@@ -69,7 +76,6 @@ const tableColumns: TableColumn<Listing>[] = [
 
 export default AuthGuardHOC(() => {
   const router = useRouter();
-  const user = useContext(UserContext);
 
   const [sortBy, setSortBy] = useState<OrderByField>();
   const [filters, setFilters] = useState<FilterByField[]>([]);
@@ -113,7 +119,7 @@ export default AuthGuardHOC(() => {
 
   // eslint-disable-next-line unused-imports/no-unused-vars
   const [docs, loading, error] = useCollection(
-    FirestoreService.getListings(user?.id, sortBy, filters)
+    FirestoreService.getListings(undefined, sortBy, filters)
   );
 
   const onApplyFilter = (filter: FilterListings) => {
@@ -148,7 +154,7 @@ export default AuthGuardHOC(() => {
           <div>
             <div className='flex justify-end'></div>
             <DataTable
-              title='My Submissions'
+              title='All Submissions'
               noDataComponent={
                 <div className='flex h-52 flex-col items-center justify-center'>
                   <div>You are yet to create any submissions</div>

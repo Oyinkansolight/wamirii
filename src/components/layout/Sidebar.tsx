@@ -1,16 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
+import React from 'react';
 import { CiSettings } from 'react-icons/ci';
 import { ImProfile } from 'react-icons/im';
 import { MdFormatListBulletedAdd } from 'react-icons/md';
 import { RiDashboardFill, RiListCheck2 } from 'react-icons/ri';
+import { Menu, MenuItem, Sidebar as Bar, SubMenu } from 'react-pro-sidebar';
 
 import clsxm from '@/lib/clsxm';
-
-import { UserContext } from '@/components/layout/GetAuthStatus';
-import ProfilePicture from '@/components/profile/ProfilePicture';
+import logger from '@/lib/logger';
 
 const NavItems = [
   {
@@ -26,13 +25,27 @@ const NavItems = [
   {
     icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Submissions',
-    link: '/home/view-submissions',
+    children: [
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'My Submissions',
+        link: '/home/view-submissions',
+      },
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'All Submissions',
+        link: '/home/view-all-submissions',
+      },
+      {
+        icon: (
+          <MdFormatListBulletedAdd className='h-6 w-6 md:h-auto md:w-auto' />
+        ),
+        label: 'Create Submissions',
+        link: '/home/create-submission',
+      },
+    ],
   },
-  {
-    icon: <MdFormatListBulletedAdd className='h-6 w-6 md:h-auto md:w-auto' />,
-    label: 'Create Submissions',
-    link: '/home/create-submission',
-  },
+
   {
     icon: <CiSettings className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Settings',
@@ -41,10 +54,10 @@ const NavItems = [
 ];
 
 const Sidebar = () => {
-  const user = useContext(UserContext);
   const router = useRouter();
+  logger(router.pathname);
   return (
-    <aside className='order-first flex h-screen w-20 min-w-[80px] flex-col overflow-y-auto border-r bg-white px-2 py-8 rtl:border-r-0 rtl:border-l md:w-64 md:px-4'>
+    <Bar>
       <Link href='#'>
         <Image
           width={200}
@@ -54,37 +67,48 @@ const Sidebar = () => {
           alt=''
         />
       </Link>
-
-      <div className='mt-6 flex flex-1 flex-col justify-between'>
-        <nav>
-          {NavItems.map((v, i) => (
-            <Link
-              key={i}
-              className={clsxm([
-                'mt-5 flex transform items-center rounded-md px-2 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-200 hover:text-gray-700',
-                router.pathname === v.link && 'bg-gray-300',
-              ])}
-              href={v.link}
-            >
-              {v.icon}
-
-              <span className='mx-4 hidden font-medium md:block'>
-                {v.label}
-              </span>
-            </Link>
-          ))}
-
-          <hr className='my-6 border-gray-200 dark:border-gray-600' />
-        </nav>
-
-        <Link href='#' className='-mx-2 hidden items-center px-4 md:flex'>
-          <ProfilePicture user={user} />
-          <span className='mx-2 font-medium text-gray-800 dark:text-gray-200'>
-            {user?.username}
-          </span>
-        </Link>
-      </div>
-    </aside>
+      <Menu>
+        {NavItems.map((m, i) => {
+          if (m.children) {
+            return (
+              <SubMenu defaultOpen key={i} label={m.label} icon={m.icon}>
+                {m.children.map((sub, j) => (
+                  <MenuItem
+                    active={router.pathname === sub.link}
+                    className={clsxm(
+                      'hover:bg-black',
+                      router.pathname === sub.link
+                        ? 'bg-gray-400 '
+                        : 'text-black'
+                    )}
+                    key={j}
+                    icon={sub.icon}
+                    component={<Link href={sub.link ?? '#'} />}
+                  >
+                    {sub.label}
+                  </MenuItem>
+                ))}
+              </SubMenu>
+            );
+          } else {
+            return (
+              <MenuItem
+                active={router.pathname === m.link}
+                className={clsxm(
+                  'hover:bg-black',
+                  router.pathname === m.link ? 'bg-primary-100' : 'text-black'
+                )}
+                key={i}
+                icon={m.icon}
+                component={<Link href={m.link ?? '#'} />}
+              >
+                {m.label}
+              </MenuItem>
+            );
+          }
+        })}
+      </Menu>
+    </Bar>
   );
 };
 

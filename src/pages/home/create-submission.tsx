@@ -180,6 +180,7 @@ export default AuthGuardHOC(() => {
                   <FileInput
                     id={v.name}
                     placeholder={v.placeholder}
+                    accept='image/png, image/gif, image/jpeg'
                     {...register(v.name ?? `${i}`)}
                   />
                 ) : v.name === 'missingLastSeenSate' ? (

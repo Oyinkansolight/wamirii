@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react';
 import algoliasearch from 'algoliasearch/lite';
 import { AppProps } from 'next/app';
 import { InstantSearch } from 'react-instantsearch-hooks-web';
+import { ProSidebarProvider } from 'react-pro-sidebar';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,9 +26,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <InstantSearch searchClient={searchClient} indexName='wamirii_firestore'>
-        <GetAuthStatus>
-          <Component {...pageProps} />
-        </GetAuthStatus>
+        <ProSidebarProvider>
+          <GetAuthStatus>
+            <Component {...pageProps} />
+          </GetAuthStatus>
+        </ProSidebarProvider>
       </InstantSearch>
       <ToastContainer />
       <Analytics />
