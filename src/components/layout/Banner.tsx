@@ -1,10 +1,8 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Hits, useSearchBox } from 'react-instantsearch-hooks-web';
 
-import Button from '@/components/buttons/Button';
 import SearchResultCard from '@/components/submissions/SearchResultCard';
 
 const Banner = () => {
@@ -40,20 +38,6 @@ const Banner = () => {
               <p className='mb-4 max-w-xl text-base text-primary-50 md:text-lg'>
                 National database for missing persons in Nigeria.
               </p>
-              <Link
-                href='/'
-                aria-label=''
-                className='hover:text-teal-accent-700 inline-flex items-center font-semibold tracking-wider text-white transition-colors duration-200'
-              >
-                Learn more
-                <svg
-                  className='ml-2 inline-block w-3'
-                  fill='currentColor'
-                  viewBox='0 0 12 12'
-                >
-                  <path d='M9.707,5.293l-5-5A1,1,0,0,0,3.293,1.707L7.586,6,3.293,10.293a1,1,0,1,0,1.414,1.414l5-5A1,1,0,0,0,9.707,5.293Z' />
-                </svg>
-              </Link>
             </div>
             <div className='w-full max-w-xl xl:w-5/12 xl:px-8'>
               <div className='rounded bg-white p-7 shadow-2xl sm:p-10'>
@@ -69,12 +53,6 @@ const Banner = () => {
                   }}
                 >
                   <div className='mb-1 sm:mb-2'>
-                    <label
-                      htmlFor='firstName'
-                      className='mb-1 inline-block font-medium'
-                    >
-                      Enter Name
-                    </label>
                     <input
                       placeholder='Search for name, location or age'
                       onChange={(v) => {
@@ -105,14 +83,6 @@ const Banner = () => {
                         }}
                       />
                     </div>
-                  </div>
-                  <div className='mt-4 mb-2 sm:mb-4'>
-                    <Button
-                      type='submit'
-                      className='inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide text-white transition duration-200'
-                    >
-                      Search
-                    </Button>
                   </div>
                 </form>
               </div>

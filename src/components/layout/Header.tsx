@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useState } from 'react';
 
@@ -15,6 +16,7 @@ const links = [
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <div
@@ -54,6 +56,15 @@ const Nav = () => {
           </ul>
         </div>
         <ul className='hidden items-center space-x-8 lg:flex'>
+          <li>
+            <Button
+              className='h-12'
+              onClick={() => router.push('/?auth=0')}
+              variant='ghost'
+            >
+              Sign In
+            </Button>
+          </li>
           <li>
             <BasicModal>
               <Button className='focus:shadow-outline inline-flex h-12 items-center justify-center rounded bg-primary px-6 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>

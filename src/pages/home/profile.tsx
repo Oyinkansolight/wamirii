@@ -126,6 +126,7 @@ export default AuthGuardHOC(() => {
                 {v.name === 'imageURL' ? (
                   <FileInput
                     id={v.name}
+                    accept='image/png, image/gif, image/jpeg'
                     placeholder={v.placeholder}
                     disabled={v.disabled}
                     {...register(v.name ?? (`${i}` as keyof User))}
