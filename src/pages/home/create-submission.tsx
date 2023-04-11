@@ -188,15 +188,15 @@ export default AuthGuardHOC(() => {
                 ) : v.name === 'missingLastSeenSate' ? (
                   <Select className='capitalize'>
                     <option value='select'>Select State</option>
-                    {allStates.map((state, i) => (
-                      <option
-                        key={i}
-                        value={state.name.toLowerCase()}
-                        className='capitalize'
-                      >
-                        {state.name.toLowerCase()}
-                      </option>
-                    ))}
+                    {allStates.map((state, i) => {
+                      const parsedStateName =
+                        state.name[0] + state.name.toLowerCase().slice(1);
+                      return (
+                        <option key={i} value={parsedStateName}>
+                          {parsedStateName}
+                        </option>
+                      );
+                    })}
                   </Select>
                 ) : v.name === 'missingGender' ? (
                   <Select
