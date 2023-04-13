@@ -4,13 +4,10 @@ import { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { GrFormView } from 'react-icons/gr';
-import { MdFilterList } from 'react-icons/md';
 
-import Button from '@/components/buttons/Button';
 import Loading from '@/components/generic/Loading';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import ButtonLink from '@/components/links/ButtonLink';
-import FilterModal from '@/components/modals/FilterModal';
 import MissingAvatar from '@/components/submissions/MissingAvatar';
 
 import {
@@ -181,17 +178,17 @@ export default AuthGuardHOC(() => {
                   </ButtonLink>
                 </div>
               }
-              actions={[
-                <FilterModal key={0}>
-                  <Button>
-                    <div className='flex items-center'>
-                      <MdFilterList />
-                      <div className='w-2' />
-                      <div>Filter</div>
-                    </div>
-                  </Button>
-                </FilterModal>,
-              ]}
+              // actions={[
+              //   <FilterModal key={0}>
+              //     <Button>
+              //       <div className='flex items-center'>
+              //         <MdFilterList />
+              //         <div className='w-2' />
+              //         <div>Filter</div>
+              //       </div>
+              //     </Button>
+              //   </FilterModal>,
+              // ]}
               sortServer
               onSort={(col, dir) => {
                 if (!col.sortField || col.sortField === '') return;
