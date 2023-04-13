@@ -80,14 +80,17 @@ const ListingCard = ({
             </Link>
             <span className='text-gray-600'>
               <>
-                —{' '}
+                :{' '}
                 {listing?.missingSince && (
                   <span>
                     {fromAlgolia
                       ? new Date(
                           listing?.missingSince as unknown as number
                         ).toDateString()
-                      : listing?.missingSince?.toDate().toDateString()}
+                      : listing?.missingSince
+                          ?.toDate()
+                          .toUTCString()
+                          .slice(0, 16)}
                   </span>
                 )}
               </>
@@ -102,18 +105,25 @@ const ListingCard = ({
             >
               {listing?.missingLastName} {listing?.missingFirstName}
             </Link>
-            <p className='mb-2 text-2xl font-bold text-gray-500'>
-              {listing?.missingAge}
+            <p className='mb-2 whitespace-nowrap text-xl font-bold text-gray-500'>
+              {listing?.missingAge} |{' '}
+              {listing?.missingGender &&
+                listing?.missingGender[0].toLocaleUpperCase()}
             </p>
           </div>
-          <p className='mb-2 text-gray-700'>{listing?.missingLastSeenSate}</p>
+          <p className='mb-2 text-xs text-gray-700'>
+            Last Seen:{' '}
+            {listing?.missingLastSeenSate
+              ? listing?.missingLastSeenSate
+              : 'Unknown'}
+          </p>
 
           <Link
             href={path}
             aria-label=''
             className='inline-flex items-center text-sm font-semibold text-primary-400 transition-colors duration-200 hover:text-primary-800'
           >
-            View more
+            Read Info
           </Link>
         </div>
       </div>

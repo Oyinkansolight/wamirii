@@ -35,7 +35,7 @@ export default AuthGuardHOC(() => {
   })[] = [
     {
       placeholder: 'Enter first name of missing person',
-      title: 'First name',
+      title: 'First name *',
       name: 'missingFirstName',
       options: {
         validate: {
@@ -45,7 +45,7 @@ export default AuthGuardHOC(() => {
     },
     {
       placeholder: 'Enter last name of missing person',
-      title: 'Last name',
+      title: 'Last name *',
       name: 'missingLastName',
       options: {
         validate: {
@@ -60,7 +60,7 @@ export default AuthGuardHOC(() => {
     },
     {
       placeholder: 'Select gender of missing person',
-      title: 'Gender',
+      title: 'Gender *',
       name: 'missingGender',
       options: {
         validate: {
@@ -70,13 +70,18 @@ export default AuthGuardHOC(() => {
     },
     {
       placeholder: 'Enter age of missing person',
-      title: 'Age',
+      title: 'Age when last seen *',
       name: 'missingAge',
       type: 'number',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
     },
     {
       placeholder: 'Enter the date the missing person was last seen',
-      title: 'Missing Since',
+      title: 'Missing Since *',
       name: 'missingSince',
       type: 'date',
       options: {
@@ -94,8 +99,13 @@ export default AuthGuardHOC(() => {
     },
     {
       placeholder: 'Enter the state the missing person was last seen',
-      title: 'State',
+      title: 'Last Location (state) *',
       name: 'missingLastSeenSate',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
     },
     {
       placeholder: 'Enter more information about the missing person',
@@ -124,6 +134,11 @@ export default AuthGuardHOC(() => {
       placeholder: 'Enter address of contact person',
       title: 'Address',
       name: 'contactAddress',
+    },
+    {
+      placeholder: 'Relationship to missing person',
+      title: 'Relationship',
+      name: 'contactRelationship',
     },
   ];
 

@@ -45,7 +45,11 @@ const NavItems = [
       },
     ],
   },
-
+  {
+    icon: <MdFormatListBulletedAdd className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Create Submissions',
+    link: '/home/create-submission',
+  },
   {
     icon: <CiSettings className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Settings',
@@ -60,54 +64,56 @@ const Sidebar = () => {
     <Bar>
       <Link href='/'>
         <Image
-          width={200}
-          height={100}
-          className='w-auto'
+          width={70}
+          height={70}
+          className='mx-auto mt-10 w-auto'
           src='/images/logo.png'
           alt=''
         />
       </Link>
-      <Menu>
-        {NavItems.map((m, i) => {
-          if (m.children) {
-            return (
-              <SubMenu defaultOpen key={i} label={m.label} icon={m.icon}>
-                {m.children.map((sub, j) => (
-                  <MenuItem
-                    active={router.pathname === sub.link}
-                    className={clsxm(
-                      'hover:bg-black',
-                      router.pathname === sub.link
-                        ? 'bg-gray-400 '
-                        : 'text-black'
-                    )}
-                    key={j}
-                    icon={sub.icon}
-                    component={<Link href={sub.link ?? '#'} />}
-                  >
-                    {sub.label}
-                  </MenuItem>
-                ))}
-              </SubMenu>
-            );
-          } else {
-            return (
-              <MenuItem
-                active={router.pathname === m.link}
-                className={clsxm(
-                  'hover:bg-black',
-                  router.pathname === m.link ? 'bg-primary-100' : 'text-black'
-                )}
-                key={i}
-                icon={m.icon}
-                component={<Link href={m.link ?? '#'} />}
-              >
-                {m.label}
-              </MenuItem>
-            );
-          }
-        })}
-      </Menu>
+      <div className='mt-20'>
+        <Menu>
+          {NavItems.map((m, i) => {
+            if (m.children) {
+              return (
+                <SubMenu defaultOpen key={i} label={m.label} icon={m.icon}>
+                  {m.children.map((sub, j) => (
+                    <MenuItem
+                      active={router.pathname === sub.link}
+                      className={clsxm(
+                        'hover:bg-black',
+                        router.pathname === sub.link
+                          ? 'bg-gray-400 '
+                          : 'text-black'
+                      )}
+                      key={j}
+                      icon={sub.icon}
+                      component={<Link href={sub.link ?? '#'} />}
+                    >
+                      {sub.label}
+                    </MenuItem>
+                  ))}
+                </SubMenu>
+              );
+            } else {
+              return (
+                <MenuItem
+                  active={router.pathname === m.link}
+                  className={clsxm(
+                    'hover:bg-black',
+                    router.pathname === m.link ? 'bg-primary-100' : 'text-black'
+                  )}
+                  key={i}
+                  icon={m.icon}
+                  component={<Link href={m.link ?? '#'} />}
+                >
+                  {m.label}
+                </MenuItem>
+              );
+            }
+          })}
+        </Menu>
+      </div>
     </Bar>
   );
 };

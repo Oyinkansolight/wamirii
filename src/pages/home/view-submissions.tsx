@@ -49,6 +49,24 @@ const tableColumns: TableColumn<Listing>[] = [
     sortField: 'missingFirstName',
   },
   {
+    name: 'Age',
+    selector: (cell) => cell.missingAge ?? '',
+    sortable: true,
+    sortField: 'missingAge',
+  },
+  {
+    name: 'Last Known Location',
+    selector: (cell) => cell.missingLastSeenSate ?? '',
+    sortable: true,
+    sortField: 'missingState',
+  },
+  {
+    name: 'Gender',
+    selector: (cell) => cell.missingGender ?? '',
+    sortable: true,
+    sortField: 'missingGender',
+  },
+  {
     name: 'Missing Since',
     selector: (cell) => cell.missingSince?.toDate().toDateString() ?? '',
     sortable: true,

@@ -52,7 +52,7 @@ export default function SingleSubmission() {
               <span className='text-primary-500'>
                 {submission?.missingLastName}
               </span>
-              <span> - </span>
+              <span>, </span>
               <span>{submission?.missingAge}</span>
             </h1>
 
@@ -68,10 +68,13 @@ export default function SingleSubmission() {
               )}
 
               <div className='mt-8 lg:mt-0 lg:px-10'>
-                <h1 className='text-2xl font-semibold text-gray-800 dark:text-white lg:w-72'>
-                  Missing Since -{' '}
+                <h1 className='whitespace-nowrap text-2xl font-semibold text-gray-800 dark:text-white lg:w-72'>
+                  Missing Since:{' '}
                   <span>
-                    {submission?.missingSince?.toDate().toDateString()}
+                    {submission?.missingSince
+                      ?.toDate()
+                      .toUTCString()
+                      .slice(0, 16)}
                   </span>
                 </h1>
 
@@ -87,32 +90,29 @@ export default function SingleSubmission() {
                 </p>
                 <div className='h-10' />
                 <div>
-                  <span className='font-bold text-primary-500'>
-                    {' '}
-                    Last Know Location
-                  </span>{' '}
-                  - <span>{submission?.missingLastSeenSate}</span>
+                  <span className='font-bold text-primary-500'> Last Seen</span>
+                  : <span>{submission?.missingLastSeenSate}</span>
                 </div>
                 <div>
                   <span className='font-bold text-primary-500'>
                     {' '}
                     Contact Name
-                  </span>{' '}
-                  - <span>{submission?.contactName}</span>
+                  </span>
+                  : <span>{submission?.contactName}</span>
                 </div>
                 <div>
                   <span className='font-bold text-primary-500'>
                     {' '}
                     Contact Email
-                  </span>{' '}
-                  - <span>{submission?.contactEmail}</span>
+                  </span>
+                  : <span>{submission?.contactEmail}</span>
                 </div>
                 <div>
                   <span className='font-bold text-primary-500'>
                     {' '}
                     Contact Phone
-                  </span>{' '}
-                  - <span>{submission?.contactPhone}</span>
+                  </span>
+                  : <span>{submission?.contactPhone}</span>
                 </div>
               </div>
             </div>

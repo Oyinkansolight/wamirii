@@ -14,9 +14,9 @@ const Footer = () => {
           d='M0 22L120 16.7C240 11 480 1.00001 720 0.700012C960 1.00001 1200 11 1320 16.7L1440 22V54H1320C1200 54 960 54 720 54C480 54 240 54 120 54H0V22Z'
         />
       </svg>
-      <div className='mx-auto px-4 pt-12 sm:max-w-xl md:max-w-full md:px-24 lg:max-w-screen-xl lg:px-8'>
-        <div className='row-gap-10 mb-8 grid gap-16 lg:grid-cols-6'>
-          <div className='md:max-w-md lg:col-span-2'>
+      <div className='mx-auto px-4 pt-12 text-center sm:max-w-xl md:max-w-full lg:max-w-screen-xl lg:px-8'>
+        <div className='mb-8'>
+          <div className=''>
             <Link
               href='/'
               aria-label='Go home'
@@ -33,197 +33,34 @@ const Footer = () => {
                 Wamirii
               </span>
             </Link>
-            <div className='mt-4 lg:max-w-sm'>
+            <div className='mt-4'>
               <p className='text-deep-purple-50 text-sm'>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam.
+                The Wamiri Initiative is a non-profit organization that is
+                dedicated to creating a comprehensive database of missing
+                persons in Nigeria. We are driven by a deep sense of compassion
+                for the families and loved ones of missing persons, and
+                committed to working tirelessly to help bring these missing
+                persons home.
               </p>
-              <p className='text-deep-purple-50 mt-4 text-sm'>
-                Eaque ipsa quae ab illo inventore veritatis et quasi architecto
-                beatae vitae dicta sunt explicabo.
-              </p>
-            </div>
-          </div>
-          <div className='row-gap-8 grid grid-cols-2 gap-5 md:grid-cols-4 lg:col-span-4'>
-            <div>
-              <p className='text-teal-accent-400 font-semibold tracking-wide'>
-                Category
-              </p>
-              <ul className='mt-2 space-y-2'>
+
+              {/* <ul className='mt-2 space-y-2'>
                 <li>
                   <Link
                     href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
+                    className='text-primary hover:text-teal-accent-400 transition-colors duration-300'
                   >
                     News
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    World
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Games
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    References
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p className='text-teal-accent-400 font-semibold tracking-wide'>
-                Cherry
-              </p>
-              <ul className='mt-2 space-y-2'>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Web
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    eCommerce
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Business
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Entertainment
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Portfolio
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p className='text-teal-accent-400 font-semibold tracking-wide'>
-                Apples
-              </p>
-              <ul className='mt-2 space-y-2'>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Media
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Brochure
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Nonprofit
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Educational
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Projects
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p className='text-teal-accent-400 font-semibold tracking-wide'>
-                Business
-              </p>
-              <ul className='mt-2 space-y-2'>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Infopreneur
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Personal
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Wiki
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/'
-                    className='text-deep-purple-50 hover:text-teal-accent-400 transition-colors duration-300'
-                  >
-                    Forum
-                  </Link>
-                </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
         </div>
         <div className='border-deep-purple-accent-200 flex flex-col justify-between border-t pt-5 pb-10 sm:flex-row'>
-          <p className='text-sm text-gray-100'>
-            © Copyright 2020 Lorem Inc. All rights reserved.
+          <p className='text-sm'>
+            © Copyright 2023 Wamirii. All rights reserved.
           </p>
-          <div className='mt-4 flex items-center space-x-4 sm:mt-0'>
+          <div className='mx-auto mt-4 flex items-center space-x-4 sm:mt-0 md:mx-0'>
             <Link
               href='/'
               className='text-deep-purple-100 hover:text-teal-accent-400 transition-colors duration-300'

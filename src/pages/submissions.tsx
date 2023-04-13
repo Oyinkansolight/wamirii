@@ -28,7 +28,7 @@ export default function Submissions() {
   const [searchString, setSearchString] = useState('');
   const router = useRouter();
   const [listings, isLoading, error, loadMore, isLastPage] =
-    useCollectionInfinite<Listing>('listings', 5);
+    useCollectionInfinite<Listing>('listings', 50);
   if (error) {
     return <div>{error.message}</div>;
   }
