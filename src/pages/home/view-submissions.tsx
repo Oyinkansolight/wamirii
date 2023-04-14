@@ -55,7 +55,7 @@ const tableColumns: TableColumn<Listing>[] = [
     name: 'Last Known Location',
     selector: (cell) => cell.missingLastSeenSate ?? '',
     sortable: true,
-    sortField: 'missingState',
+    sortField: 'missingLastSeenSate',
   },
   {
     name: 'Gender',
