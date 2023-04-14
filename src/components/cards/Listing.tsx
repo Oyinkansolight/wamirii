@@ -1,5 +1,6 @@
 import { initials } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
+import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -84,13 +85,12 @@ const ListingCard = ({
                 {listing?.missingSince && (
                   <span>
                     {fromAlgolia
-                      ? new Date(
+                      ? moment(
                           listing?.missingSince as unknown as number
-                        ).toDateString()
-                      : listing?.missingSince
-                          ?.toDate()
-                          .toUTCString()
-                          .slice(0, 16)}
+                        ).format('ddd, DD/MMM/YYYY')
+                      : moment(listing?.missingSince?.toDate()).format(
+                          'ddd, DD/MMM/YYYY'
+                        )}
                   </span>
                 )}
               </>

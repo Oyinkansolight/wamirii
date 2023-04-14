@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useState } from 'react';
 
@@ -8,6 +7,7 @@ import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
 import { BasicModal } from '@/components/modals';
+import SignUpModal from '@/components/modals/SignUpModal';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -16,7 +16,6 @@ const links = [
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const router = useRouter();
 
   return (
     <div
@@ -57,20 +56,18 @@ const Nav = () => {
         </div>
         <ul className='hidden items-center space-x-8 lg:flex'>
           <li>
-            <Button
-              className='h-12'
-              onClick={() => router.push('/?auth=0')}
-              variant='ghost'
-            >
-              Sign In
-            </Button>
+            <BasicModal>
+              <Button className='h-12' variant='ghost'>
+                Sign In
+              </Button>
+            </BasicModal>
           </li>
           <li>
-            <BasicModal>
+            <SignUpModal>
               <Button className='focus:shadow-outline inline-flex h-12 items-center justify-center rounded bg-primary px-6 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
                 Report a missing Person
               </Button>
-            </BasicModal>
+            </SignUpModal>
           </li>
         </ul>
         <div className='lg:hidden'>

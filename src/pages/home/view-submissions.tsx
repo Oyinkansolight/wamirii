@@ -82,7 +82,7 @@ const tableColumns: TableColumn<Listing>[] = [
       <div className='flex items-center'>
         <GrFormView
           onClick={() => {
-            window.location.replace(`/home/submission/${cell._id}`);
+            window.location.href = `/home/submission/${cell._id}`;
           }}
           className='h-5 w-5 cursor-pointer'
         />

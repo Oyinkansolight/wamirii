@@ -3,33 +3,27 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 
-import logger from '@/lib/logger';
-
-import SignInView from '@/views/auth/signin';
+import SignUpView from '@/views/auth/signup';
 
 interface BasicModalProps {
   children: JSX.Element;
 }
 
-export default function BasicModal({ children }: BasicModalProps) {
+export default function SignUpModal({ children }: BasicModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
-    logger(router.query['auth']);
-    logger(router.asPath);
     if (router.query['auth']) {
-      if (router.query['auth']) {
-        if (Number.parseInt(router.query['auth'] as string) === 0) {
-          setIsOpen(true);
-          setPage(Number.parseInt(router.query['auth'] as string));
-        } else {
-          setIsOpen(false);
-        }
+      if (Number.parseInt(router.query['auth'] as string) === 1) {
+        setIsOpen(true);
+        setPage(Number.parseInt(router.query['auth'] as string));
+      } else {
+        setIsOpen(false);
       }
     }
-  }, [router.query, router.asPath]);
+  }, [router.query]);
 
   function closeModal() {
     setIsOpen(false);
@@ -88,7 +82,7 @@ export default function BasicModal({ children }: BasicModalProps) {
 
                   <div className='mt-4 flex min-h-[15rem] flex-col'>
                     <div className='mt-6 flex flex-col justify-center transition-all delay-1000'>
-                      <SignInView />
+                      <SignUpView />
                     </div>
                   </div>
                 </Dialog.Panel>

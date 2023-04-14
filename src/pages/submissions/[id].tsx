@@ -96,6 +96,25 @@ export default function SingleSubmission() {
                 <div>
                   <span className='font-bold text-primary-500'>
                     {' '}
+                    Occupation
+                  </span>
+                  : <span>{submission?.missingOccupation}</span>
+                </div>
+                <div>
+                  <span className='font-bold text-primary-500'> Gender</span>:{' '}
+                  <span>{submission?.missingGender}</span>
+                </div>
+                <div>
+                  <span className='font-bold text-primary-500'>
+                    {' '}
+                    Date Reported
+                  </span>
+                  :{' '}
+                  <span>{submission?.createdAt?.toDate().toDateString()}</span>
+                </div>
+                <div>
+                  <span className='font-bold text-primary-500'>
+                    {' '}
                     Contact Name
                   </span>
                   : <span>{submission?.contactName}</span>

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -53,6 +54,12 @@ export default function SignInView() {
           Forgot your password?
         </PrimaryLink>
         {errors.password && <div>{errors.password.message?.toString()}</div>}
+        <div className='text-end'>
+          Don't an account?{' '}
+          <Link className='text-primary ' href='/?auth=1'>
+            Sign Up
+          </Link>
+        </div>
         <Button
           isLoading={loading}
           type='submit'

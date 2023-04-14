@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useResponsive } from 'react-hooks-responsive';
 import { CiSettings } from 'react-icons/ci';
 import { ImProfile } from 'react-icons/im';
 import { MdFormatListBulletedAdd } from 'react-icons/md';
@@ -56,12 +57,13 @@ const NavItems = [
     link: '#',
   },
 ];
-
+const breakpoints = { xs: 0, sm: 480, md: 1024 };
 const Sidebar = () => {
   const router = useRouter();
   logger(router.pathname);
+  const { size } = useResponsive(breakpoints);
   return (
-    <Bar>
+    <Bar defaultCollapsed={size === 'xs'}>
       <Link href='/'>
         <Image
           width={70}
