@@ -112,10 +112,7 @@ const ListingCard = ({
             </p>
           </div>
           <p className='mb-2 text-xs text-gray-700'>
-            Last Seen:{' '}
-            {listing?.missingLastSeenSate
-              ? listing?.missingLastSeenSate
-              : 'Unknown'}
+            Last Seen State: {listing?.missingLastSeenSate}
           </p>
 
           <Link

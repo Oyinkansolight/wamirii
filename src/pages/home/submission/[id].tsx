@@ -86,7 +86,9 @@ export default function SingleSubmission() {
                 </p>
                 <div className='h-10' />
                 <div>
-                  <span className='font-bold text-primary-500'> Last Seen</span>
+                  <span className='font-bold text-primary-500'>
+                    Last Seen State
+                  </span>
                   : <span>{submission?.missingLastSeenSate}</span>
                 </div>
                 <div>
