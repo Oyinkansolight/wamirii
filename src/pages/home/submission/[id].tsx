@@ -1,3 +1,6 @@
+import { initials } from '@dicebear/collection';
+import { createAvatar } from '@dicebear/core';
+import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -35,9 +38,19 @@ export default function SingleSubmission() {
     StorageService.getRef(submission?.missingImageUrl)
   );
 
+  const name =
+    submission?.missingFirstName || submission?.missingLastName
+      ? `${submission?.missingLastName} ${submission?.missingFirstName}`
+      : submission?._id;
+
+  const avatar = createAvatar(initials, {
+    seed: name ?? 'NO',
+    // fontFamily: ['Arial'],
+  });
+
   return (
     <DashboardLayout>
-      <section className='bg-white dark:bg-gray-900'>
+      <section className='bg-white capitalize dark:bg-gray-900'>
         <div className='relative flex'>
           <div className='min-h-screen lg:w-1/3'></div>
           <div className='hidden min-h-screen w-3/4 bg-gray-100 dark:bg-gray-800 lg:block'></div>
@@ -53,35 +66,33 @@ export default function SingleSubmission() {
             </h1>
 
             <div className='mt-10 lg:mt-20 lg:flex lg:items-center'>
-              {url && (
-                <Image
-                  width={880}
-                  height={96}
-                  alt='person'
-                  src={`${url}`}
-                  className='h-96 w-full rounded-lg object-cover object-center lg:w-[32rem]'
-                />
-              )}
+              <Image
+                width={880}
+                height={96}
+                alt='person'
+                src={`${
+                  url ??
+                  `data:image/svg+xml;utf8,${encodeURIComponent(
+                    avatar.toString()
+                  )}`
+                }`}
+                className='h-96 w-full rounded-lg object-cover object-center lg:w-[32rem]'
+              />
 
               <div className='mt-8 lg:mt-0 lg:px-10'>
                 <h1 className='whitespace-nowrap text-2xl font-semibold text-gray-800 dark:text-white lg:w-72'>
                   Missing Since:{' '}
                   <span>
-                    {submission?.missingSince
-                      ?.toDate()
-                      .toUTCString()
-                      .slice(0, 16)}
+                    {moment(submission?.missingSince?.toDate()).format(
+                      'ddd, DD/MMM/YYYY'
+                    )}
                   </span>
                 </h1>
 
                 <p className='mt-6 max-w-lg text-gray-500 dark:text-gray-400'>
                   “
-                  {submission?.missingMoreInformation
-                    ? submission?.missingMoreInformation
-                    : `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Tempore quibusdam ducimus libero ad tempora doloribus expedita
-                  laborum saepe voluptas perferendis delectus assumenda rerum,
-                  culpa aperiam dolorum, obcaecati corrupti aspernatur a. `}
+                  {submission?.missingMoreInformation ??
+                    'No additional information'}
                   ”
                 </p>
                 <div className='h-10' />
@@ -115,21 +126,21 @@ export default function SingleSubmission() {
                     {' '}
                     Contact Name
                   </span>
-                  : <span>{submission?.contactName}</span>
+                  : <span>{submission?.contactName ?? 'Unknown'}</span>
                 </div>
                 <div>
                   <span className='font-bold text-primary-500'>
                     {' '}
                     Contact Email
                   </span>
-                  : <span>{submission?.contactEmail}</span>
+                  : <span>{submission?.contactEmail ?? 'Unknown'}</span>
                 </div>
                 <div>
                   <span className='font-bold text-primary-500'>
                     {' '}
                     Contact Phone
                   </span>
-                  : <span>{submission?.contactPhone}</span>
+                  : <span>{submission?.contactPhone ?? 'Unknown'}</span>
                 </div>
               </div>
             </div>
