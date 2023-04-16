@@ -121,27 +121,6 @@ export default function SingleSubmission() {
                   :{' '}
                   <span>{submission?.createdAt?.toDate().toDateString()}</span>
                 </div>
-                <div>
-                  <span className='font-bold text-primary-500'>
-                    {' '}
-                    Contact Name
-                  </span>
-                  : <span>{submission?.contactName ?? 'Unknown'}</span>
-                </div>
-                <div>
-                  <span className='font-bold text-primary-500'>
-                    {' '}
-                    Contact Email
-                  </span>
-                  : <span>{submission?.contactEmail ?? 'Unknown'}</span>
-                </div>
-                <div>
-                  <span className='font-bold text-primary-500'>
-                    {' '}
-                    Contact Phone
-                  </span>
-                  : <span>{submission?.contactPhone ?? 'Unknown'}</span>
-                </div>
               </div>
             </div>
           </div>
