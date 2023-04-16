@@ -121,6 +121,13 @@ export default function SingleSubmission() {
                   :{' '}
                   <span>{submission?.createdAt?.toDate().toDateString()}</span>
                 </div>
+                <div>
+                  <span className='font-bold text-primary-500'>
+                    {' '}
+                    Reported By
+                  </span>
+                  : <span>{submission?.reporterRelationship ?? 'Unknown'}</span>
+                </div>
               </div>
             </div>
           </div>
