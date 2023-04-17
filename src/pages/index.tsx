@@ -1,7 +1,13 @@
 import * as React from 'react';
 
+import { useCollectionInfinite } from '@/hooks/useCollectionInfinite';
+
+import { ListingCard } from '@/components/cards';
+import Banner from '@/components/layout/Banner';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
+
+import { Listing } from '@/types/listing';
 
 /**
  * SVGR Support
@@ -16,11 +22,33 @@ import Seo from '@/components/Seo';
 // to customize the default configuration.
 
 export default function HomePage() {
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const [listings, isLoading, error] = useCollectionInfinite<Listing>(
+    'listings',
+    9
+  );
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
   return (
     <Layout>
-      {/* <Seo templateTitle='Home' /> */}
       <Seo />
-      <div>Homepage</div>
+
+      <Banner />
+
+      <div className='layout py-16'>
+        {listings?.length === 0 ? (
+          <div className='h3 mb-4 px-4 md:px-0'>No Recent Submissions</div>
+        ) : (
+          <div className='h3 mb-4 px-4 md:px-0'>Recent Submissions</div>
+        )}
+        <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
+          {listings?.map((listing, i) => (
+            <ListingCard key={i} listing={listing} />
+          ))}
+        </div>
+      </div>
     </Layout>
   );
 }
