@@ -33,7 +33,7 @@ export default function HomePage() {
 
   return (
     <Layout>
-      <Seo />
+      <Seo title='Wamirii' />
 
       <Banner />
 
