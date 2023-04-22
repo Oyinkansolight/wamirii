@@ -1,9 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2023, 4, 18);
+    match /listings/{listing} {
+      allow read;
+      allow  write: if request.auth != null
+    }
+    match /users/{user}{
+      allow read;
+      allow write: if request.auth != null
+    }
+    match /global/global{
+      allow read;
     }
   }
 }

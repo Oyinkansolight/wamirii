@@ -6,7 +6,7 @@ import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 import { connectStorageEmulator, getStorage } from 'firebase/storage';
 
-import { firebaseConfig } from '@/constant/env';
+import { firebaseConfig, isLocal } from '@/constant/env';
 
 // Initialize Firebase
 const app: FirebaseApp | undefined = initializeApp(firebaseConfig);
@@ -23,7 +23,7 @@ export const db = getFirestore();
 export const functions = getFunctions(app);
 export const storage = getStorage();
 
-if (process.env.LOCAL_ENV === 'development') {
+if (isLocal) {
   connectAuthEmulator(auth, 'http://localhost:9099');
   connectFirestoreEmulator(db, 'localhost', 8080);
   connectFunctionsEmulator(functions, 'localhost', 5001);

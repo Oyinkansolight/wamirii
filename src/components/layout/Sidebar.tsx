@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useResponsive } from 'react-hooks-responsive';
 import { CiSettings } from 'react-icons/ci';
-import { ImProfile } from 'react-icons/im';
+import { ImProfile, ImUsers } from 'react-icons/im';
 import { MdFormatListBulletedAdd } from 'react-icons/md';
 import { RiDashboardFill, RiListCheck2 } from 'react-icons/ri';
 import { Menu, MenuItem, Sidebar as Bar, SubMenu } from 'react-pro-sidebar';
@@ -22,6 +22,11 @@ const NavItems = [
     icon: <ImProfile className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Profile',
     link: '/home/profile',
+  },
+  {
+    icon: <ImUsers className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Users',
+    link: '/home/users',
   },
   {
     icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
