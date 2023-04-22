@@ -10,7 +10,6 @@ import {
   FirestoreService,
   OrderByField,
 } from '@/firebase/firestore/firestore-service';
-import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
 import { User } from '@/types/user';
 
@@ -40,9 +39,7 @@ const tableColumns: TableColumn<User>[] = [
   },
 ];
 
-export default AuthGuardHOC(() => {
-  // const user = useContext(UserContext);
-
+export default function SubmissionCounter() {
   const [, setSortBy] = useState<OrderByField>();
   const [docs, loading, error] = useCollection(
     FirestoreService.getUsersQuery()
@@ -76,4 +73,4 @@ export default AuthGuardHOC(() => {
       </div>
     </Layout>
   );
-});
+}
