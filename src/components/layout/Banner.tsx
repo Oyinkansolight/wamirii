@@ -41,7 +41,7 @@ const Banner = () => {
                 Wamirii Initiative
               </h2>
               <p className='mb-4 max-w-xl text-base text-primary-50 md:text-lg'>
-                National database for missing persons in Nigeria.
+                Database for missing persons in Nigeria.
               </p>
             </div>
             <div className='w-full max-w-xl xl:w-5/12 xl:px-8'>

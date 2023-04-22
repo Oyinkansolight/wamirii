@@ -1,5 +1,5 @@
 export const isProd = process.env.NODE_ENV === 'production';
-export const isLocal = true;
+export const isLocal = false;
 export const isStaging = true;
 export const firebaseConfig = isStaging
   ? {
