@@ -3,7 +3,7 @@ import DataTable, { TableColumn } from 'react-data-table-component';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
 import Loading from '@/components/generic/Loading';
-import DashboardLayout from '@/components/layout/DashboardLayout';
+import Layout from '@/components/layout/Layout';
 import ProfilePicture from '@/components/profile/ProfilePicture';
 
 import {
@@ -17,7 +17,11 @@ import { User } from '@/types/user';
 const tableColumns: TableColumn<User>[] = [
   {
     name: '',
-    cell: (cell) => <ProfilePicture user={cell} />,
+    cell: (cell) => (
+      <div className='py-4'>
+        <ProfilePicture user={cell} />
+      </div>
+    ),
     grow: 0,
   },
   {
@@ -47,13 +51,13 @@ export default AuthGuardHOC(() => {
     return <div>Loading...</div>;
   }
   return (
-    <DashboardLayout>
-      <div className='relative h-full'>
+    <Layout>
+      <div className='layout relative h-full'>
         {(error && <div>{error.message}</div>) || (
           <div>
             <div className='flex justify-end'></div>
             <DataTable
-              title='All Users'
+              title='Volunteer Submission Count'
               sortServer
               onSort={(col, dir) => {
                 if (!col.sortField || col.sortField === '') return;
@@ -70,6 +74,6 @@ export default AuthGuardHOC(() => {
           </div>
         )}
       </div>
-    </DashboardLayout>
+    </Layout>
   );
 });

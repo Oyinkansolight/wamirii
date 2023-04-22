@@ -46,8 +46,8 @@ const Banner = () => {
             </div>
             <div className='w-full max-w-xl xl:w-5/12 xl:px-8'>
               <div className='rounded bg-white p-7 shadow-2xl sm:p-10'>
-                <div className='font-bold'>
-                  Total Submissions {doc?.totalSubmissions ?? 0}
+                <div className='mb-3 font-bold md:text-center'>
+                  Total Submissions: {doc?.totalSubmissions ?? 0}
                 </div>
 
                 <h3 className='mb-4 text-xl font-semibold sm:mb-6 sm:text-center sm:text-2xl'>

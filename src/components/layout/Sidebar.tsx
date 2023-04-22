@@ -25,8 +25,8 @@ const NavItems = [
   },
   {
     icon: <ImUsers className='h-6 w-6 md:h-auto md:w-auto' />,
-    label: 'Users',
-    link: '/home/users',
+    label: 'Sub Count',
+    link: '/home/counter',
   },
   {
     icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,

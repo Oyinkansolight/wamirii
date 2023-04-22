@@ -2,22 +2,32 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
+import {
+  AuthStatusContext,
+  UserContext,
+} from '@/components/layout/GetAuthStatus';
 import { BasicModal } from '@/components/modals';
 import SignUpModal from '@/components/modals/SignUpModal';
+import ProfilePicture from '@/components/profile/ProfilePicture';
+
+import { AuthService } from '@/firebase/auth/auth-service';
 
 const links = [
   { href: '/', label: 'Home' },
   { href: '/submissions', label: 'Submissions' },
+  { href: '/submissions/counter', label: 'Counter' },
 ];
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
+  const status = useContext(AuthStatusContext);
+  const user = useContext(UserContext);
   return (
     <div
       className={clsxm(!isMenuOpen ? 'py-5' : 'w-full', 'layout z-10 mx-auto')}
@@ -36,9 +46,6 @@ const Nav = () => {
               alt='Wamirii Logo'
               src='/images/logo.png'
             />
-            <span className='ml-2 text-xl font-bold uppercase tracking-wide text-gray-800'>
-              Wamirii
-            </span>
           </Link>
           <ul className='hidden items-center space-x-8 lg:flex'>
             {links.map((link, idx) => (
@@ -56,32 +63,63 @@ const Nav = () => {
           </ul>
         </div>
         <div className='flex-1' />
-        <ul className='hidden items-center space-x-8 lg:flex'>
-          <li>
-            <BasicModal>
-              <Button className='h-12' variant='ghost'>
+        {status === 'logged-in' ? (
+          <>
+            <div
+              className='hidden cursor-pointer items-center gap-x-4 lg:flex'
+              onClick={() => router.push('/home')}
+            >
+              <ProfilePicture />
+              <div className='font-bold text-primary'>
+                {user?.username}
+              </div>{' '}
+            </div>
+            <Button
+              className='ml-10 hidden lg:block'
+              onClick={() => AuthService.signOut()}
+            >
+              Sign Out
+            </Button>
+          </>
+        ) : (
+          <ul className='hidden items-center space-x-8 lg:flex'>
+            <li>
+              <BasicModal>
+                <Button className='h-12' variant='ghost'>
+                  Sign In
+                </Button>
+              </BasicModal>
+            </li>
+            <li>
+              <SignUpModal>
+                <Button className='focus:shadow-outline inline-flex h-12 items-center justify-center rounded bg-primary px-6 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
+                  Report a missing Person
+                </Button>
+              </SignUpModal>
+            </li>
+          </ul>
+        )}
+        {status === 'logged-in' ? (
+          <div
+            className='flex cursor-pointer items-center gap-x-4 lg:hidden'
+            onClick={() => router.push('/home')}
+          >
+            <div className='mr-4 font-bold text-primary'>{user?.username}</div>{' '}
+          </div>
+        ) : (
+          <>
+            <div className='flex-1 lg:hidden' />
+            <div className='lg:hidden'>
+              <Button
+                onClick={() => router.replace('/?auth=0')}
+                className='h-12'
+                variant='ghost'
+              >
                 Sign In
               </Button>
-            </BasicModal>
-          </li>
-          <li>
-            <SignUpModal>
-              <Button className='focus:shadow-outline inline-flex h-12 items-center justify-center rounded bg-primary px-6 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
-                Report a missing Person
-              </Button>
-            </SignUpModal>
-          </li>
-        </ul>
-        <div className='flex-1 lg:hidden' />
-        <div className='lg:hidden'>
-          <Button
-            onClick={() => router.replace('/?auth=0')}
-            className='h-12'
-            variant='ghost'
-          >
-            Sign In
-          </Button>
-        </div>
+            </div>
+          </>
+        )}
         <div className='lg:hidden'>
           <button
             aria-label='Open Menu'
@@ -157,11 +195,17 @@ const Nav = () => {
                         </Link>
                       </li>
                     ))}
-                    <SignUpModal>
-                      <Button className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
-                        Report a missing Person
+                    {status === 'logged-in' ? (
+                      <Button onClick={() => AuthService.signOut()}>
+                        Sign Out
                       </Button>
-                    </SignUpModal>
+                    ) : (
+                      <SignUpModal>
+                        <Button className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
+                          Report a missing Person
+                        </Button>
+                      </SignUpModal>
+                    )}
                   </ul>
                 </nav>
               </div>
