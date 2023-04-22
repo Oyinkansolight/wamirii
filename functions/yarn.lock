@@ -788,7 +788,7 @@ finalhandler@1.2.0:
     statuses "2.0.1"
     unpipe "~1.0.0"
 
-firebase-admin@^11.7.0:
+firebase-admin@^11.5.0:
   version "11.7.0"
   resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.7.0.tgz#ffcb17662f8652be9a11f676772a018cce149fe8"
   integrity sha512-58y9dor/nrK4Dc/hwpmm7uGCy+oqld+k189mclWwhKu8IZJcZbXxPFHsNzW/yG7aVTH5sTD4rHnRXj8+t5AhPQ==
@@ -814,7 +814,7 @@ firebase-functions-test@^3.0.0:
     lodash "^4.17.5"
     ts-deepmerge "^2.0.1"
 
-firebase-functions@^4.3.1:
+firebase-functions@^4.2.0:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-4.3.1.tgz#40f8917b35a69edb5ef42f72f8262a40c87a5395"
   integrity sha512-sbitfzHcuWsLD03/EgeIRIfkVGeyGjNo3IEA2z+mDIkK1++LhKLCWwVQXrMqeeATOG04CAp30guAagsNElVlng==
