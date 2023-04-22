@@ -1,6 +1,6 @@
 export const isProd = process.env.NODE_ENV === 'production';
 export const isLocal = process.env.NODE_ENV === 'development';
-export const isStaging = process.env.LOCAL_ENV === 'staging';
+export const isStaging = true;
 export const firebaseConfig = isStaging
   ? {
       apiKey: 'AIzaSyCYdhlSI_unFxqw2ambWtaclps-KbPNqNg',
