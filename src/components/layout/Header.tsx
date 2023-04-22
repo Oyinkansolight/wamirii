@@ -157,16 +157,11 @@ const Nav = () => {
                         </Link>
                       </li>
                     ))}
-                    <BasicModal>
-                      <Button className='h-12' variant='ghost'>
-                        Sign In
-                      </Button>
-                    </BasicModal>
-                    <BasicModal>
+                    <SignUpModal>
                       <Button className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
                         Report a missing Person
                       </Button>
-                    </BasicModal>
+                    </SignUpModal>
                   </ul>
                 </nav>
               </div>

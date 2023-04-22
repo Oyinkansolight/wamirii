@@ -3,8 +3,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 
-import logger from '@/lib/logger';
-
 import SignInView from '@/views/auth/signin';
 
 interface BasicModalProps {
@@ -17,8 +15,6 @@ export default function BasicModal({ children }: BasicModalProps) {
   const router = useRouter();
 
   useEffect(() => {
-    logger(router.query['auth']);
-    logger(router.asPath);
     if (router.query['auth']) {
       if (router.query['auth']) {
         if (Number.parseInt(router.query['auth'] as string) === 0) {
@@ -33,6 +29,7 @@ export default function BasicModal({ children }: BasicModalProps) {
 
   function closeModal() {
     setIsOpen(false);
+    router.replace('/');
   }
 
   function openModal() {
