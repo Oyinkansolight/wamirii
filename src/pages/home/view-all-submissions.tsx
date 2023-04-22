@@ -1,4 +1,4 @@
-import { Timestamp } from 'firebase/firestore';
+import { DocumentData, Timestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
@@ -16,6 +16,7 @@ import {
   OrderByField,
 } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
+import GetDocumentHOC from '@/hocs/get-document';
 import { Misc } from '@/misc/misc-functions';
 
 import { FilterListings } from '@/types/filter-listings';
@@ -39,6 +40,16 @@ const tableColumns: TableColumn<Listing>[] = [
     ),
     sortable: true,
     sortField: 'missingFirstName',
+  },
+  {
+    name: 'Reporter',
+    cell: (row) => {
+      const C = GetDocumentHOC(
+        ({ doc }: { doc: DocumentData }) => <div>{doc.username}</div>,
+        `users/${row.createdBy}`
+      );
+      return <C />;
+    },
   },
   {
     name: 'Age',

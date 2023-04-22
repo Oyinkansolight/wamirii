@@ -6,6 +6,7 @@ export class User {
   firstName?: string;
   lastName?: string;
   imageURL?: string;
+  submissionsCount?: number;
 }
 
 export type Role = 'admin' | 'moderator' | 'visitor';

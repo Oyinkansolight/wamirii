@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useState } from 'react';
 
@@ -16,12 +17,12 @@ const links = [
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const router = useRouter();
   return (
     <div
       className={clsxm(!isMenuOpen ? 'py-5' : 'w-full', 'layout z-10 mx-auto')}
     >
-      <div className='relative flex items-center justify-between'>
+      <div className='relative flex items-center'>
         <div className='flex items-center'>
           <Link
             href='/'
@@ -54,6 +55,7 @@ const Nav = () => {
             ))}
           </ul>
         </div>
+        <div className='flex-1' />
         <ul className='hidden items-center space-x-8 lg:flex'>
           <li>
             <BasicModal>
@@ -70,6 +72,16 @@ const Nav = () => {
             </SignUpModal>
           </li>
         </ul>
+        <div className='flex-1 lg:hidden' />
+        <div className='lg:hidden'>
+          <Button
+            onClick={() => router.replace('/?auth=0')}
+            className='h-12'
+            variant='ghost'
+          >
+            Sign In
+          </Button>
+        </div>
         <div className='lg:hidden'>
           <button
             aria-label='Open Menu'
@@ -114,6 +126,7 @@ const Nav = () => {
                       </span>
                     </Link>
                   </div>
+
                   <div>
                     <button
                       aria-label='Close Menu'
@@ -144,7 +157,11 @@ const Nav = () => {
                         </Link>
                       </li>
                     ))}
-
+                    <BasicModal>
+                      <Button className='h-12' variant='ghost'>
+                        Sign In
+                      </Button>
+                    </BasicModal>
                     <BasicModal>
                       <Button className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
                         Report a missing Person
