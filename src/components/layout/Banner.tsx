@@ -1,19 +1,15 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { Hits, useSearchBox } from 'react-instantsearch-hooks-web';
 
 import SearchResultCard from '@/components/submissions/SearchResultCard';
-
-import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
 const Banner = () => {
   const router = useRouter();
   const [searchString, setSearchString] = useState('');
   const { refine } = useSearchBox();
   const [showHits, setShowHits] = useState(false);
-  const [doc] = useDocumentData(FirestoreService.getDocRef('global/global'));
 
   return (
     <div className='relative w-full'>
@@ -46,10 +42,6 @@ const Banner = () => {
             </div>
             <div className='w-full max-w-xl xl:w-5/12 xl:px-8'>
               <div className='rounded bg-white p-7 shadow-2xl sm:p-10'>
-                <div className='mb-3 font-bold md:text-center'>
-                  Total Submissions: {doc?.totalSubmissions ?? 0}
-                </div>
-
                 <h3 className='mb-4 text-xl font-semibold sm:mb-6 sm:text-center sm:text-2xl'>
                   Who are you looking for?
                 </h3>
