@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
+// import * as admin from 'firebase-admin';
+// import * as functions from 'firebase-functions';
 
 import { groupListing } from './listings';
 
 // Make the above imports using javascript require import
-// const admin = require('firebase-admin');
-// const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+const functions = require('firebase-functions');
 
 admin.initializeApp();
 
@@ -61,16 +61,22 @@ export const init = functions.https.onRequest(
 
 export const listingsWritten = functions.firestore
   .document('listings/{doc}')
-  .onWrite(async (changeDoc) => {
-    await updateCounts(
-      changeDoc.after?.data()?.createdBy ?? changeDoc.before?.data()?.createdBy
-    );
-    if (!changeDoc.after.data()) {
-      groupListing(changeDoc.before as any, 'delete');
-    } else {
-      groupListing(changeDoc.after as any, 'set');
+  .onWrite(
+    async (changeDoc: {
+      after: { data: () => { (): any; new (): any; createdBy: any } };
+      before: { data: () => { (): any; new (): any; createdBy: any } };
+    }) => {
+      await updateCounts(
+        changeDoc.after?.data()?.createdBy ??
+          changeDoc.before?.data()?.createdBy
+      );
+      if (!changeDoc.after.data()) {
+        groupListing(changeDoc.before as any, 'delete');
+      } else {
+        groupListing(changeDoc.after as any, 'set');
+      }
     }
-  });
+  );
 
 async function updateCounts(userId: string) {
   admin
