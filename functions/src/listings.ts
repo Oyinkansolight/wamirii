@@ -1,15 +1,26 @@
-import {
+/* eslint-disable @typescript-eslint/no-var-requires */
+// import {
+//   getFirestore,
+//   QueryDocumentSnapshot,
+//   Timestamp,
+// } from 'firebase-admin/firestore';
+import moment from 'moment';
+
+//refactor imports to use require
+const {
   getFirestore,
   QueryDocumentSnapshot,
   Timestamp,
-} from 'firebase-admin/firestore';
-import moment from 'moment';
+} = require('firebase-admin/firestore');
 
 type OpType = 'set' | 'delete';
 
-export async function groupListing(doc: QueryDocumentSnapshot, op: OpType) {
+export async function groupListing(
+  doc: typeof QueryDocumentSnapshot,
+  op: OpType
+) {
   const createdBy = doc.data().createdBy as string;
-  const createdAt = moment((doc.data().createdAt as Timestamp).toDate());
+  const createdAt = moment((doc.data().createdAt as typeof Timestamp).toDate());
   const format = createdAt.format('Do MMMM YYYY');
   const firestore = getFirestore();
   if (!(await firestore.doc(`listings-by-date/${format}`).get()).exists) {
