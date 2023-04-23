@@ -1,13 +1,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
+import {
+  AuthStatusContext,
+  UserContext,
+} from '@/components/layout/GetAuthStatus';
 import { BasicModal } from '@/components/modals';
 import SignUpModal from '@/components/modals/SignUpModal';
+import ProfilePicture from '@/components/profile/ProfilePicture';
+
+import { AuthService } from '@/firebase/auth/auth-service';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -16,12 +24,14 @@ const links = [
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const router = useRouter();
+  const status = useContext(AuthStatusContext);
+  const user = useContext(UserContext);
   return (
     <div
       className={clsxm(!isMenuOpen ? 'py-5' : 'w-full', 'layout z-10 mx-auto')}
     >
-      <div className='relative flex items-center justify-between'>
+      <div className='relative flex items-center'>
         <div className='flex items-center'>
           <Link
             href='/'
@@ -35,9 +45,6 @@ const Nav = () => {
               alt='Wamirii Logo'
               src='/images/logo.png'
             />
-            <span className='ml-2 text-xl font-bold uppercase tracking-wide text-gray-800'>
-              Wamirii
-            </span>
           </Link>
           <ul className='hidden items-center space-x-8 lg:flex'>
             {links.map((link, idx) => (
@@ -54,22 +61,63 @@ const Nav = () => {
             ))}
           </ul>
         </div>
-        <ul className='hidden items-center space-x-8 lg:flex'>
-          <li>
-            <BasicModal>
-              <Button className='h-12' variant='ghost'>
-                Sign In
-              </Button>
-            </BasicModal>
-          </li>
-          <li>
-            <SignUpModal>
-              <Button className='focus:shadow-outline inline-flex h-12 items-center justify-center rounded bg-primary px-6 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
-                Report a missing Person
-              </Button>
-            </SignUpModal>
-          </li>
-        </ul>
+        <div className='flex-1' />
+        {status === 'logged-in' ? (
+          <>
+            <div
+              className='hidden cursor-pointer items-center gap-x-4 lg:flex'
+              onClick={() => router.push('/home')}
+            >
+              <ProfilePicture />
+              <div className='font-bold text-primary'>
+                {user?.username}
+              </div>{' '}
+            </div>
+
+            <div className='ml-4 hidden md:block'>
+              <Link
+                href='/home'
+                aria-label='Dashboard'
+                title='Dashboard'
+                className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
+              >
+                Dashboard
+              </Link>
+            </div>
+
+            <Button
+              className='ml-10 hidden lg:block'
+              onClick={() => AuthService.signOut()}
+            >
+              Sign Out
+            </Button>
+          </>
+        ) : (
+          <ul className='hidden items-center space-x-8 lg:flex'>
+            <li>
+              <BasicModal>
+                <Button className='h-12' variant='ghost'>
+                  Sign In
+                </Button>
+              </BasicModal>
+            </li>
+            <li>
+              <SignUpModal>
+                <Button className='focus:shadow-outline inline-flex h-12 items-center justify-center rounded bg-primary px-6 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
+                  Report a missing Person
+                </Button>
+              </SignUpModal>
+            </li>
+          </ul>
+        )}
+        {status === 'logged-in' && (
+          <div
+            className='flex cursor-pointer items-center gap-x-4 lg:hidden'
+            onClick={() => router.push('/home')}
+          >
+            <div className='mr-4 font-bold text-primary'>{user?.username}</div>{' '}
+          </div>
+        )}
         <div className='lg:hidden'>
           <button
             aria-label='Open Menu'
@@ -114,6 +162,7 @@ const Nav = () => {
                       </span>
                     </Link>
                   </div>
+
                   <div>
                     <button
                       aria-label='Close Menu'
@@ -144,12 +193,40 @@ const Nav = () => {
                         </Link>
                       </li>
                     ))}
-
-                    <BasicModal>
-                      <Button className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
-                        Report a missing Person
+                    {status === 'logged-in' && (
+                      <li>
+                        <Link
+                          href='/home'
+                          aria-label='Our product'
+                          title='Our product'
+                          className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
+                        >
+                          Dashboard
+                        </Link>
+                      </li>
+                    )}
+                    {status === 'logged-in' ? (
+                      <Button onClick={() => AuthService.signOut()}>
+                        Sign Out
                       </Button>
-                    </BasicModal>
+                    ) : (
+                      <div className='flex flex-col gap-y-4'>
+                        <div className='lg:hidden'>
+                          <div
+                            onClick={() => router.replace('/?auth=0')}
+                            className='hover:text-deep-purple-accent-400 cursor-pointer font-medium tracking-wide text-gray-700 transition-colors duration-200'
+                          >
+                            Sign In
+                          </div>
+                        </div>
+
+                        <SignUpModal>
+                          <Button className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
+                            Report a missing Person
+                          </Button>
+                        </SignUpModal>
+                      </div>
+                    )}
                   </ul>
                 </nav>
               </div>
