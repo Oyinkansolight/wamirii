@@ -76,7 +76,7 @@ export default function SingleSubmission() {
                     avatar.toString()
                   )}`
                 }`}
-                className='h-96 w-full rounded-lg object-cover object-center lg:w-[32rem]'
+                className='h-96 w-full rounded-lg object-cover object-center lg:w-[20rem]'
               />
 
               <div className='mt-8 lg:mt-0 lg:px-10'>

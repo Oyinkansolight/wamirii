@@ -64,7 +64,7 @@ const ListingCard = ({
                   avatar.toString()
                 )}`
               }`}
-              className='h-64 w-full object-cover transition-all duration-300 ease-in hover:scale-110'
+              className='h-64 w-full object-contain transition-all duration-300 ease-in hover:scale-110'
               alt=''
             />
           )}
