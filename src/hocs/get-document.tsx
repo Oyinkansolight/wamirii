@@ -1,8 +1,6 @@
 import { DocumentData } from 'firebase/firestore';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 
-import logger from '@/lib/logger';
-
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
 export default function GetDocumentHOC<T_PROPS extends JSX.IntrinsicAttributes>(
@@ -14,7 +12,6 @@ export default function GetDocumentHOC<T_PROPS extends JSX.IntrinsicAttributes>(
     FirestoreService.getDocRef(`${docPath}`)
   );
 
-  logger(docPath, 'document');
   return function C(props: T_PROPS) {
     return doc ? <Component {...props} doc={doc} /> : <div></div>;
   };

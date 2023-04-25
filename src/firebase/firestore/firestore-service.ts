@@ -38,6 +38,12 @@ export class FirestoreService {
     });
   }
 
+  static getMyListingsConstraints(userId?: string) {
+    if (userId) {
+      return where('createdBy', '==', userId);
+    }
+  }
+
   static async updateUserDocument(user: User) {
     if (user?.imageURL) {
       const f = user.imageURL as unknown as FileList;

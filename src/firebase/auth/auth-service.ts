@@ -4,8 +4,6 @@ import {
   signOut,
 } from 'firebase/auth';
 
-import logger from '@/lib/logger';
-
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import { auth } from '@/firebase/init';
 
@@ -50,7 +48,6 @@ export class AuthService {
       case 'auth/weak-password':
         return 'Password is too weak';
       default:
-        logger(code);
         return 'Unknown error';
     }
   }

@@ -1,10 +1,10 @@
-import { Timestamp } from 'firebase/firestore';
-import { useRouter } from 'next/router';
+import { DocumentData, QueryConstraint } from 'firebase/firestore';
+import { Button } from 'flowbite-react';
 import { useContext, useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { useCollection } from 'react-firebase-hooks/firestore';
-import { AiFillEdit } from 'react-icons/ai';
-import { GrFormView } from 'react-icons/gr';
+import { GrFormEdit, GrFormView } from 'react-icons/gr';
+
+import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 
 import Loading from '@/components/generic/Loading';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -12,15 +12,10 @@ import { UserContext } from '@/components/layout/GetAuthStatus';
 import ButtonLink from '@/components/links/ButtonLink';
 import MissingAvatar from '@/components/submissions/MissingAvatar';
 
-import {
-  FilterByField,
-  FirestoreService,
-  OrderByField,
-} from '@/firebase/firestore/firestore-service';
+import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
-import { Misc } from '@/misc/misc-functions';
+import GetDocumentHOC from '@/hocs/get-document';
 
-import { FilterListings } from '@/types/filter-listings';
 import { Listing } from '@/types/listing';
 
 const tableColumns: TableColumn<Listing>[] = [
@@ -37,13 +32,20 @@ const tableColumns: TableColumn<Listing>[] = [
         <div className='font-bold'>
           {cell.missingFirstName} {cell.missingLastName}
         </div>
-        <div className='text-xs tracking-widest'>
-          {cell.missingAge ? `${cell.missingAge} yo` : ''}
-        </div>
       </div>
     ),
     sortable: true,
     sortField: 'missingFirstName',
+  },
+  {
+    name: 'Reporter',
+    cell: (row) => {
+      const C = GetDocumentHOC(
+        ({ doc }: { doc: DocumentData }) => <div>{doc.username}</div>,
+        `users/${row.createdBy}`
+      );
+      return <C />;
+    },
   },
   {
     name: 'Age',
@@ -86,8 +88,7 @@ const tableColumns: TableColumn<Listing>[] = [
           }}
           className='h-5 w-5 cursor-pointer'
         />
-        <div className='h-full w-px bg-black' />
-        <AiFillEdit className='h-5 w-5 cursor-pointer' />
+        <GrFormEdit className='h-5 w-5 cursor-pointer' />
       </div>
     ),
     width: '150px',
@@ -96,79 +97,24 @@ const tableColumns: TableColumn<Listing>[] = [
 ];
 
 export default AuthGuardHOC(() => {
-  const router = useRouter();
   const user = useContext(UserContext);
-
-  const [sortBy, setSortBy] = useState<OrderByField>();
-  const [filters, setFilters] = useState<FilterByField[]>([]);
-
+  const [userConstraint, setUserConstraint] = useState<QueryConstraint>();
   useEffect(() => {
-    const data = Misc.queryStringToJSON<FilterListings>(
-      router.asPath.split('?')[1]
-    );
-    if (data) {
-      onApplyFilter({
-        ...data,
-        ageFrom: data.ageFrom
-          ? Number.parseInt(data.ageFrom as unknown as string)
-          : null,
-        ageTo: data.ageTo
-          ? Number.parseInt(data.ageTo as unknown as string)
-          : null,
-        missingSinceTo: data.missingSinceTo
-          ? Timestamp.fromDate(
-              new Date(data.missingSinceTo as unknown as string)
-            )
-          : null,
-        missingSinceFrom: data.missingSinceFrom
-          ? Timestamp.fromDate(
-              new Date(data.missingSinceFrom as unknown as string)
-            )
-          : null,
-        dateReportedTo: data.dateReportedTo
-          ? Timestamp.fromDate(
-              new Date(data.dateReportedTo as unknown as string)
-            )
-          : null,
-        dateReportedFrom: data.dateReportedFrom
-          ? Timestamp.fromDate(
-              new Date(data.dateReportedFrom as unknown as string)
-            )
-          : null,
-      });
-    }
-  }, [router]);
+    setUserConstraint(FirestoreService.getMyListingsConstraints(user?.id));
+  }, [user?.id]);
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const [docs, loading, error] = useCollection(
-    FirestoreService.getListings(user?.id, sortBy, filters)
-  );
+  const {
+    docs,
+    error,
+    isLoading,
+    nextPage,
+    previousPage,
+    pageNumber,
+    hasNextPage,
+    hasPreviousPage,
+    setSortByField,
+  } = useCollectionPaginated('listings', 2, userConstraint);
 
-  const onApplyFilter = (filter: FilterListings) => {
-    const f: FilterByField[] = [];
-    if (filter.missingGender) {
-      f.push(['missingGender', '==', filter.missingGender]);
-    }
-    if (filter.ageFrom) {
-      f.push(['missingAge', '>', filter.ageFrom]);
-    }
-    if (filter.ageTo) {
-      f.push(['missingAge', '<', filter.ageTo]);
-    }
-    if (filter.missingSinceFrom) {
-      f.push(['missingSince', '>', filter.missingSinceFrom]);
-    }
-    if (filter.missingSinceTo) {
-      f.push(['missingSince', '<', filter.missingSinceTo]);
-    }
-    if (filter.dateReportedFrom) {
-      f.push(['missingDateReported', '>', filter.dateReportedFrom]);
-    }
-    if (filter.dateReportedTo) {
-      f.push(['missingDateReported', '<', filter.dateReportedTo]);
-    }
-    setFilters(f);
-  };
   return (
     <DashboardLayout>
       <div className='relative h-full'>
@@ -176,7 +122,7 @@ export default AuthGuardHOC(() => {
           <div>
             <div className='flex justify-end'></div>
             <DataTable
-              title='My Submissions'
+              title='All Submissions'
               noDataComponent={
                 <div className='flex h-52 flex-col items-center justify-center'>
                   <div>You are yet to create any submissions</div>
@@ -200,20 +146,30 @@ export default AuthGuardHOC(() => {
               sortServer
               onSort={(col, dir) => {
                 if (!col.sortField || col.sortField === '') return;
-                setSortBy({ fieldName: col.sortField ?? '', direction: dir });
+                setSortByField({
+                  fieldName: col.sortField ?? '',
+                  direction: dir,
+                });
               }}
               columns={tableColumns}
-              data={
-                docs?.docs.map((doc) => ({ _id: doc.id, ...doc.data() })) ?? []
-              }
+              data={docs?.map((doc) => ({ _id: doc.id, ...doc.data() })) ?? []}
             />
           </div>
         )}
-        {loading && (
+        {isLoading && (
           <div className='absolute inset-0 flex items-center justify-center'>
             <Loading />
           </div>
         )}
+        <div className='flex items-center justify-center'>
+          <Button disabled={!hasPreviousPage} onClick={() => previousPage()}>
+            Previous
+          </Button>
+          <div className='px-20'>Page: {pageNumber}</div>
+          <Button disabled={!hasNextPage} onClick={() => nextPage()}>
+            Next
+          </Button>
+        </div>
       </div>
     </DashboardLayout>
   );

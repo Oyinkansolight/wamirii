@@ -10,7 +10,6 @@ import { RiDashboardFill, RiListCheck2 } from 'react-icons/ri';
 import { Menu, MenuItem, Sidebar as Bar, SubMenu } from 'react-pro-sidebar';
 
 import clsxm from '@/lib/clsxm';
-import logger from '@/lib/logger';
 
 const NavItems = [
   {
@@ -60,7 +59,7 @@ const NavItems = [
 const breakpoints = { xs: 0, sm: 480, md: 1024 };
 const Sidebar = () => {
   const router = useRouter();
-  logger(router.pathname);
+
   const { size } = useResponsive(breakpoints);
   return (
     <Bar defaultCollapsed={size === 'xs'}>
