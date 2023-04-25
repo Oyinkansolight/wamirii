@@ -16,7 +16,7 @@ import { db } from '@/firebase/init';
 
 export function useCollectionPaginated(
   collectionPath: string,
-  perPage = 5,
+  perPage = 10,
   initConstraint?: QueryConstraint
 ): {
   docs: DocumentSnapshot[] | undefined;

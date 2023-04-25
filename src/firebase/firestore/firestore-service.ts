@@ -33,7 +33,7 @@ export class FirestoreService {
       id,
       username,
       email,
-      role: 'visitor',
+      role: 'volunteer',
       createdAt: serverTimestamp(),
     });
   }

@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export class User {
   id?: string;
   role?: Role;
@@ -7,6 +9,7 @@ export class User {
   lastName?: string;
   imageURL?: string;
   submissionsCount?: number;
+  createdAt?: Timestamp;
 }
 
-export type Role = 'admin' | 'moderator' | 'visitor';
+export type Role = 'admin' | 'user' | 'organization' | 'manager' | 'volunteer';
