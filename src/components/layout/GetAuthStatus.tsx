@@ -27,6 +27,7 @@ export default function GetAuthStatus({ children }: { children: JSX.Element }) {
       auth,
       async (u) => {
         if (!u) {
+          setIsLoggedIn('loading');
           t = setTimeout(() => {
             setIsLoggedIn('logged-out');
             setUser(null);

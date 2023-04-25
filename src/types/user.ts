@@ -1,5 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
 
+import { roles } from '@/constant/generic';
+
 export class User {
   id?: string;
   role?: Role;
@@ -12,4 +14,4 @@ export class User {
   createdAt?: Timestamp;
 }
 
-export type Role = 'admin' | 'user' | 'organization' | 'manager' | 'volunteer';
+export type Role = (typeof roles)[number];

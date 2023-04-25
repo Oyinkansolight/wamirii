@@ -17,6 +17,7 @@ import { UserContext } from '@/components/layout/GetAuthStatus';
 import ProfilePicture from '@/components/profile/ProfilePicture';
 
 import { allStates } from '@/constant/generic';
+import { AuthService } from '@/firebase/auth/auth-service';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
@@ -168,6 +169,7 @@ export default AuthGuardHOC(() => {
           Update
         </Button>
       </form>
+      <Button onClick={() => AuthService.signOut()}>Logout</Button>
     </DashboardLayout>
   );
 });

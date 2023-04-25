@@ -17,7 +17,7 @@ import Button from '@/components/buttons/Button';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import ProfilePicture from '@/components/profile/ProfilePicture';
 
-import { allStates } from '@/constant/generic';
+import { roles } from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
@@ -64,6 +64,16 @@ export default AuthGuardHOC(() => {
       placeholder: 'Select profile picture',
       title: 'Image',
       name: 'imageURL',
+    },
+    {
+      placeholder: '',
+      title: 'Role',
+      name: 'role',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
     },
   ];
 
@@ -134,16 +144,19 @@ export default AuthGuardHOC(() => {
                     disabled={v.disabled}
                     {...register(v.name ?? (`${i}` as keyof User))}
                   />
-                ) : v.name === 'missingLastSeenSate' ? (
-                  <Select className='capitalize'>
-                    <option value=''>Select State</option>
-                    {allStates.map((state, i) => (
+                ) : v.name === 'role' ? (
+                  <Select
+                    className='capitalize'
+                    {...register((v.name ?? `${i}`) as keyof User, v.options)}
+                  >
+                    <option value=''>Select Role</option>
+                    {roles.map((role, i) => (
                       <option
                         key={i}
-                        value={state.name.toLowerCase()}
+                        value={role.toLowerCase()}
                         className='capitalize'
                       >
-                        {state.name.toLowerCase()}
+                        {role.toLowerCase()}
                       </option>
                     ))}
                   </Select>
@@ -175,4 +188,4 @@ export default AuthGuardHOC(() => {
       </form>
     </DashboardLayout>
   );
-});
+}, ['admin']);

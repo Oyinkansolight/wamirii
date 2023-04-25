@@ -33,9 +33,6 @@ export default AuthGuardHOC(() => {
 
   const [, setSortBy] = useState<OrderByField>();
   const [docs, loading, error] = useCollection(FirestoreService.getDateGroup());
-  if (loading) {
-    return <div>Loading...</div>;
-  }
   return (
     <DashboardLayout>
       <div className='flex h-screen flex-col items-center justify-center'>
