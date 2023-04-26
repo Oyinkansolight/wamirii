@@ -113,7 +113,7 @@ export default AuthGuardHOC(() => {
     hasNextPage,
     hasPreviousPage,
     setSortByField,
-  } = useCollectionPaginated('listings', 2, userConstraint);
+  } = useCollectionPaginated('listings', undefined, userConstraint);
 
   return (
     <DashboardLayout>

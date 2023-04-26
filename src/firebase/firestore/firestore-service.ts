@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   FirestoreError,
+  getCountFromServer,
   getDoc,
   onSnapshot,
   orderBy,
@@ -42,6 +43,16 @@ export class FirestoreService {
     if (userId) {
       return where('createdBy', '==', userId);
     }
+  }
+
+  static async getGenderCount(gender: 'male' | 'female') {
+    return await getCountFromServer(
+      query(collection(db, 'listings'), where('missingGender', '==', gender))
+    );
+  }
+
+  static async getUsersCount() {
+    return await getCountFromServer(query(collection(db, 'users')));
   }
 
   static async updateUserDocument(user: User) {

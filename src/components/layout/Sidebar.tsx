@@ -55,7 +55,7 @@ const NavItems = [
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
         label: 'All Submissions',
-        link: '/home/view-all-submissions',
+        link: '/home',
       },
       {
         icon: (

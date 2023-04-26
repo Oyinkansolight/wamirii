@@ -5,6 +5,8 @@ import DataTable, { TableColumn } from 'react-data-table-component';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
+import GenderCountCard from '@/components/cards/GenderCount';
+import UsersCountCard from '@/components/cards/UsersCountCard';
 import Loading from '@/components/generic/Loading';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
@@ -36,9 +38,17 @@ export default AuthGuardHOC(() => {
   return (
     <DashboardLayout>
       <div className='flex h-screen flex-col items-center justify-center'>
-        <div className='mb-2 text-xl font-bold md:mb-10 md:text-center md:text-3xl'>
-          Total Submissions: {doc?.totalSubmissions ?? 0}
+        <div className='flex gap-8'>
+          <GenderCountCard />
+          <UsersCountCard />
         </div>
+        <div className='h-12' />
+        <div className='flex items-center rounded-lg bg-white py-2 px-8 text-xl text-gray-600  shadow-lg'>
+          <div className=' text-xl font-bold  md:text-center md:text-3xl'>
+            Total Submissions: {doc?.totalSubmissions ?? 0}
+          </div>
+        </div>
+        <div className='h-5' />
 
         <div className='layout relative h-full'>
           {(error && <div>{error.message}</div>) || (
