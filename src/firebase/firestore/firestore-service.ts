@@ -39,10 +39,36 @@ export class FirestoreService {
     });
   }
 
-  static getMyListingsConstraints(userId?: string) {
-    if (userId) {
-      return where('createdBy', '==', userId);
+  static getListingsConstraints(listing: Listing) {
+    const q: QueryConstraint[] = [];
+    const keys = Object.keys(listing) as (keyof Listing)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (listing[key]) {
+        q.push(where(key, '==', listing[key]));
+      }
     }
+    return q;
+  }
+
+  static getUsersConstraints(user: User) {
+    const q: QueryConstraint[] = [];
+    const keys = Object.keys(user) as (keyof User)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (user[key]) {
+        q.push(where(key, '==', user[key]));
+      }
+    }
+    return q;
+  }
+
+  static getUsersConstraintsOp(
+    key: keyof User,
+    op: WhereFilterOp,
+    value: unknown
+  ) {
+    return [where(key, op, value)];
   }
 
   static async getGenderCount(gender: 'male' | 'female') {

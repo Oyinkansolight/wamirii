@@ -35,6 +35,11 @@ const NavItems = [
         link: '/home/users',
       },
       {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'View All Admin',
+        link: '/home/users/view-users-admin',
+      },
+      {
         icon: (
           <MdFormatListBulletedAdd className='h-6 w-6 md:h-auto md:w-auto' />
         ),

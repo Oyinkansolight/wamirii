@@ -12,10 +12,7 @@ import ButtonLink from '@/components/links/ButtonLink';
 import ProfilePicture from '@/components/profile/ProfilePicture';
 import Role from '@/components/profile/Role';
 
-import {
-  FirestoreService,
-  OrderByField,
-} from '@/firebase/firestore/firestore-service';
+import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
 import { User } from '@/types/user';
@@ -64,16 +61,8 @@ const tableColumns: TableColumn<User>[] = [
 
 export default AuthGuardHOC(() => {
   const [userConstraint, setUserConstraint] = useState<QueryConstraint[]>();
-  const [sort] = useState<OrderByField[]>([
-    {
-      fieldName: 'role',
-      direction: 'asc',
-    },
-  ]);
   useEffect(() => {
-    setUserConstraint(
-      FirestoreService.getUsersConstraintsOp('role', '!=', 'admin')
-    );
+    setUserConstraint(FirestoreService.getUsersConstraints({ role: 'admin' }));
   }, []);
   const {
     docs,
@@ -85,7 +74,7 @@ export default AuthGuardHOC(() => {
     hasNextPage,
     hasPreviousPage,
     setSortByField,
-  } = useCollectionPaginated('users', undefined, userConstraint, sort);
+  } = useCollectionPaginated('users', undefined, userConstraint);
 
   return (
     <DashboardLayout>

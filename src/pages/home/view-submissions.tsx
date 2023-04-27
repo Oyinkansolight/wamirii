@@ -103,9 +103,11 @@ const tableColumns: TableColumn<Listing>[] = [
 
 export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
-  const [userConstraint, setUserConstraint] = useState<QueryConstraint>();
+  const [userConstraint, setUserConstraint] = useState<QueryConstraint[]>();
   useEffect(() => {
-    setUserConstraint(FirestoreService.getMyListingsConstraints(user?.id));
+    setUserConstraint(
+      FirestoreService.getListingsConstraints({ createdBy: user?.id })
+    );
   }, [user?.id]);
 
   const {

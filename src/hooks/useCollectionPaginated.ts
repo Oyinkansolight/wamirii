@@ -17,7 +17,8 @@ import { db } from '@/firebase/init';
 export function useCollectionPaginated(
   collectionPath: string,
   perPage = 10,
-  initConstraint?: QueryConstraint
+  initConstraint?: (QueryConstraint | undefined)[],
+  orderByFields?: OrderByField[]
 ): {
   docs: DocumentSnapshot[] | undefined;
   isLoading: boolean;
@@ -46,7 +47,19 @@ export function useCollectionPaginated(
       limit(perPage + 1),
     ];
     if (initConstraint) {
-      constraints.push(initConstraint);
+      for (let i = 0; i < initConstraint.length; i++) {
+        const constraint = initConstraint[i];
+        if (constraint) {
+          constraints.push(constraint);
+        }
+      }
+    }
+    if (orderByFields) {
+      constraints.splice(
+        0,
+        0,
+        ...orderByFields.map((v) => orderBy(v.fieldName, v.direction))
+      );
     }
     if (cursors.length > 0) {
       constraints.push(startAfter(cursors[cursors.length - 1]));
@@ -65,7 +78,7 @@ export function useCollectionPaginated(
       }
     );
     return unsubscribe;
-  }, [collectionPath, cursors, initConstraint, perPage, sort]);
+  }, [collectionPath, cursors, initConstraint, orderByFields, perPage, sort]);
 
   const nextPage = () => {
     if (hasNextPage) {
