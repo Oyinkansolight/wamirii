@@ -88,7 +88,12 @@ const tableColumns: TableColumn<Listing>[] = [
           }}
           className='h-5 w-5 cursor-pointer'
         />
-        <GrFormEdit className='h-5 w-5 cursor-pointer' />
+        <GrFormEdit
+          onClick={() => {
+            window.location.href = `/home/submission/edit/${cell._id}`;
+          }}
+          className='h-5 w-5 cursor-pointer'
+        />
       </div>
     ),
     width: '150px',

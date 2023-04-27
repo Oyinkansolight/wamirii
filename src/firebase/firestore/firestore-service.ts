@@ -71,7 +71,7 @@ export class FirestoreService {
     await updateDoc(doc(db, `users/${user.id}`), { ...user });
   }
 
-  static async createListing(listing: Listing) {
+  static async createListing(listing: Listing, id?: string) {
     if (listing?.missingImageUrl) {
       const f = listing.missingImageUrl as unknown as FileList;
       if (f.length > 0) {
@@ -91,10 +91,22 @@ export class FirestoreService {
         new Date((listing.missingDateReported as unknown as string) ?? '')
       );
     }
-    return await addDoc(collection(db, 'listings'), {
-      ...listing,
-      createdAt: serverTimestamp(),
-    });
+    if (id) {
+      return await updateDoc(doc(db, `listings/${id}`), {
+        ...listing,
+        missingAge: listing.missingAge
+          ? Number.parseInt(listing.missingAge)
+          : null,
+      });
+    } else {
+      return await addDoc(collection(db, 'listings'), {
+        ...listing,
+        missingAge: listing.missingAge
+          ? Number.parseInt(listing.missingAge)
+          : null,
+        createdAt: serverTimestamp(),
+      });
+    }
   }
 
   static async userDocExists(id: string) {

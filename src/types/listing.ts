@@ -23,3 +23,13 @@ export class Listing {
   reporterRelationship?: string;
   createdAt?: Timestamp;
 }
+
+export function toLocalListings(l: Listing) {
+  const c = {
+    ...l,
+    missingSince: l.missingSince?.toDate(),
+    missingDateReported: l.missingDateReported?.toDate(),
+    createdAt: l.createdAt?.toDate(),
+  };
+  return c;
+}

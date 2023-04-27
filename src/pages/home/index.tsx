@@ -21,7 +21,7 @@ import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
 import ListingsGroup from '@/types/listings-group';
 
-const tableColumns: TableColumn<ListingsGroup>[] = [
+const tableColumns: TableColumn<ListingsGroup & { index: number }>[] = [
   {
     name: '',
     cell: (cell) => <div className='py-4 font-bold'>{cell.format}</div>,
@@ -52,7 +52,7 @@ export default AuthGuardHOC(() => {
 
         <div className='layout relative h-full'>
           {(error && <div>{error.message}</div>) || (
-            <div>
+            <div className='h-[30rem] overflow-auto'>
               <div className='flex justify-end'></div>
               <DataTable
                 title='Volunteer Submission Count'
@@ -63,10 +63,11 @@ export default AuthGuardHOC(() => {
                 }}
                 columns={tableColumns}
                 data={
-                  (docs?.docs.map((doc) => doc.data()) ?? []) as ListingsGroup[]
+                  (docs?.docs.map((doc, i) => ({ ...doc.data(), index: i })) ??
+                    []) as (ListingsGroup & { index: number })[]
                 }
                 expandableRows
-                expandableRowExpanded={() => true}
+                expandableRowExpanded={(r) => r.index === 0}
                 expandableRowsComponent={(data) => (
                   <GroupedListingsTable group={data.data.format} />
                 )}

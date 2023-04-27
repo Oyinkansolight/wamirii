@@ -39,7 +39,7 @@ const NavItems = [
           <MdFormatListBulletedAdd className='h-6 w-6 md:h-auto md:w-auto' />
         ),
         label: 'Create Users',
-        link: '/home/#',
+        link: '/home/users/create',
       },
     ],
   },
