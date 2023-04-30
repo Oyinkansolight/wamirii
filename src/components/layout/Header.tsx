@@ -73,6 +73,18 @@ const Nav = () => {
                 {user?.username}
               </div>{' '}
             </div>
+
+            <div className='ml-4 hidden md:block'>
+              <Link
+                href='/home'
+                aria-label='Dashboard'
+                title='Dashboard'
+                className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
+              >
+                Dashboard
+              </Link>
+            </div>
+
             <Button
               className='ml-10 hidden lg:block'
               onClick={() => AuthService.signOut()}
@@ -181,6 +193,18 @@ const Nav = () => {
                         </Link>
                       </li>
                     ))}
+                    {status === 'logged-in' && (
+                      <li>
+                        <Link
+                          href='/home'
+                          aria-label='Our product'
+                          title='Our product'
+                          className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
+                        >
+                          Dashboard
+                        </Link>
+                      </li>
+                    )}
                     {status === 'logged-in' ? (
                       <Button onClick={() => AuthService.signOut()}>
                         Sign Out

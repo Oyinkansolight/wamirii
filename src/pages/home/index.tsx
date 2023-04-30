@@ -38,7 +38,7 @@ export default AuthGuardHOC(() => {
   }
   return (
     <DashboardLayout>
-      <div className='flex h-1/2 flex-col items-center justify-center md:h-2/3'>
+      <div className='flex h-screen flex-col items-center justify-center'>
         <div className='mb-2 text-xl font-bold md:mb-10 md:text-center md:text-3xl'>
           Total Submissions: {doc?.totalSubmissions ?? 0}
         </div>
@@ -74,7 +74,7 @@ export default AuthGuardHOC(() => {
         </div>
 
         {user && (
-          <div>
+          <div className='mt-6'>
             {' '}
             Logged in as <span className='font-bold'>{user.username}</span>
           </div>

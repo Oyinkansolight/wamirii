@@ -62,7 +62,8 @@ const Footer = () => {
           </p>
           <div className='mx-auto mt-4 flex items-center space-x-4 sm:mt-0 md:mx-0'>
             <Link
-              href='/'
+              target='_blank'
+              href='https://twitter.com/thewamirii'
               className='text-deep-purple-100 hover:text-teal-accent-400 transition-colors duration-300'
             >
               <svg viewBox='0 0 24 24' fill='currentColor' className='h-5'>
@@ -70,7 +71,8 @@ const Footer = () => {
               </svg>
             </Link>
             <Link
-              href='/'
+              target='_blank'
+              href='https://instagram.com/thewamirii'
               className='text-deep-purple-100 hover:text-teal-accent-400 transition-colors duration-300'
             >
               <svg viewBox='0 0 30 30' fill='currentColor' className='h-6'>
@@ -79,7 +81,8 @@ const Footer = () => {
               </svg>
             </Link>
             <Link
-              href='/'
+              target='_blank'
+              href='https://facebook.com/thewamiri'
               className='text-deep-purple-100 hover:text-teal-accent-400 transition-colors duration-300'
             >
               <svg viewBox='0 0 24 24' fill='currentColor' className='h-5'>
