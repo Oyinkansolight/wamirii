@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
-// import * as admin from 'firebase-admin';
-// import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
+
+import { groupListing } from './listings';
 
 // Make the above imports using javascript require import
-const admin = require('firebase-admin');
-const functions = require('firebase-functions');
+// const admin = require('firebase-admin');
+// const functions = require('firebase-functions');
 
 admin.initializeApp();
 
@@ -30,6 +32,14 @@ export const init = functions.https.onRequest(
         },
         { merge: true }
       );
+
+    const allListings = (await admin.firestore().collection('listings').get())
+      .docs;
+    for (let i = 0; i < allListings.length; i++) {
+      const doc = allListings[i];
+      await groupListing(doc, 'set');
+    }
+
     const allDocs = (await admin.firestore().collection('users').get()).docs;
     for (let i = 0; i < allDocs.length; i++) {
       const doc = allDocs[i];
@@ -49,68 +59,40 @@ export const init = functions.https.onRequest(
   }
 );
 
-export const listingCreated = functions.firestore
+export const listingsWritten = functions.firestore
   .document('listings/{doc}')
-  .onCreate(
-    async (changeDoc: {
-      data: () => { (): any; new (): any; createdBy: any };
-    }) => {
-      admin
-        .firestore()
-        .doc('global/global')
-        .set(
-          {
-            totalSubmissions: (
-              await admin.firestore().collection('listings').count().get()
-            ).data().count,
-          },
-          { merge: true }
-        );
-      const docRef = admin
-        .firestore()
-        .doc(`users/${changeDoc.data().createdBy}`);
-      await docRef.update({
-        submissionsCount: (
-          await admin
-            .firestore()
-            .collection('listings')
-            .where('createdBy', '==', docRef.id)
-            .count()
-            .get()
-        ).data().count,
-      });
+  .onWrite(async (changeDoc) => {
+    await updateCounts(
+      changeDoc.after?.data()?.createdBy ?? changeDoc.before?.data()?.createdBy
+    );
+    if (!changeDoc.after.data()) {
+      groupListing(changeDoc.before as any, 'delete');
+    } else {
+      groupListing(changeDoc.after as any, 'set');
     }
-  );
+  });
 
-export const listingDeleted = functions.firestore
-  .document('listings/{doc}')
-  .onDelete(
-    async (changeDoc: {
-      data: () => { (): any; new (): any; createdBy: any };
-    }) => {
-      admin
-        .firestore()
-        .doc('global/global')
-        .set(
-          {
-            totalSubmissions: (
-              await admin.firestore().collection('listings').count().get()
-            ).data().count,
-          },
-          { merge: true }
-        );
-      const docRef = admin
-        .firestore()
-        .doc(`users/${changeDoc.data().createdBy}`);
-      await docRef.update({
-        submissionsCount: (
-          await admin
-            .firestore()
-            .collection('listings')
-            .where('createdBy', '==', docRef.id)
-            .count()
-            .get()
+async function updateCounts(userId: string) {
+  admin
+    .firestore()
+    .doc('global/global')
+    .set(
+      {
+        totalSubmissions: (
+          await admin.firestore().collection('listings').count().get()
         ).data().count,
-      });
-    }
-  );
+      },
+      { merge: true }
+    );
+  const docRef = admin.firestore().doc(`users/${userId}`);
+  await docRef.update({
+    submissionsCount: (
+      await admin
+        .firestore()
+        .collection('listings')
+        .where('createdBy', '==', userId)
+        .count()
+        .get()
+    ).data().count,
+  });
+}
