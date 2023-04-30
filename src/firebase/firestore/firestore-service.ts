@@ -92,6 +92,21 @@ export class FirestoreService {
     return query(collection(db, 'users'), ...constraints);
   }
 
+  static getDateGroup() {
+    return query(collection(db, 'listings-by-date'), orderBy('date', 'desc'));
+  }
+
+  static getGroupedUsers(group: string, orderByField?: OrderByField) {
+    const constraints: QueryConstraint[] = [];
+    if (orderByField) {
+      constraints.push(orderBy(orderByField.fieldName, orderByField.direction));
+    }
+    return query(
+      collection(db, `listings-by-date/${group}/users`),
+      ...constraints
+    );
+  }
+
   static getMyDocsQuery(id: string) {
     return query(
       collection(db, 'listings'),

@@ -8,7 +8,7 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import Loading from '@/components/generic/Loading';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
-import GroupedListingsTable from '@/components/submissions/GroupedListingsTable';
+import ProfilePicture from '@/components/profile/ProfilePicture';
 
 import { AuthService } from '@/firebase/auth/auth-service';
 import {
@@ -17,12 +17,31 @@ import {
 } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
-import ListingsGroup from '@/types/listings-group';
+import { User } from '@/types/user';
 
-const tableColumns: TableColumn<ListingsGroup>[] = [
+const tableColumns: TableColumn<User>[] = [
   {
     name: '',
-    cell: (cell) => <div className='py-4 font-bold'>{cell.format}</div>,
+    cell: (cell) => (
+      <div className='py-4'>
+        <ProfilePicture user={cell} />
+      </div>
+    ),
+    grow: 0,
+  },
+  {
+    name: 'Name',
+    selector: (cell) => cell.username ?? '',
+    cell: (cell) => <div>{cell.username}</div>,
+    sortable: true,
+    sortField: 'missingFirstName',
+  },
+  {
+    name: 'Total Submissions',
+    selector: (cell) => cell.submissionsCount ?? 0,
+    cell: (cell) => <div>{cell.submissionsCount ?? 0}</div>,
+    sortable: true,
+    sortField: 'submissionsCount',
   },
 ];
 
@@ -32,7 +51,9 @@ export default AuthGuardHOC(() => {
   const [doc] = useDocumentData(FirestoreService.getDocRef('global/global'));
 
   const [, setSortBy] = useState<OrderByField>();
-  const [docs, loading, error] = useCollection(FirestoreService.getDateGroup());
+  const [docs, loading, error] = useCollection(
+    FirestoreService.getUsersQuery()
+  );
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -55,14 +76,7 @@ export default AuthGuardHOC(() => {
                   setSortBy({ fieldName: col.sortField ?? '', direction: dir });
                 }}
                 columns={tableColumns}
-                data={
-                  (docs?.docs.map((doc) => doc.data()) ?? []) as ListingsGroup[]
-                }
-                expandableRows
-                expandableRowExpanded={() => true}
-                expandableRowsComponent={(data) => (
-                  <GroupedListingsTable group={data.data.format} />
-                )}
+                data={docs?.docs.map((doc) => doc.data()) ?? []}
               />
             </div>
           )}

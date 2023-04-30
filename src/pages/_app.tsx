@@ -12,6 +12,8 @@ import '@/styles/colors.css';
 
 import GetAuthStatus from '@/components/layout/GetAuthStatus';
 
+import { isStaging } from '@/constant/env';
+
 const searchClient = algoliasearch(
   'MCZ2828J1K',
   'ff7b732a9e37807e283303b3ae230397'
@@ -25,7 +27,12 @@ const searchClient = algoliasearch(
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <InstantSearch searchClient={searchClient} indexName='wamirii_firestore'>
+      <InstantSearch
+        searchClient={searchClient}
+        indexName={
+          isStaging ? 'staging_wamirii_firestore' : 'wamirii_firestore'
+        }
+      >
         <ProSidebarProvider>
           <GetAuthStatus>
             <Component {...pageProps} />

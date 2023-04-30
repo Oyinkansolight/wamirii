@@ -68,7 +68,7 @@ const Nav = () => {
               className='hidden cursor-pointer items-center gap-x-4 lg:flex'
               onClick={() => router.push('/home')}
             >
-              <ProfilePicture />
+              <ProfilePicture user={user} />
               <div className='font-bold text-primary'>
                 {user?.username}
               </div>{' '}
