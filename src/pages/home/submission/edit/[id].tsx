@@ -160,7 +160,7 @@ export default AuthGuardHOC(() => {
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i] as keyof Listing;
         if (key === 'missingSince') {
-          setValue(key, moment(localSub[key]).format('YYYY-MM-D'));
+          setValue(key, moment(localSub[key]).format('YYYY-MM-DD'));
         } else {
           setValue(key, localSub[key]);
         }

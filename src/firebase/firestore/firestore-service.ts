@@ -100,11 +100,11 @@ export class FirestoreService {
   static async createListing(listing: Listing, id?: string) {
     if (listing?.missingImageUrl) {
       const f = listing.missingImageUrl as unknown as FileList;
-      if (f.length > 0) {
+      if (f.length > 0 && typeof listing.missingImageUrl !== 'string') {
         const r = await StorageService.uploadFile(f);
         listing.missingImageUrl = r.ref.fullPath;
       } else {
-        listing.missingImageUrl = '';
+        delete listing.missingImageUrl;
       }
     }
     if (listing?.missingSince) {

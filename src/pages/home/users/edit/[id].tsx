@@ -67,7 +67,7 @@ export default AuthGuardHOC(() => {
     },
     {
       placeholder: '',
-      title: 'Role',
+      title: 'Status',
       name: 'role',
       options: {
         validate: {

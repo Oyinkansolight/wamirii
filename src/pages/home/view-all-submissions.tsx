@@ -1,7 +1,7 @@
 import { DocumentData } from 'firebase/firestore';
 import { Button } from 'flowbite-react';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { GrFormView } from 'react-icons/gr';
+import { GrFormEdit, GrFormView } from 'react-icons/gr';
 
 import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 
@@ -82,6 +82,12 @@ const tableColumns: TableColumn<Listing>[] = [
         <GrFormView
           onClick={() => {
             window.location.href = `/home/submission/${cell._id}`;
+          }}
+          className='h-5 w-5 cursor-pointer'
+        />
+        <GrFormEdit
+          onClick={() => {
+            window.location.href = `/home/submission/edit/${cell._id}`;
           }}
           className='h-5 w-5 cursor-pointer'
         />
