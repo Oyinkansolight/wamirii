@@ -13,7 +13,7 @@ import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import { StorageService } from '@/firebase/storage/storage-service';
 import GetDocumentHOC from '@/hocs/get-document';
 
-import { Listing } from '@/types/listing';
+import { Listing, Status } from '@/types/listing';
 
 export const ListingCardFromId = ({ listingId }: { listingId: string }) => {
   const [listing] = useDocument(
@@ -54,8 +54,8 @@ const ListingCard = ({
 
   return (
     <div className='relative w-full overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
-      <div className='absolute top-2 right-2 z-50 flex w-16 justify-center rounded-lg bg-green-500 text-xs text-white'>
-        Active
+      <div className='absolute top-2 right-2 z-50 flex justify-center rounded-lg text-xs '>
+        <Status status={listing?.status ?? 'active'} />
       </div>
 
       <div className='h-full w-full'>
@@ -141,5 +141,13 @@ const ListingCard = ({
     </div>
   );
 };
+
+export function Status({ status }: { status: Status }) {
+  return (
+    <div className='rounded-full bg-green-500 px-4 py-1 text-white'>
+      {status}
+    </div>
+  );
+}
 
 export default ListingCard;

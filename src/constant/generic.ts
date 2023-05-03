@@ -159,3 +159,10 @@ export const roles = <const>[
   'manager',
   'volunteer',
 ];
+
+export const status = <const>[
+  'active',
+  'duplicate',
+  'found-alive',
+  'found-deceased',
+];

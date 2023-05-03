@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   FirestoreError,
   getCountFromServer,
@@ -127,12 +128,17 @@ export class FirestoreService {
     } else {
       return await addDoc(collection(db, 'listings'), {
         ...listing,
+        status: 'active',
         missingAge: listing.missingAge
           ? Number.parseInt(listing.missingAge)
           : null,
         createdAt: serverTimestamp(),
       });
     }
+  }
+
+  static async deleteListing(id: string) {
+    await deleteDoc(doc(db, `listings/${id}`));
   }
 
   static async userDocExists(id: string) {

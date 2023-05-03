@@ -19,7 +19,7 @@ import Button from '@/components/buttons/Button';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 
-import { allStates } from '@/constant/generic';
+import { allStates, status } from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
@@ -96,6 +96,16 @@ const missingPersonInputProps: (TextInputProps & {
     placeholder: 'Enter the state the missing person was last seen',
     title: 'Last Location (state) *',
     name: 'missingLastSeenSate',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== 'select' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Status',
+    name: 'status',
     options: {
       validate: {
         notEmpty: (v) => v !== 'select' || 'This field must not be empty',
@@ -228,6 +238,20 @@ export default AuthGuardHOC(() => {
                     accept='image/png, image/gif, image/jpeg'
                     {...register(v.name ?? `${i}`)}
                   />
+                ) : v.name === 'status' ? (
+                  <Select
+                    className='capitalize'
+                    {...register(v.name, v.options)}
+                  >
+                    <option value='select'>Select Status</option>
+                    {status.map((status, i) => {
+                      return (
+                        <option key={i} value={status}>
+                          {status}
+                        </option>
+                      );
+                    })}
+                  </Select>
                 ) : v.name === 'missingLastSeenSate' ? (
                   <Select
                     className='capitalize'

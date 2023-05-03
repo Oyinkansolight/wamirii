@@ -1,21 +1,25 @@
 import { DocumentData } from 'firebase/firestore';
 import { Button } from 'flowbite-react';
+import { useContext } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { GrFormEdit, GrFormView } from 'react-icons/gr';
+import { GrFormEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
 
 import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 
 import Loading from '@/components/generic/Loading';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import { UserContext } from '@/components/layout/GetAuthStatus';
 import ButtonLink from '@/components/links/ButtonLink';
+import DeleteSubmissionModal from '@/components/modals/DeleteSubmissionModal';
 import MissingAvatar from '@/components/submissions/MissingAvatar';
 
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 import GetDocumentHOC from '@/hocs/get-document';
 
 import { Listing } from '@/types/listing';
+import { User } from '@/types/user';
 
-const tableColumns: TableColumn<Listing>[] = [
+const tableColumns: TableColumn<Listing & { currentUser?: User | null }>[] = [
   {
     name: '',
     cell: (cell) => <MissingAvatar listing={cell} />,
@@ -91,6 +95,11 @@ const tableColumns: TableColumn<Listing>[] = [
           }}
           className='h-5 w-5 cursor-pointer'
         />
+        {cell.currentUser && cell.currentUser.role === 'admin' && (
+          <DeleteSubmissionModal submission={cell}>
+            <GrFormTrash className='h-5 w-5 cursor-pointer' />
+          </DeleteSubmissionModal>
+        )}
       </div>
     ),
     width: '150px',
@@ -99,6 +108,7 @@ const tableColumns: TableColumn<Listing>[] = [
 ];
 
 export default AuthGuardHOC(() => {
+  const user = useContext(UserContext);
   const {
     docs,
     error,
@@ -148,7 +158,13 @@ export default AuthGuardHOC(() => {
                 });
               }}
               columns={tableColumns}
-              data={docs?.map((doc) => ({ _id: doc.id, ...doc.data() })) ?? []}
+              data={
+                docs?.map((doc) => ({
+                  _id: doc.id,
+                  ...doc.data(),
+                  currentUser: user,
+                })) ?? []
+              }
             />
           </div>
         )}

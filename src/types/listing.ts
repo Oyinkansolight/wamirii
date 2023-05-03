@@ -1,5 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
 
+import { status } from '@/constant/generic';
+
 export class Listing {
   _id?: string;
   createdBy?: string;
@@ -22,7 +24,10 @@ export class Listing {
   reporterPhone?: string;
   reporterRelationship?: string;
   createdAt?: Timestamp;
+  status?: Status;
 }
+
+export type Status = (typeof status)[number];
 
 export function toLocalListings(l: Listing) {
   const c = {
