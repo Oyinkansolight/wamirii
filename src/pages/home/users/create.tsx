@@ -36,6 +36,16 @@ export default AuthGuardHOC(() => {
       },
     },
     {
+      placeholder: 'Optional',
+      title: 'Acronym (Organization)',
+      name: 'acronym',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
+    },
+    {
       placeholder: '',
       title: 'Email',
       name: 'email',

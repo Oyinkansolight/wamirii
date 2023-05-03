@@ -53,7 +53,11 @@ const ListingCard = ({
   );
 
   return (
-    <div className='w-full overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
+    <div className='relative w-full overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
+      <div className='absolute top-2 right-2 z-50 flex w-16 justify-center rounded-lg bg-green-500 text-xs text-white'>
+        Active
+      </div>
+
       <div className='h-full w-full'>
         <div
           style={{ aspectRatio: 2, position: 'relative' }}
