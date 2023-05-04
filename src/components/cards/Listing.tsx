@@ -144,7 +144,7 @@ const ListingCard = ({
 
 export function Status({ status }: { status: Status }) {
   return (
-    <div className='rounded-full bg-green-500 px-4 py-1 text-white'>
+    <div className='rounded-full bg-green-500 px-4 py-1 capitalize text-white'>
       {status}
     </div>
   );

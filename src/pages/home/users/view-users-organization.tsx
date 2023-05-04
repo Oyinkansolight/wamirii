@@ -61,14 +61,10 @@ const tableColumns: TableColumn<User>[] = [
 
 export default AuthGuardHOC(() => {
   const [userConstraint, setUserConstraint] = useState<QueryConstraint[]>();
-  // const [sort] = useState<OrderByField[]>([
-  //   {
-  //     fieldName: 'createdAt',
-  //     direction: 'asc',
-  //   },
-  // ]);
   useEffect(() => {
-    setUserConstraint(FirestoreService.getUsersConstraints({ role: 'user' }));
+    setUserConstraint(
+      FirestoreService.getUsersConstraints({ role: 'organization' })
+    );
   }, []);
   const {
     docs,
@@ -80,7 +76,7 @@ export default AuthGuardHOC(() => {
     hasNextPage,
     hasPreviousPage,
     setSortByField,
-  } = useCollectionPaginated('users', undefined, userConstraint, undefined);
+  } = useCollectionPaginated('users', undefined, userConstraint);
 
   return (
     <DashboardLayout>

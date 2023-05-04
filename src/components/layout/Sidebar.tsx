@@ -31,13 +31,28 @@ const NavItems = [
     children: [
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-        label: 'View All',
+        label: 'View All Users',
         link: '/home/users',
       },
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
         label: 'View All Admin',
         link: '/home/users/view-users-admin',
+      },
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'View All Manager',
+        link: '/home/users/view-users-manager',
+      },
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'View All Organization',
+        link: '/home/users/view-users-organization',
+      },
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'View All Volunteer',
+        link: '/home/users/view-users-volunteer',
       },
       {
         icon: (
