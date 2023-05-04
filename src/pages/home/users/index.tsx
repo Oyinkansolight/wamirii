@@ -1,5 +1,6 @@
 import { QueryConstraint } from 'firebase/firestore';
 import { Button } from 'flowbite-react';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { GrFormView } from 'react-icons/gr';
@@ -15,7 +16,7 @@ import Role from '@/components/profile/Role';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
-import { User } from '@/types/user';
+import { Role as R, User } from '@/types/user';
 
 const tableColumns: TableColumn<User>[] = [
   {
@@ -61,15 +62,11 @@ const tableColumns: TableColumn<User>[] = [
 
 export default AuthGuardHOC(() => {
   const [userConstraint, setUserConstraint] = useState<QueryConstraint[]>();
-  // const [sort] = useState<OrderByField[]>([
-  //   {
-  //     fieldName: 'createdAt',
-  //     direction: 'asc',
-  //   },
-  // ]);
+  const router = useRouter();
+  const role = router.query['role'] as R;
   useEffect(() => {
-    setUserConstraint(FirestoreService.getUsersConstraints({ role: 'user' }));
-  }, []);
+    setUserConstraint(FirestoreService.getUsersConstraints({ role }));
+  }, [role]);
   const {
     docs,
     error,
@@ -80,7 +77,7 @@ export default AuthGuardHOC(() => {
     hasNextPage,
     hasPreviousPage,
     setSortByField,
-  } = useCollectionPaginated('users', undefined, userConstraint, undefined);
+  } = useCollectionPaginated('users', undefined, userConstraint);
 
   return (
     <DashboardLayout>
@@ -92,10 +89,10 @@ export default AuthGuardHOC(() => {
               title='Manage Users'
               noDataComponent={
                 <div className='flex h-52 flex-col items-center justify-center'>
-                  <div>You are yet to create any submissions</div>
+                  <div>You are yet to create any {role}s</div>
                   <div className='h-5' />
-                  <ButtonLink href='/home/create-submission'>
-                    Create Submission
+                  <ButtonLink href='/home/users/create'>
+                    Create A {role}
                   </ButtonLink>
                 </div>
               }

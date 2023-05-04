@@ -32,27 +32,27 @@ const NavItems = [
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
         label: 'View All Users',
-        link: '/home/users',
+        link: '/home/users?role=user',
       },
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
         label: 'View All Admin',
-        link: '/home/users/view-users-admin',
+        link: '/home/users?role=admin',
       },
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
         label: 'View All Manager',
-        link: '/home/users/view-users-manager',
+        link: '/home/users?role=manager',
       },
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
         label: 'View All Organization',
-        link: '/home/users/view-users-organization',
+        link: '/home/users?role=organization',
       },
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
         label: 'View All Volunteer',
-        link: '/home/users/view-users-volunteer',
+        link: '/home/users?role=volunteer',
       },
       {
         icon: (
