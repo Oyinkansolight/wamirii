@@ -11,7 +11,6 @@ import Loading from '@/components/generic/Loading';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import { StorageService } from '@/firebase/storage/storage-service';
-import GetDocumentHOC from '@/hocs/get-document';
 
 import { Listing, Status } from '@/types/listing';
 
@@ -43,14 +42,14 @@ const ListingCard = ({
     // fontFamily: ['Arial'],
   });
 
-  const Reporter = GetDocumentHOC(
-    (props) => (
-      <p className='mb-2 text-xs text-gray-700'>
-        Reported By: {props?.doc.username}
-      </p>
-    ),
-    `users/${listing?.createdBy}`
-  );
+  // const Reporter = GetDocumentHOC(
+  //   (props) => (
+  //     <p className='mb-2 text-xs text-gray-700'>
+  //       Reported By: {props?.doc.username}
+  //     </p>
+  //   ),
+  //   `users/${listing?.createdBy}`
+  // );
 
   return (
     <div className='relative w-full overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
@@ -128,7 +127,9 @@ const ListingCard = ({
           <p className='mb-2 text-xs text-gray-700'>
             Last Seen State: {listing?.missingLastSeenSate}
           </p>
-          <Reporter />
+          <p className='mb-2 text-xs text-gray-700'>
+            Reported By: {listing?.contactRelationship ?? 'Unknown'}
+          </p>
           <Link
             href={path}
             aria-label=''

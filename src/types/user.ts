@@ -6,6 +6,7 @@ export class User {
   id?: string;
   role?: Role;
   username?: string;
+  acronym?: string;
   email?: string;
   firstName?: string;
   lastName?: string;

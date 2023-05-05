@@ -19,10 +19,10 @@ export class Listing {
   contactEmail?: string;
   contactPhone?: string;
   contactAddress?: string;
+  contactRelationship?: string;
   reporterName?: string;
   reporterEmail?: string;
   reporterPhone?: string;
-  reporterRelationship?: string;
   createdAt?: Timestamp;
   status?: Status;
 }

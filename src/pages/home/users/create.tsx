@@ -1,88 +1,188 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { Card, Select, TextInput, TextInputProps } from 'flowbite-react';
-import { useState } from 'react';
-import { FieldValues, RegisterOptions, useForm } from 'react-hook-form';
+import { Card, TextInput, TextInputProps } from 'flowbite-react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import {
+  Controller,
+  FieldValues,
+  RegisterOptions,
+  useForm,
+} from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import SelectCreateRoleModal from '@/components/modals/SelectCreateRoleModal';
+import OrganizationSelector from '@/components/selectors/OrganizationSelector';
 
-import { roles } from '@/constant/generic';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
-import { User } from '@/types/user';
+import { Role, User } from '@/types/user';
+
+const profileInputProps: (TextInputProps & {
+  options?: RegisterOptions<FieldValues, string> | undefined;
+})[] = [
+  {
+    placeholder: '',
+    title: 'Full Name',
+    name: 'username',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+
+  {
+    placeholder: '',
+    title: 'Email',
+    name: 'email',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Password',
+    name: 'password',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+];
+
+const organizationInputProps: (TextInputProps & {
+  options?: RegisterOptions<FieldValues, string> | undefined;
+})[] = [
+  {
+    placeholder: '',
+    title: 'Organization Name',
+    name: 'username',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Acronym',
+    name: 'acronym',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Email',
+    name: 'email',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Password',
+    name: 'password',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+];
+
+const managerInputProps: (TextInputProps & {
+  options?: RegisterOptions<FieldValues, string> | undefined;
+})[] = [
+  {
+    placeholder: '',
+    title: 'Full Name',
+    name: 'username',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Select Organization',
+    name: 'organization',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Email',
+    name: 'email',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Password',
+    name: 'password',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+];
 
 export default AuthGuardHOC(() => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({ mode: 'onChange' });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const profileInputProps: (TextInputProps & {
-    options?: RegisterOptions<FieldValues, string> | undefined;
-  })[] = [
-    {
-      placeholder: '',
-      title: 'Full Name',
-      name: 'username',
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
-    },
-    {
-      placeholder: 'Optional',
-      title: 'Acronym (Organization)',
-      name: 'acronym',
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
-    },
-    {
-      placeholder: '',
-      title: 'Email',
-      name: 'email',
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
-    },
-    {
-      placeholder: '',
-      title: 'Password',
-      name: 'password',
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
-    },
-    {
-      placeholder: '',
-      title: 'Role',
-      name: 'role',
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
-    },
-  ];
+  const router = useRouter();
+  const role = router.query['role'] as Role;
+  const [inputProps, setInputProps] = useState(profileInputProps);
+
+  useEffect(() => {
+    switch (role) {
+      case 'manager':
+        setInputProps(managerInputProps);
+        break;
+      case 'organization':
+        setInputProps(organizationInputProps);
+        break;
+      case 'volunteer':
+        setInputProps(managerInputProps);
+        break;
+      default:
+        setInputProps(profileInputProps);
+        break;
+    }
+  }, [role]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
       const f = httpsCallable(getFunctions(), 'createUser', {});
-      const r = await f(data);
+      const r = await f({ ...data, role });
       if ((r.data as any)?.errorInfo.message) {
         toast((r.data as any).errorInfo.message, { type: 'error' });
       } else {
@@ -97,11 +197,12 @@ export default AuthGuardHOC(() => {
   };
   return (
     <DashboardLayout>
+      <SelectCreateRoleModal />
       <form className='flex flex-col gap-y-8' onSubmit={handleSubmit(onSubmit)}>
         <Card>
-          <div className=' font-bold'>Create User</div>
+          <div className=' font-bold capitalize'>Create {role}</div>
           <div className='flex flex-wrap justify-between gap-x-2 gap-y-4'>
-            {profileInputProps.map((v, i) => (
+            {inputProps.map((v, i) => (
               <div
                 className={clsxm([
                   'min-w-[15rem] flex-1',
@@ -119,22 +220,12 @@ export default AuthGuardHOC(() => {
                 >
                   {v.title}
                 </label>
-                {v.name === 'role' ? (
-                  <Select
-                    className='capitalize'
-                    {...register((v.name ?? `${i}`) as keyof User, v.options)}
-                  >
-                    <option value=''>Select Role</option>
-                    {roles.map((role, i) => (
-                      <option
-                        key={i}
-                        value={role.toLowerCase()}
-                        className='capitalize'
-                      >
-                        {role.toLowerCase()}
-                      </option>
-                    ))}
-                  </Select>
+                {v.name === 'organization' ? (
+                  <Controller
+                    control={control}
+                    render={({ field }) => <OrganizationSelector {...field} />}
+                    name={v.name}
+                  />
                 ) : (
                   <TextInput
                     id={v.name}
@@ -158,9 +249,9 @@ export default AuthGuardHOC(() => {
           isLoading={isSubmitting}
           className='justify-center'
         >
-          Create User
+          Create {role}
         </Button>
       </form>
     </DashboardLayout>
   );
-});
+}, ['admin']);
