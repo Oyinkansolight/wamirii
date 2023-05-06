@@ -22,7 +22,7 @@ export default function OrganizationSelector(
       >
         <option value=''>Select Role</option>
         {organizations?.map((organization, i) => (
-          <option key={i} value={organization?.username} className='capitalize'>
+          <option key={i} value={organization?.id} className='capitalize'>
             {organization?.username?.toLowerCase()} ({organization?.acronym})
           </option>
         ))}

@@ -119,7 +119,7 @@ const managerInputProps: (TextInputProps & {
   {
     placeholder: '',
     title: 'Select Organization',
-    name: 'organization',
+    name: 'organizationId',
     options: {
       validate: {
         notEmpty: (v) => v !== '' || 'This field must not be empty',

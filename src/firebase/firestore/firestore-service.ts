@@ -98,7 +98,7 @@ export class FirestoreService {
     await updateDoc(doc(db, `users/${user.id}`), { ...user });
   }
 
-  static async createListing(listing: Listing, id?: string) {
+  static async createListing(listing: Listing, submissionId?: string) {
     if (listing?.missingImageUrl) {
       const f = listing.missingImageUrl as unknown as FileList;
       if (f.length > 0 && typeof listing.missingImageUrl !== 'string') {
@@ -118,8 +118,8 @@ export class FirestoreService {
         new Date((listing.missingDateReported as unknown as string) ?? '')
       );
     }
-    if (id) {
-      return await updateDoc(doc(db, `listings/${id}`), {
+    if (submissionId) {
+      return await updateDoc(doc(db, `listings/${submissionId}`), {
         ...listing,
         missingAge: listing.missingAge
           ? Number.parseInt(listing.missingAge)

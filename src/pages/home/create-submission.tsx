@@ -156,7 +156,10 @@ export default AuthGuardHOC(() => {
         }
       }
       await FirestoreService.createListing({
-        createdBy: user?.id,
+        createdBy:
+          user?.role === 'manager' || user?.role === 'volunteer'
+            ? user?.organizationId || user?.id
+            : user?.id,
         ...data,
         missingAge: data.missingAge ? Number.parseInt(data.missingAge) : null,
       });
