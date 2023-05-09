@@ -20,7 +20,7 @@ export default function OrganizationSelector(
         className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm capitalize text-gray-900 focus:border-blue-500 focus:ring-blue-500'
         {...props}
       >
-        <option value=''>Select Role</option>
+        <option value=''>Select Organization</option>
         {organizations?.map((organization, i) => (
           <option key={i} value={organization?.id} className='capitalize'>
             {organization?.username?.toLowerCase()} ({organization?.acronym})

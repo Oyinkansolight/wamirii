@@ -122,7 +122,9 @@ const managerInputProps: (TextInputProps & {
     name: 'organizationId',
     options: {
       validate: {
-        notEmpty: (v) => v !== '' || 'This field must not be empty',
+        notEmpty: (v) =>
+          (v !== '' && v !== 'Select Organization') ||
+          'This field must not be empty',
       },
     },
   },
@@ -220,7 +222,7 @@ export default AuthGuardHOC(() => {
                 >
                   {v.title}
                 </label>
-                {v.name === 'organization' ? (
+                {v.name === 'organizationId' ? (
                   <Controller
                     control={control}
                     render={({ field }) => <OrganizationSelector {...field} />}
