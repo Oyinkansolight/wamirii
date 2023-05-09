@@ -185,7 +185,7 @@ export default AuthGuardHOC(() => {
     try {
       const f = httpsCallable(getFunctions(), 'createUser', {});
       const r = await f({ ...data, role });
-      if ((r.data as any)?.errorInfo.message) {
+      if ((r.data as any)?.errorInfo?.message) {
         toast((r.data as any).errorInfo.message, { type: 'error' });
       } else {
         toast('User Created', { type: 'success' });

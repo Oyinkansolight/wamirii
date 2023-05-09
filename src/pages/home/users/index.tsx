@@ -15,6 +15,7 @@ import Role from '@/components/profile/Role';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
+import GetDocumentHOC from '@/hocs/get-document';
 
 import { Role as R, User } from '@/types/user';
 
@@ -38,6 +39,20 @@ const tableColumns: TableColumn<User>[] = [
     cell: (row) => <Role role={row.role ?? ''} />,
     sortable: true,
     sortField: 'createdAt',
+  },
+  {
+    name: 'Organization',
+    cell: (row) => {
+      if (row.organizationId) {
+        const C = GetDocumentHOC(
+          (p) => <div>{p.doc.username}</div>,
+          `users/${row.organizationId}`
+        );
+        return <C />;
+      } else {
+        return <div>None</div>;
+      }
+    },
   },
   {
     name: 'Joined',
