@@ -27,7 +27,7 @@ const NavItems = [
   {
     icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Users',
-    role: 'admin',
+    roles: ['admin'],
     children: [
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
@@ -60,6 +60,23 @@ const NavItems = [
         ),
         label: 'Create Users',
         link: '/home/users/create',
+      },
+    ],
+  },
+  {
+    icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Organization',
+    roles: ['manager'],
+    children: [
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'Profile',
+        link: '/home/organization',
+      },
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'View Submissions',
+        link: '/home/organization/submissions',
       },
     ],
   },
@@ -116,49 +133,47 @@ const Sidebar = () => {
       </Link>
       <div className='mt-20'>
         <Menu>
-          {NavItems.filter((v) => !v.role || v.role === user?.role).map(
-            (m, i) => {
-              if (m.children) {
-                return (
-                  <SubMenu defaultOpen key={i} label={m.label} icon={m.icon}>
-                    {m.children.map((sub, j) => (
-                      <MenuItem
-                        active={router.pathname === sub.link}
-                        className={clsxm(
-                          'hover:bg-black',
-                          router.pathname === sub.link
-                            ? 'bg-gray-400 '
-                            : 'text-black'
-                        )}
-                        key={j}
-                        icon={sub.icon}
-                        component={<Link href={sub.link ?? '#'} />}
-                      >
-                        {sub.label}
-                      </MenuItem>
-                    ))}
-                  </SubMenu>
-                );
-              } else {
-                return (
-                  <MenuItem
-                    active={router.pathname === m.link}
-                    className={clsxm(
-                      'hover:bg-black',
-                      router.pathname === m.link
-                        ? 'bg-primary-100'
-                        : 'text-black'
-                    )}
-                    key={i}
-                    icon={m.icon}
-                    component={<Link href={m.link ?? '#'} />}
-                  >
-                    {m.label}
-                  </MenuItem>
-                );
-              }
+          {NavItems.filter(
+            (v) => !v.roles || v.roles.includes(user?.role ?? 'null')
+          ).map((m, i) => {
+            if (m.children) {
+              return (
+                <SubMenu defaultOpen key={i} label={m.label} icon={m.icon}>
+                  {m.children.map((sub, j) => (
+                    <MenuItem
+                      active={router.pathname === sub.link}
+                      className={clsxm(
+                        'hover:bg-black',
+                        router.pathname === sub.link
+                          ? 'bg-gray-400 '
+                          : 'text-black'
+                      )}
+                      key={j}
+                      icon={sub.icon}
+                      component={<Link href={sub.link ?? '#'} />}
+                    >
+                      {sub.label}
+                    </MenuItem>
+                  ))}
+                </SubMenu>
+              );
+            } else {
+              return (
+                <MenuItem
+                  active={router.pathname === m.link}
+                  className={clsxm(
+                    'hover:bg-black',
+                    router.pathname === m.link ? 'bg-primary-100' : 'text-black'
+                  )}
+                  key={i}
+                  icon={m.icon}
+                  component={<Link href={m.link ?? '#'} />}
+                >
+                  {m.label}
+                </MenuItem>
+              );
             }
-          )}
+          })}
         </Menu>
       </div>
     </Bar>

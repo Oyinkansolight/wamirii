@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
+import UsersInOrganizationCard from '@/components/cards/UsersInOrganizationCard';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import ProfilePicture from '@/components/profile/ProfilePicture';
 
@@ -186,6 +187,9 @@ export default AuthGuardHOC(() => {
           Update
         </Button>
       </form>
+      {user?.id && user.role === 'organization' && (
+        <UsersInOrganizationCard organizationId={user.id} />
+      )}
     </DashboardLayout>
   );
 }, ['admin']);

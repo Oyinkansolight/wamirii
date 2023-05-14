@@ -106,9 +106,11 @@ export default AuthGuardHOC(() => {
   const [userConstraint, setUserConstraint] = useState<QueryConstraint[]>();
   useEffect(() => {
     setUserConstraint(
-      FirestoreService.getListingsConstraints({ createdBy: user?.id })
+      FirestoreService.getListingsConstraints({
+        createdBy: user?.organizationId,
+      })
     );
-  }, [user?.id]);
+  }, [user?.organizationId]);
 
   const {
     docs,
@@ -125,33 +127,36 @@ export default AuthGuardHOC(() => {
   return (
     <DashboardLayout>
       <div className='relative h-full'>
-        {(error && <div>{error.message}</div>) || (
-          <div>
-            <div className='flex justify-end'></div>
-            <DataTable
-              title='All Submissions'
-              noDataComponent={
-                <div className='flex h-52 flex-col items-center justify-center'>
-                  <div>You are yet to create any submissions</div>
-                  <div className='h-5' />
-                  <ButtonLink href='/home/create-submission'>
-                    Create Submission
-                  </ButtonLink>
-                </div>
-              }
-              sortServer
-              onSort={(col, dir) => {
-                if (!col.sortField || col.sortField === '') return;
-                setSortByField({
-                  fieldName: col.sortField ?? '',
-                  direction: dir,
-                });
-              }}
-              columns={tableColumns}
-              data={docs?.map((doc) => ({ _id: doc.id, ...doc.data() })) ?? []}
-            />
-          </div>
-        )}
+        {(error && <div>{error.message}</div>) ||
+          (user?.organizationId && (
+            <div>
+              <div className='flex justify-end'></div>
+              <DataTable
+                title='All Submissions'
+                noDataComponent={
+                  <div className='flex h-52 flex-col items-center justify-center'>
+                    <div>You are yet to create any submissions</div>
+                    <div className='h-5' />
+                    <ButtonLink href='/home/create-submission'>
+                      Create Submission
+                    </ButtonLink>
+                  </div>
+                }
+                sortServer
+                onSort={(col, dir) => {
+                  if (!col.sortField || col.sortField === '') return;
+                  setSortByField({
+                    fieldName: col.sortField ?? '',
+                    direction: dir,
+                  });
+                }}
+                columns={tableColumns}
+                data={
+                  docs?.map((doc) => ({ _id: doc.id, ...doc.data() })) ?? []
+                }
+              />
+            </div>
+          ))}
         {isLoading && (
           <div className='absolute inset-0 flex items-center justify-center'>
             <Loading />
@@ -169,4 +174,4 @@ export default AuthGuardHOC(() => {
       </div>
     </DashboardLayout>
   );
-});
+}, ['manager']);

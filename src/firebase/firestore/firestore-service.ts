@@ -238,6 +238,30 @@ export class FirestoreService {
       onError
     );
   }
+
+  static async getUserCountWhere(user: User) {
+    const q: QueryConstraint[] = [];
+    const keys = Object.keys(user) as (keyof User)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (user[key]) {
+        q.push(where(key, '==', user[key]));
+      }
+    }
+    return await getCountFromServer(query(collection(db, 'users'), ...q));
+  }
+
+  static async getSubmissionCountWhere(submission: Listing) {
+    const q: QueryConstraint[] = [];
+    const keys = Object.keys(submission) as (keyof Listing)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (submission[key]) {
+        q.push(where(key, '==', submission[key]));
+      }
+    }
+    return await getCountFromServer(query(collection(db, 'listings'), ...q));
+  }
 }
 
 export type FilterByField = [string, WhereFilterOp, unknown];
