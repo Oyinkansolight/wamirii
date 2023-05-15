@@ -41,6 +41,48 @@ const tableColumns: TableColumn<User>[] = [
     sortField: 'createdAt',
   },
   {
+    name: 'Joined',
+    cell: (row) => <div>{row.createdAt?.toDate().toDateString()}</div>,
+    sortable: true,
+    sortField: 'createdAt',
+  },
+  {
+    name: 'Action',
+    cell: (cell) => (
+      <div
+        onClick={() => (window.location.href = `/home/users/edit/${cell.id}`)}
+        className='flex items-center'
+      >
+        <GrFormView className='h-5 w-5 cursor-pointer' />
+      </div>
+    ),
+    width: '150px',
+    grow: 0,
+  },
+];
+
+const managerColumns: TableColumn<User>[] = [
+  {
+    name: '',
+    cell: (cell) => <ProfilePicture user={cell} />,
+    grow: 0,
+  },
+  {
+    name: 'Full Name',
+    selector: (cell) => `${cell.username}`,
+    cell: (cell) => (
+      <div>
+        <div className='font-bold'>{cell.username}</div>
+      </div>
+    ),
+  },
+  {
+    name: 'Status',
+    cell: (row) => <Role role={row.role ?? ''} />,
+    sortable: true,
+    sortField: 'createdAt',
+  },
+  {
     name: 'Organization',
     cell: (row) => {
       if (row.organizationId) {
@@ -99,7 +141,9 @@ export default AuthGuardHOC(() => {
       <div className='relative h-full'>
         {(error && <div>{error.message}</div>) || (
           <div>
-            <div className='flex justify-end'></div>
+            <div className='my-4 flex justify-end'>
+              <ButtonLink href='/home/users/create'>Create {role}</ButtonLink>
+            </div>
             <DataTable
               title='Manage Users'
               noDataComponent={
@@ -119,7 +163,11 @@ export default AuthGuardHOC(() => {
                   direction: dir,
                 });
               }}
-              columns={tableColumns}
+              columns={
+                role === 'manager' || role === 'volunteer'
+                  ? managerColumns
+                  : tableColumns
+              }
               data={docs?.map((doc) => ({ id: doc.id, ...doc.data() })) ?? []}
             />
           </div>
