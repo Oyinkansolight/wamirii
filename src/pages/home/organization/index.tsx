@@ -5,6 +5,7 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 import UsersInOrganizationCard from '@/components/cards/UsersInOrganizationCard';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
+import ButtonLink from '@/components/links/ButtonLink';
 import Role from '@/components/profile/Role';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -53,6 +54,11 @@ export default AuthGuardHOC(() => {
           <div>Total Users: {totalUsers}</div>
           <div>Total Submissions: {totalSubmissions}</div>
         </Card>
+        <div className='flex justify-end'>
+          <ButtonLink href='/home/organization/create_user'>
+            Create User
+          </ButtonLink>
+        </div>
         {user?.organizationId && (
           <UsersInOrganizationCard organizationId={user?.organizationId} />
         )}
