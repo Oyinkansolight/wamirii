@@ -34,8 +34,10 @@ const tableColumns: TableColumn<User>[] = [
   {
     name: 'Role',
     cell: (row) => <Role role={row.role ?? ''} />,
-    sortable: true,
-    sortField: 'createdAt',
+  },
+  {
+    name: 'Status',
+    cell: (row) => <Role role={row.status ?? 'active'} />,
   },
   {
     name: 'Organization',
