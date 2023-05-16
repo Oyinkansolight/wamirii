@@ -20,10 +20,29 @@ const NavItems = [
     link: '/home',
   },
   {
-    icon: <ImProfile className='h-6 w-6 md:h-auto md:w-auto' />,
-    label: 'Profile',
-    link: '/home/profile',
+    icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Submissions',
+    children: [
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'My Submissions',
+        link: '/home/view-submissions',
+      },
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'All Submissions',
+        link: '/home/view-all-submissions',
+      },
+      {
+        icon: (
+          <MdFormatListBulletedAdd className='h-6 w-6 md:h-auto md:w-auto' />
+        ),
+        label: 'Create Submissions',
+        link: '/home/create-submission',
+      },
+    ],
   },
+
   {
     icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Users',
@@ -64,13 +83,18 @@ const NavItems = [
     ],
   },
   {
+    icon: <ImProfile className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Profile',
+    link: '/home/profile',
+  },
+  {
     icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Organization',
     roles: ['manager'],
     children: [
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-        label: 'Profile',
+        label: 'Users',
         link: '/home/organization',
       },
       {
@@ -84,34 +108,6 @@ const NavItems = [
         link: '/home/organization/create_user',
       },
     ],
-  },
-  {
-    icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-    label: 'Submissions',
-    children: [
-      {
-        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-        label: 'My Submissions',
-        link: '/home/view-submissions',
-      },
-      {
-        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-        label: 'All Submissions',
-        link: '/home/view-all-submissions',
-      },
-      {
-        icon: (
-          <MdFormatListBulletedAdd className='h-6 w-6 md:h-auto md:w-auto' />
-        ),
-        label: 'Create Submissions',
-        link: '/home/create-submission',
-      },
-    ],
-  },
-  {
-    icon: <MdFormatListBulletedAdd className='h-6 w-6 md:h-auto md:w-auto' />,
-    label: 'Create Submissions',
-    link: '/home/create-submission',
   },
   {
     icon: <CiSettings className='h-6 w-6 md:h-auto md:w-auto' />,

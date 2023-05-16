@@ -35,10 +35,6 @@ const tableColumns: TableColumn<User>[] = [
     ),
   },
   {
-    name: 'Role',
-    cell: (row) => <Role role={row.role ?? ''} />,
-  },
-  {
     name: 'Status',
     cell: (row) => <Role role={row.status ?? 'active'} />,
   },
@@ -77,10 +73,6 @@ const managerColumns: TableColumn<User>[] = [
         <div className='font-bold'>{cell.username}</div>
       </div>
     ),
-  },
-  {
-    name: 'Role',
-    cell: (row) => <Role role={row.role ?? ''} />,
   },
   {
     name: 'Status',
