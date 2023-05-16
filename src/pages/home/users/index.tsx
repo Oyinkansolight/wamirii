@@ -148,7 +148,7 @@ export default AuthGuardHOC(() => {
                 <div className='flex h-52 flex-col items-center justify-center'>
                   <div>You are yet to create any {role}s</div>
                   <div className='h-5' />
-                  <ButtonLink href='/home/users/create'>
+                  <ButtonLink href={`/home/users/create?role=${role}`}>
                     Create A {role}
                   </ButtonLink>
                 </div>
