@@ -66,9 +66,14 @@ const tableColumns: TableColumn<User>[] = [
 const managerColumns: TableColumn<User>[] = [
   {
     name: 'Date Joined',
-    cell: (row) => <div>{row.joinedAt?.toDate().toDateString()}</div>,
+    cell: (row) => (
+      <div>
+        {row.joinedAt?.toDate().toDateString() ??
+          row.createdAt?.toDate().toDateString()}
+      </div>
+    ),
     sortable: true,
-    sortField: 'joinedAt',
+    sortField: 'createdAt',
   },
   {
     name: '',

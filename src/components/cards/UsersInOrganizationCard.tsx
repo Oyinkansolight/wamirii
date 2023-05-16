@@ -12,11 +12,16 @@ import ProfilePicture from '@/components/profile/ProfilePicture';
 import Role from '@/components/profile/Role';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
-import GetDocumentHOC from '@/hocs/get-document';
 
 import { User } from '@/types/user';
 
 const tableColumns: TableColumn<User>[] = [
+  {
+    name: 'Date Created',
+    cell: (row) => <div>{row.createdAt?.toDate().toDateString()}</div>,
+    sortable: true,
+    sortField: 'createdAt',
+  },
   {
     name: '',
     cell: (cell) => <ProfilePicture user={cell} />,
@@ -32,35 +37,20 @@ const tableColumns: TableColumn<User>[] = [
     ),
   },
   {
+    name: 'Email',
+    cell: (row) => <div>{row.email}</div>,
+  },
+  {
     name: 'Role',
-    cell: (row) => <Role role={row.role ?? ''} />,
+    cell: (row) => <Role role={row.role ?? 'user'} />,
   },
   {
     name: 'Status',
     cell: (row) => <Role role={row.status ?? 'active'} />,
   },
+
   {
-    name: 'Organization',
-    cell: (row) => {
-      if (row.organizationId) {
-        const C = GetDocumentHOC(
-          (p) => <div>{p.doc.username}</div>,
-          `users/${row.organizationId}`
-        );
-        return <C />;
-      } else {
-        return <div>None</div>;
-      }
-    },
-  },
-  {
-    name: 'Joined',
-    cell: (row) => <div>{row.createdAt?.toDate().toDateString()}</div>,
-    sortable: true,
-    sortField: 'createdAt',
-  },
-  {
-    name: 'Action',
+    name: 'Edit',
     cell: (cell) => (
       <div
         onClick={() => (window.location.href = `/home/users/edit/${cell.id}`)}
