@@ -3,7 +3,7 @@ import { Button } from 'flowbite-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { GrFormView } from 'react-icons/gr';
+import { GrFormEdit } from 'react-icons/gr';
 
 import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 
@@ -21,6 +21,12 @@ import { Role as R, User } from '@/types/user';
 
 const tableColumns: TableColumn<User>[] = [
   {
+    name: 'Date Created',
+    cell: (row) => <div>{row.createdAt?.toDate().toDateString()}</div>,
+    sortable: true,
+    sortField: 'createdAt',
+  },
+  {
     name: '',
     cell: (cell) => <ProfilePicture user={cell} />,
     grow: 0,
@@ -35,23 +41,21 @@ const tableColumns: TableColumn<User>[] = [
     ),
   },
   {
+    name: 'Email',
+    cell: (row) => <div>{row.email}</div>,
+  },
+  {
     name: 'Status',
     cell: (row) => <Role role={row.status ?? 'active'} />,
   },
   {
-    name: 'Joined',
-    cell: (row) => <div>{row.createdAt?.toDate().toDateString()}</div>,
-    sortable: true,
-    sortField: 'createdAt',
-  },
-  {
-    name: 'Action',
+    name: 'Edit',
     cell: (cell) => (
       <div
         onClick={() => (window.location.href = `/home/users/edit/${cell.id}`)}
         className='flex items-center'
       >
-        <GrFormView className='h-5 w-5 cursor-pointer' />
+        <GrFormEdit className='h-5 w-5 cursor-pointer' />
       </div>
     ),
     width: '150px',
@@ -61,6 +65,12 @@ const tableColumns: TableColumn<User>[] = [
 
 const managerColumns: TableColumn<User>[] = [
   {
+    name: 'Date Joined',
+    cell: (row) => <div>{row.joinedAt?.toDate().toDateString()}</div>,
+    sortable: true,
+    sortField: 'joinedAt',
+  },
+  {
     name: '',
     cell: (cell) => <ProfilePicture user={cell} />,
     grow: 0,
@@ -73,6 +83,10 @@ const managerColumns: TableColumn<User>[] = [
         <div className='font-bold'>{cell.username}</div>
       </div>
     ),
+  },
+  {
+    name: 'Email',
+    cell: (row) => <div>{row.email}</div>,
   },
   {
     name: 'Status',
@@ -92,20 +106,15 @@ const managerColumns: TableColumn<User>[] = [
       }
     },
   },
+
   {
-    name: 'Date Joined',
-    cell: (row) => <div>{row.joinedAt?.toDate().toDateString()}</div>,
-    sortable: true,
-    sortField: 'joinedAt',
-  },
-  {
-    name: 'Action',
+    name: 'Edit',
     cell: (cell) => (
       <div
         onClick={() => (window.location.href = `/home/users/edit/${cell.id}`)}
         className='flex items-center'
       >
-        <GrFormView className='h-5 w-5 cursor-pointer' />
+        <GrFormEdit className='h-5 w-5 cursor-pointer' />
       </div>
     ),
     width: '150px',
