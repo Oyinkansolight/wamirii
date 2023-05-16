@@ -138,7 +138,9 @@ export default AuthGuardHOC(() => {
         {(error && <div>{error.message}</div>) || (
           <div>
             <div className='my-4 flex justify-end'>
-              <ButtonLink href='/home/users/create'>Create {role}</ButtonLink>
+              <ButtonLink href={`/home/users/create?role=${role}`}>
+                Create {role}
+              </ButtonLink>
             </div>
             <DataTable
               title='Manage Users'
