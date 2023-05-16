@@ -5,7 +5,7 @@ import React, { useContext } from 'react';
 import { useResponsive } from 'react-hooks-responsive';
 import { CiSettings } from 'react-icons/ci';
 import { ImProfile } from 'react-icons/im';
-import { MdFormatListBulletedAdd } from 'react-icons/md';
+import { MdFormatListBulletedAdd, MdLogout } from 'react-icons/md';
 import { RiDashboardFill, RiListCheck2 } from 'react-icons/ri';
 import { Menu, MenuItem, Sidebar as Bar, SubMenu } from 'react-pro-sidebar';
 
@@ -78,6 +78,11 @@ const NavItems = [
         label: 'View Submissions',
         link: '/home/organization/submissions',
       },
+      {
+        icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
+        label: 'Create User',
+        link: '/home/organization/create_user',
+      },
     ],
   },
   {
@@ -112,6 +117,11 @@ const NavItems = [
     icon: <CiSettings className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Settings',
     link: '#',
+  },
+  {
+    icon: <MdLogout className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Log Out',
+    link: '/logout',
   },
 ];
 const breakpoints = { xs: 0, sm: 480, md: 1024 };

@@ -36,6 +36,7 @@ export class FirestoreService {
       username,
       email,
       role: 'volunteer',
+      status: 'active',
       createdAt: serverTimestamp(),
     });
   }

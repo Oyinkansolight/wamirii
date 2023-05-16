@@ -160,6 +160,8 @@ export const roles = <const>[
   'volunteer',
 ];
 
+export const statuses = <const>['active', 'inactive'];
+
 export const status = <const>[
   'active',
   'duplicate',

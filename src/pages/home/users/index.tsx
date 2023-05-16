@@ -35,10 +35,12 @@ const tableColumns: TableColumn<User>[] = [
     ),
   },
   {
-    name: 'Status',
+    name: 'Role',
     cell: (row) => <Role role={row.role ?? ''} />,
-    sortable: true,
-    sortField: 'createdAt',
+  },
+  {
+    name: 'Status',
+    cell: (row) => <Role role={row.status ?? 'active'} />,
   },
   {
     name: 'Joined',
@@ -77,10 +79,12 @@ const managerColumns: TableColumn<User>[] = [
     ),
   },
   {
-    name: 'Status',
+    name: 'Role',
     cell: (row) => <Role role={row.role ?? ''} />,
-    sortable: true,
-    sortField: 'createdAt',
+  },
+  {
+    name: 'Status',
+    cell: (row) => <Role role={row.status ?? 'active'} />,
   },
   {
     name: 'Organization',
@@ -97,10 +101,10 @@ const managerColumns: TableColumn<User>[] = [
     },
   },
   {
-    name: 'Joined',
-    cell: (row) => <div>{row.createdAt?.toDate().toDateString()}</div>,
+    name: 'Date Joined',
+    cell: (row) => <div>{row.joinedAt?.toDate().toDateString()}</div>,
     sortable: true,
-    sortField: 'createdAt',
+    sortField: 'joinedAt',
   },
   {
     name: 'Action',

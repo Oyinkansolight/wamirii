@@ -5,7 +5,13 @@ import { Fragment, useEffect, useState } from 'react';
 
 import { roles } from '@/constant/generic';
 
-export default function SelectCreateRoleModal() {
+import { Role } from '@/types/user';
+
+export default function SelectCreateRoleModal({
+  fromRoles,
+}: {
+  fromRoles?: Role[];
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -67,7 +73,7 @@ export default function SelectCreateRoleModal() {
 
                 <div className='mt-4 flex min-h-[15rem] flex-col'>
                   <div className='mt-6 flex flex-col justify-center transition-all delay-1000'>
-                    {roles.map((v, i) => (
+                    {(fromRoles ?? roles).map((v, i) => (
                       <div
                         className='rounded-md py-5 capitalize hover:bg-gray-200'
                         onClick={() => {

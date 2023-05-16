@@ -2,7 +2,7 @@ import { QueryConstraint } from 'firebase/firestore';
 import { Button, Card } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { GrFormView } from 'react-icons/gr';
+import { GrFormEdit } from 'react-icons/gr';
 
 import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 
@@ -32,7 +32,7 @@ const tableColumns: TableColumn<User>[] = [
     ),
   },
   {
-    name: 'Status',
+    name: 'Role',
     cell: (row) => <Role role={row.role ?? ''} />,
     sortable: true,
     sortField: 'createdAt',
@@ -64,7 +64,7 @@ const tableColumns: TableColumn<User>[] = [
         onClick={() => (window.location.href = `/home/users/edit/${cell.id}`)}
         className='flex items-center'
       >
-        <GrFormView className='h-5 w-5 cursor-pointer' />
+        <GrFormEdit className='h-5 w-5 cursor-pointer' />
       </div>
     ),
     width: '150px',

@@ -1,6 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 
-import { roles } from '@/constant/generic';
+import { roles, statuses } from '@/constant/generic';
 
 export class User {
   id?: string;
@@ -14,6 +14,9 @@ export class User {
   organizationId?: string;
   submissionsCount?: number;
   createdAt?: Timestamp;
+  joinedAt?: Timestamp;
+  status?: UserStatus;
 }
 
 export type Role = (typeof roles)[number];
+export type UserStatus = (typeof statuses)[number];
