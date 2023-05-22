@@ -50,27 +50,27 @@ const NavItems = [
     children: [
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-        label: 'View All Users',
+        label: 'Users',
         link: '/home/users?role=user',
       },
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-        label: 'View All Admin',
+        label: 'Admins',
         link: '/home/users?role=admin',
       },
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-        label: 'View All Manager',
+        label: 'Managers',
         link: '/home/users?role=manager',
       },
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-        label: 'View All Organization',
+        label: 'Organizations',
         link: '/home/users?role=organization',
       },
       {
         icon: <RiListCheck2 className='h-6 w-6 md:h-auto md:w-auto' />,
-        label: 'View All Volunteer',
+        label: 'Volunteers',
         link: '/home/users?role=volunteer',
       },
       {
