@@ -199,6 +199,7 @@ export default AuthGuardHOC(() => {
         toast((r.data as any).errorInfo.message, { type: 'error' });
       } else {
         toast('User Created', { type: 'success' });
+        router.push(`/home/organization`);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

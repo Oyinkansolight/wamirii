@@ -140,6 +140,63 @@ const managerInputProps: (TextInputProps & {
   },
   {
     placeholder: '',
+    title: 'Phone Number',
+    name: 'phone',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Password',
+    name: 'password',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+];
+
+const volunteerInputProps: (TextInputProps & {
+  options?: RegisterOptions<FieldValues, string> | undefined;
+})[] = [
+  {
+    placeholder: '',
+    title: 'Full Name',
+    name: 'username',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Select Organization',
+    name: 'organizationId',
+    options: {
+      validate: {
+        notEmpty: (v) =>
+          (v !== '' && v !== 'Select Organization') ||
+          'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Email',
+    name: 'email',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
     title: 'Password',
     name: 'password',
     options: {
@@ -171,7 +228,7 @@ export default AuthGuardHOC(() => {
         setInputProps(organizationInputProps);
         break;
       case 'volunteer':
-        setInputProps(managerInputProps);
+        setInputProps(volunteerInputProps);
         break;
       default:
         setInputProps(profileInputProps);
@@ -188,6 +245,7 @@ export default AuthGuardHOC(() => {
       if ((r.data as any)?.errorInfo?.message) {
         toast((r.data as any).errorInfo.message, { type: 'error' });
       } else {
+        router.push(`/home/users?role=${role}`);
         toast('User Created', { type: 'success' });
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

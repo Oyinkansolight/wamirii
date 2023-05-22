@@ -142,6 +142,65 @@ const managerInputProps: (TextInputProps & {
   },
   {
     placeholder: '',
+    title: 'Phone Number',
+    name: 'phone',
+    disabled: true,
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Role',
+    name: 'role',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+];
+
+const volunteerInputProps: (TextInputProps & {
+  options?: RegisterOptions<FieldValues, string> | undefined;
+})[] = [
+  {
+    placeholder: '',
+    title: 'Full Name',
+    name: 'username',
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Select Organization',
+    name: 'organizationId',
+    options: {
+      validate: {
+        notEmpty: (v) =>
+          (v !== '' && v !== 'Select Organization') ||
+          'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
+    title: 'Email',
+    name: 'email',
+    disabled: true,
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: '',
     title: 'Role',
     name: 'role',
     options: {
@@ -189,7 +248,7 @@ export default AuthGuardHOC(() => {
         setInputProps(organizationInputProps);
         break;
       case 'volunteer':
-        setInputProps(managerInputProps);
+        setInputProps(volunteerInputProps);
         break;
       default:
         setInputProps(profileInputProps);
