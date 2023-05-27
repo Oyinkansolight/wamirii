@@ -273,6 +273,7 @@ export default AuthGuardHOC(() => {
       for (let i = 0; i < Object.keys(data).length; i++) {
         const key = Object.keys(data)[i];
         if (
+          !data[key] ||
           data[key] === '' ||
           (typeof data[key] === 'string' && data[key] === 'select')
         ) {
