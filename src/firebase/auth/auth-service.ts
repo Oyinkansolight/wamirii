@@ -12,10 +12,11 @@ export class AuthService {
     email: string,
     password: string,
     username?: string
-  ): Promise<void> {
+  ) {
     try {
       const u = await createUserWithEmailAndPassword(auth, email, password);
-      FirestoreService.createNewUserDocument(u.user.uid, email, username);
+      await FirestoreService.createNewUserDocument(u.user.uid, email, username);
+      return u;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       throw { message: this.getErrorMessage(error.code), code: error.code };
