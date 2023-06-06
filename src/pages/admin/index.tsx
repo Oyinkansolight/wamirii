@@ -49,7 +49,7 @@ export default AuthGuardHOC(() => {
   ];
   return (
     <DashboardLayout2>
-      <div className='flex h-screen flex-col gap-6'>
+      <div className='layout flex h-screen flex-col gap-6'>
         <div>
           <div className='text-3xl font-extrabold'>Dashboard</div>
           <div className='font-light text-[#819289]'>

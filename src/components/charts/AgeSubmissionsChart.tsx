@@ -13,7 +13,7 @@ export default function AgeSubmissionsChart() {
           colorBy='id'
           colors={({ id, data }) => data[`${id}Color`] as string}
           height={300}
-          width={1200}
+          width={1080}
           groupMode='grouped'
           padding={0.6}
           innerPadding={8}
