@@ -53,9 +53,9 @@ const ListingCard = ({
 
   return (
     <div className='relative w-full overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
-      <div className='absolute top-2 right-2 flex justify-center rounded-lg text-xs'>
+      {/* <div className='absolute top-2 right-2 flex justify-center rounded-lg text-xs'>
         <Status status={listing?.status ?? 'active'} />
-      </div>
+      </div> */}
 
       <div className='h-full w-full'>
         <div
