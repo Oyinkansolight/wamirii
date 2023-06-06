@@ -15,7 +15,7 @@ const NavItems = [
   {
     icon: <RiDashboardFill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Dashboard',
-    link: '/home',
+    link: '/admin',
   },
   {
     icon: <FaFileAlt className='h-6 w-6 md:h-auto md:w-auto' />,
@@ -88,20 +88,24 @@ const Sidebar = () => {
             //   //   </SubMenu>
             //   // );
             // } else {
+            const isActive = router.pathname === m.link;
             return (
               <MenuItem
-                className='mb-6'
+                className='mb-6 '
                 active={router.pathname === m.link}
                 rootStyles={{
                   ['.' + menuClasses.button]: {
                     borderRadius: '4px',
-                    color: '#819289 !important',
+                    color: isActive
+                      ? '#13602C !important'
+                      : '#819289 !important',
                     padding: '0px 0px 0px 0px !important',
                     height: '40px !important',
+                    backgroundColor: isActive ? '#DEF5E7 !important' : '',
+                    fontWeight: isActive ? 'bold' : 'normal',
                     '&:hover': {
-                      backgroundColor: '#DEF5E7 !important',
+                      backgroundColor: '#e8f9ee !important',
                       color: '#13602C !important',
-                      fontWeight: 'bold',
                     },
                   },
                 }}
