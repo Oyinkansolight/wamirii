@@ -14,7 +14,7 @@ const DashboardHeader = () => {
           <div className='mr-4 flex items-center'>
             <Link
               className='inline-block rounded-full py-2 px-3 hover:bg-gray-200'
-              href='/home/profile'
+              href={user?.role === 'admin' ? '#' : '/home/profile'}
             >
               <div className='relative flex cursor-pointer items-center whitespace-nowrap'>
                 Hello, {user?.username}

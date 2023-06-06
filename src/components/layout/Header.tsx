@@ -74,7 +74,7 @@ const Nav = () => {
 
             <div className='ml-4 hidden md:block'>
               <Link
-                href='/home'
+                href={user?.role === 'admin' ? '/admin' : '/home'}
                 aria-label='Dashboard'
                 title='Dashboard'
                 className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
