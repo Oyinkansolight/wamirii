@@ -36,7 +36,7 @@ export default function LoginPage() {
   };
   return (
     <section className='relative'>
-      <div>
+      <div className='absolute -z-10 h-screen w-screen'>
         <Image
           className='-z-10'
           src='/images/login-background.png'
@@ -68,8 +68,8 @@ export default function LoginPage() {
           className='absolute bottom-20 right-20 -z-10'
         />
       </div>
-      <div className='mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0'>
-        <div className='w-full rounded-2xl bg-white shadow sm:max-w-md md:mt-0 xl:p-0'>
+      <div className='flex h-screen flex-col items-center justify-center px-2 py-2 lg:py-0'>
+        <div className='w-full rounded-2xl bg-white shadow sm:min-w-[30rem] sm:max-w-md'>
           <div className='space-y-2 p-6 sm:p-10'>
             <a
               href='#'
