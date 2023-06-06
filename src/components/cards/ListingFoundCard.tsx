@@ -24,7 +24,7 @@ export default function ListingFoundCard({
       </div>
       <div
         className={clsxm(
-          'flex items-center gap-3 rounded-lg bg-[#d9d9d9] py-2 pr-20 pl-2'
+          'flex items-center gap-3 rounded-lg bg-[#d9d9d9] py-2 pl-2 pr-2 md:pr-20'
         )}
       >
         <div style={{ minWidth: '64px' }}>
