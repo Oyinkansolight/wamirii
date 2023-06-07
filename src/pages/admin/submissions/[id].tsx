@@ -160,6 +160,7 @@ export default function ViewSubmission() {
   const [submission] = useDocumentData<Listing>(
     id ? FirestoreService.getDocRef(`listings/${id}`) : undefined
   );
+  const [isEditing, setIsEditing] = useState(false);
 
   const {
     register,
@@ -222,21 +223,35 @@ export default function ViewSubmission() {
       >
         <div className='flex items-start justify-between'>
           <div>
-            <div className='mb-4 flex items-center gap-2'>
+            <div
+              onClick={() => router.back()}
+              className='mb-4 flex cursor-pointer items-center gap-2'
+            >
               <IoCaretBackOutline className='text-[#819289]' />
               <div>Back</div>
             </div>
             <div className='text-3xl font-extrabold'>View Submission</div>
           </div>
-          <div className='flex gap-2'>
-            <Button
-              variant='outline'
-              className='border-red-500 text-red-500 hover:bg-red-200'
-            >
-              Delete Submission
-            </Button>
-            <Button variant='outline'>Edit Information</Button>
-          </div>
+          {isEditing ? (
+            <Button type='submit'>Submit</Button>
+          ) : (
+            <div className='flex gap-2'>
+              <Button
+                type='button'
+                variant='outline'
+                className='border-red-500 text-red-500 hover:bg-red-200'
+              >
+                Delete Submission
+              </Button>
+              <Button
+                type='button'
+                onClick={() => setIsEditing(true)}
+                variant='outline'
+              >
+                Edit Information
+              </Button>
+            </div>
+          )}
         </div>
         <div className='flex gap-4'>
           <div className='flex-1 rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4'>
@@ -264,7 +279,7 @@ export default function ViewSubmission() {
                     )}
                   >
                     {v.title}
-                    {v.required && <span className='text-red-500'> * </span>}
+                    {v.required && <span className='text-red-500'>*</span>}
                   </label>
                   {v.name === 'missingImageUrl' ? (
                     <FileInput
@@ -275,6 +290,7 @@ export default function ViewSubmission() {
                     />
                   ) : v.name === 'status' ? (
                     <Select
+                      disabled={!isEditing}
                       className='capitalize'
                       {...register(v.name, v.options)}
                     >
@@ -289,6 +305,7 @@ export default function ViewSubmission() {
                     </Select>
                   ) : v.name === 'missingLastSeenSate' ? (
                     <Select
+                      disabled={!isEditing}
                       className='capitalize'
                       {...register(v.name, v.options)}
                     >
@@ -305,6 +322,7 @@ export default function ViewSubmission() {
                     </Select>
                   ) : v.name === 'missingGender' ? (
                     <Select
+                      disabled={!isEditing}
                       id={v.name}
                       placeholder={v.placeholder}
                       {...register(v.name, v.options)}
@@ -316,6 +334,7 @@ export default function ViewSubmission() {
                   ) : v.name === 'missingMoreInformation' ? (
                     <div>
                       <Textarea
+                        disabled={!isEditing}
                         id={v.name}
                         placeholder={v.placeholder}
                         {...register(v.name, v.options)}
@@ -326,6 +345,7 @@ export default function ViewSubmission() {
                       id={v.name}
                       type={v.type}
                       placeholder={v.placeholder}
+                      disabled={!isEditing}
                       {...register(v.name ?? `${i}`, v.options)}
                     />
                   )}
@@ -349,7 +369,11 @@ export default function ViewSubmission() {
                   <label htmlFor={`${i}`} className='text-[#819289]'>
                     {v.title}
                   </label>
-                  <TextInput {...v} {...register(v.name ?? `${i}`)} />
+                  <TextInput
+                    disabled={!isEditing}
+                    {...v}
+                    {...register(v.name ?? `${i}`)}
+                  />
                 </div>
               ))}
             </div>
