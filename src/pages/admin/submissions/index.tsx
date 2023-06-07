@@ -2,6 +2,7 @@ import { Menu, MenuItem } from '@szhsin/react-menu';
 import { DocumentData, QueryConstraint } from 'firebase/firestore';
 import { Select, TextInput } from 'flowbite-react';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { BiEdit } from 'react-icons/bi';
@@ -117,6 +118,7 @@ export default AuthGuardHOC(() => {
   const [idx, setIdx] = useState(0);
   const [mySubmissionsCount, setMySubmissionsCount] = useState(0);
   const [allSubmissionsCount, setAllSubmissionsCount] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const a = async () => {
@@ -150,7 +152,9 @@ export default AuthGuardHOC(() => {
               Stay up to date with submissions made on the platform
             </div>
           </div>
-          <Button>Add New Submission</Button>
+          <Button onClick={() => router.push('/admin/submissions/create')}>
+            Add New Submission
+          </Button>
         </div>
         <TabBar
           currentIdx={idx}
