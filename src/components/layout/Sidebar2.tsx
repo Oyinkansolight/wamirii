@@ -20,17 +20,17 @@ const NavItems = [
   {
     icon: <FaFileAlt className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Submissions',
-    link: '/home',
+    link: '/admin/submissions',
   },
   {
     icon: <HiUsers className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Users',
-    link: '/home',
+    link: '#',
   },
   {
     icon: <BsFillBuildingsFill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Organization',
-    link: '/home',
+    link: '#',
   },
   {
     icon: <RiSettings4Fill className='h-6 w-6 md:h-auto md:w-auto' />,
@@ -40,7 +40,7 @@ const NavItems = [
   {
     icon: <RiDashboardFill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Dashboard',
-    link: '/home',
+    link: '#',
     roles: [''],
   },
 ];
