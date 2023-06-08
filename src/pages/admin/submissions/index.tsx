@@ -8,6 +8,7 @@ import DataTable, { TableColumn } from 'react-data-table-component';
 import { BiEdit } from 'react-icons/bi';
 import { BsFillEyeFill } from 'react-icons/bs';
 import { FaTrashAlt } from 'react-icons/fa';
+import { ImInfo } from 'react-icons/im';
 import { SlOptions } from 'react-icons/sl';
 
 import '@szhsin/react-menu/dist/index.css';
@@ -136,11 +137,15 @@ export default AuthGuardHOC(() => {
     const constraints: QueryConstraint[][] = [
       FirestoreService.getListingsConstraints({ createdBy: user?.id }),
       [],
-      [],
+      FirestoreService.getListingsConstraints({ status: 'found-alive' }),
     ];
     return constraints[idx];
   }, [idx, user?.id]);
-  const { docs, setSortByField } = useCollectionPaginated('listings', 5, c);
+  const { docs, error, setSortByField } = useCollectionPaginated(
+    'listings',
+    5,
+    c
+  );
 
   return (
     <DashboardLayout2>
@@ -165,6 +170,18 @@ export default AuthGuardHOC(() => {
             { label: 'Missing and Found (0)' },
           ]}
         />
+        {error && (
+          <div
+            className='mb-4 flex rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400'
+            role='alert'
+          >
+            <ImInfo className='h-5 w-5' />
+            <span className='sr-only'>Info</span>
+            <div>
+              <span className='font-medium'>Error!</span> {error.message}
+            </div>
+          </div>
+        )}
         <div className='rounded-lg border p-5'>
           <div className='flex items-stretch gap-4'>
             <div className='flex-1'>

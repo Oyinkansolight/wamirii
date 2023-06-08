@@ -9,16 +9,23 @@ import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { FieldValues, RegisterOptions, useForm } from 'react-hook-form';
+import {
+  Controller,
+  FieldValues,
+  RegisterOptions,
+  useForm,
+} from 'react-hook-form';
 import { IoCaretBackOutline } from 'react-icons/io5';
-import { toast } from 'react-toastify';
 
 import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
 import ImagePicker from '@/components/inputs/image-picker';
 import DashboardLayout2 from '@/components/layout/DashboardLayout2';
+import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
+import ActionFailedView from '@/components/modal-views/ActionFailed';
+import ActionSuccessView from '@/components/modal-views/ActionSuccess';
 
 import { allStates, status } from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -166,9 +173,12 @@ export default function ViewSubmission() {
     register,
     handleSubmit,
     setValue,
+    getValues,
+    control,
     formState: { errors },
   } = useForm({ mode: 'onChange' });
   const [, setIsSubmitting] = useState(false);
+  const generalModal = useContext(GeneralModalContext);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
@@ -190,11 +200,32 @@ export default function ViewSubmission() {
         },
         id as string
       );
-      toast.success('Submission Updated');
-      router.push('/home/view-submissions');
+      if (generalModal?.setContent) {
+        generalModal.setContent(
+          <ActionSuccessView
+            onClose={() => generalModal.setIsOpen(false)}
+            title='Submission Updated'
+            subtitle=''
+          />
+        );
+        generalModal.setIsOpen(true);
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(error.message);
+      if (generalModal?.setContent) {
+        generalModal.setContent(
+          <ActionFailedView
+            onClose={() => generalModal.setIsOpen(false)}
+            tryAgain={() => {
+              generalModal.setIsOpen(false);
+              onSubmit(getValues());
+            }}
+            title='Submission Failed'
+            subtitle={error}
+          />
+        );
+        generalModal.setIsOpen(true);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -257,7 +288,16 @@ export default function ViewSubmission() {
           <div className='flex-1 rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4'>
             <div className='text-xl font-bold'>Missing Person Information</div>
             <div className='py-6'>
-              <ImagePicker initialImage={submission?.missingImageUrl} />
+              <Controller
+                name='missingImageUrl'
+                control={control}
+                render={(field) => (
+                  <ImagePicker
+                    initialImage={submission?.missingImageUrl}
+                    onChange={field.field.onChange}
+                  />
+                )}
+              />
             </div>
             <div className='grid grid-cols-2 gap-x-10 gap-y-6'>
               {missingPersonInputProps.map((v, i) => (

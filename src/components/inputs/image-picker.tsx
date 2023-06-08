@@ -10,7 +10,7 @@ export default function ImagePicker({
   onChange,
 }: {
   initialImage?: string;
-  onChange?: (file: File) => void;
+  onChange?: (file: FileList) => void;
 }) {
   const [fileUrl, setFileUrl] = useState<string>();
 
@@ -58,7 +58,7 @@ export default function ImagePicker({
       <input
         onChange={async (e) => {
           if (e.currentTarget?.files && e.currentTarget.files[0]) {
-            if (onChange) onChange(e.currentTarget?.files[0]);
+            if (onChange) onChange(e.currentTarget?.files);
             setFileUrl(
               URL.createObjectURL(
                 new Blob([await e.currentTarget?.files[0].arrayBuffer()])

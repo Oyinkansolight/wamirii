@@ -10,6 +10,7 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+import GeneralModalLayout from '@/components/layout/GeneralModalLayout';
 import GetAuthStatus from '@/components/layout/GetAuthStatus';
 
 import { isStaging } from '@/constant/env';
@@ -35,7 +36,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <ProSidebarProvider>
           <GetAuthStatus>
-            <Component {...pageProps} />
+            <GeneralModalLayout>
+              <Component {...pageProps} />
+            </GeneralModalLayout>
           </GetAuthStatus>
         </ProSidebarProvider>
       </InstantSearch>
