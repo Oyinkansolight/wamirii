@@ -195,7 +195,7 @@ export default function ViewSubmission() {
         generalModal.setContent(
           <ActionSuccessView
             onClose={() => generalModal.setIsOpen(false)}
-            title='Submission Updated'
+            title='Submission Created'
             subtitle=''
           />
         );
