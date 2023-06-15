@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 
-import DashboardInfoCard from '@/components/cards/DashboardInfoCard';
 const RegisteredUsersChart = dynamic(
   () => import('../../components/charts/RegisteredUsersChart'),
   { ssr: false }
@@ -15,6 +14,7 @@ const AgeSubmissionsChart = dynamic(
 );
 import dynamic from 'next/dynamic';
 
+import MissingPersonsCards from '@/components/charts/MissingPersonsCards';
 import RecentSubmissionsTable from '@/components/charts/RecentSubmissionsTable';
 import RecentUsersTable from '@/components/charts/RecentUsersTable';
 import DashboardLayout2 from '@/components/layout/DashboardLayout2';
@@ -24,29 +24,6 @@ import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
 export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
-
-  const s = [
-    {
-      n: 12002,
-      subText: 'Found Persons',
-      percent: 10,
-    },
-    {
-      n: 12002,
-      subText: 'Total Missing Persons',
-      percent: -10,
-    },
-    {
-      n: 12002,
-      subText: 'Found Persons',
-      percent: 10,
-    },
-    {
-      n: 12002,
-      subText: 'Found Persons',
-      percent: 10,
-    },
-  ];
   return (
     <DashboardLayout2>
       <div className='layout flex h-screen flex-col gap-6'>
@@ -57,13 +34,7 @@ export default AuthGuardHOC(() => {
             Wamirii.{' '}
           </div>
         </div>
-        <div className='flex justify-between gap-6'>
-          {Array(4)
-            .fill(0)
-            .map((v, i) => (
-              <DashboardInfoCard key={i} {...s[i]} variant={i} />
-            ))}
-        </div>
+        <MissingPersonsCards />
         <div className='flex justify-between gap-6'>
           <RegisteredUsersChart />
           <GenderSubmissionsChart />

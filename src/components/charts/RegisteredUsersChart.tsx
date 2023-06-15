@@ -1,6 +1,24 @@
 import { RadialBar } from '@nivo/radial-bar';
+import { useEffect, useState } from 'react';
+
+import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
 export default function RegisteredUsersChart() {
+  const [countUsers, setCountUsers] = useState({ volunteers: 0, users: 0 });
+  useEffect(() => {
+    const asyncRun = async () => {
+      const volunteers = await FirestoreService.getUserCountWhere({
+        role: 'volunteer',
+      });
+      const allUsers = await FirestoreService.getUserCountWhere({});
+      setCountUsers({
+        users: allUsers.data().count - volunteers.data().count,
+        volunteers: volunteers.data().count,
+      });
+    };
+    asyncRun();
+  }, []);
+
   return (
     <div className='rounded-lg border p-4'>
       <div className='text-xl font-bold'>Registered Users</div>
@@ -8,7 +26,9 @@ export default function RegisteredUsersChart() {
         <div className='absolute inset-0 flex items-center justify-center text-center'>
           <div>
             <div className='text-sm text-[#819289]'>Total No Of Users</div>
-            <div className='text-xl font-bold'>20,000</div>
+            <div className='text-xl font-bold'>
+              {countUsers.users + countUsers.volunteers}
+            </div>
           </div>
         </div>
         <RadialBar
@@ -27,12 +47,12 @@ export default function RegisteredUsersChart() {
                 {
                   color: '#F25F33',
                   x: 'Volunteers',
-                  y: 512,
+                  y: countUsers.volunteers,
                 },
                 {
                   color: '#FEBD38',
                   x: 'Standalone Users',
-                  y: 175,
+                  y: countUsers.users,
                 },
               ],
             },

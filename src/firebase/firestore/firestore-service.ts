@@ -252,7 +252,7 @@ export class FirestoreService {
     return await getCountFromServer(query(collection(db, 'users'), ...q));
   }
 
-  static async getSubmissionCountWhere(submission: Listing) {
+  static async getSubmissionCountWhere(submission: Listing, month?: string) {
     const q: QueryConstraint[] = [];
     const keys = Object.keys(submission) as (keyof Listing)[];
     for (let i = 0; i < keys.length; i++) {
@@ -261,7 +261,11 @@ export class FirestoreService {
         q.push(where(key, '==', submission[key]));
       }
     }
-    return await getCountFromServer(query(collection(db, 'listings'), ...q));
+    return month
+      ? await getCountFromServer(
+          query(collection(db, `listings-by-month/${month}/listings`), ...q)
+        )
+      : await getCountFromServer(query(collection(db, 'listings'), ...q));
   }
 }
 

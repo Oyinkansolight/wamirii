@@ -17,6 +17,9 @@ service cloud.firestore {
     match /listings-by-date/{date}/users/{user}{
       allow read;
     }
+    match /listings-by-month/{month}/listings/{listing}{
+      allow read;
+    }
     match /global/global{
       allow read;
     }

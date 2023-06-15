@@ -1,109 +1,100 @@
-import { BarCanvas } from '@nivo/bar';
+import { Bar } from '@nivo/bar';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+
+import Loading from '@/components/generic/Loading';
+
+import { FirestoreService } from '@/firebase/firestore/firestore-service';
+
+const months = [
+  'JAN',
+  'FEB',
+  'MAR',
+  'APR',
+  'MAY',
+  'JUN',
+  'JUL',
+  'AUG',
+  'SEP',
+  'OCT',
+  'NOV',
+  'DEC',
+];
+
+const maleColor = '#BECAC3';
+const femaleColor = '#042614';
+
+const defaultData = months.map((v) => ({
+  id: v,
+  female: 0,
+  male: 0,
+  maleColor,
+  femaleColor,
+}));
 
 export default function GenderSubmissionsChart() {
+  const [data, setData] = useState<
+    {
+      id: string;
+      female: number;
+      male: number;
+      maleColor: string;
+      femaleColor: string;
+    }[]
+  >(defaultData);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const asyncRun = async () => {
+      setIsLoading(true);
+      const newData = [...defaultData];
+      const m = moment();
+      m.day(1);
+      for (let i = 0; i <= m.month(); i++) {
+        const newM = moment();
+        newM.day(1);
+        newM.month(i);
+        const format = newM.format('MMMM YYYY');
+        const male = (
+          await FirestoreService.getSubmissionCountWhere(
+            { missingGender: 'male' },
+            format
+          )
+        ).data().count;
+        const female = (
+          await FirestoreService.getSubmissionCountWhere(
+            { missingGender: 'female' },
+            format
+          )
+        ).data().count;
+        newData[i].female = female;
+        newData[i].male = male;
+      }
+      setData(newData);
+      setIsLoading(false);
+    };
+    asyncRun();
+  }, []);
+
   return (
-    <div className='flex-1 rounded-lg border p-4'>
+    <div className='relative flex-1 overflow-hidden rounded-lg border p-4'>
       <div className='text-xl font-bold'>Submissions</div>
       <div className='relative'>
-        <BarCanvas
+        <Bar
           enableGridY={false}
           keys={['male', 'female']}
           enableLabel={false}
           borderRadius={6}
           colorBy='id'
-          colors={({ id, data }) => data[`${id}Color`] as string}
+          colors={({ id, data }) =>
+            data[`${id}Color` as keyof (typeof defaultData)[number]] as string
+          }
           height={300}
           width={700}
           groupMode='grouped'
           padding={0.4}
           innerPadding={3}
           margin={{ bottom: 30, top: 30, right: 100, left: 30 }}
-          data={[
-            {
-              id: 'JAN',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'FEB',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'MAR',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'APR',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'MAY',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'JUN',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'JUL',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'AUG',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'SEP',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'OCT',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'NOV',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: 'DEC',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-          ]}
+          data={data}
           legends={[
             {
               dataFrom: 'keys',
@@ -130,6 +121,11 @@ export default function GenderSubmissionsChart() {
           ]}
         />
       </div>
+      {isLoading && (
+        <div className='absolute inset-0 flex items-center justify-center bg-[#00000016]'>
+          <Loading />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,109 +1,84 @@
-import { BarCanvas } from '@nivo/bar';
+import { Bar } from '@nivo/bar';
+import {
+  collection,
+  getCountFromServer,
+  query,
+  where,
+} from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+
+import Loading from '@/components/generic/Loading';
+
+import { db } from '@/firebase/init';
+
+const defaultData = Array(12)
+  .fill(0)
+  .map((v, i) => ({
+    id: `${5 * i} - ${5 * i + 5} Years`,
+    female: 0,
+    male: 0,
+    maleColor: '#BECAC3',
+    femaleColor: '#042614',
+  }));
 
 export default function AgeSubmissionsChart() {
+  const [data, setData] = useState(defaultData);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const asyncRun = async () => {
+      setIsLoading(true);
+      const newData = [...defaultData];
+      for (let i = 0; i < 12; i++) {
+        const male = (
+          await getCountFromServer(
+            query(
+              collection(db, 'listings'),
+              where('missingGender', '==', 'male'),
+              where('missingAge', '>=', i * 5),
+              where('missingAge', '<', i * 5 + 5)
+            )
+          )
+        ).data().count;
+        const female = (
+          await getCountFromServer(
+            query(
+              collection(db, 'listings'),
+              where('missingGender', '==', 'female'),
+              where('missingAge', '>=', i * 5),
+              where('missingAge', '<', i * 5 + 5)
+            )
+          )
+        ).data().count;
+        newData[i].male = male;
+        newData[i].female = female;
+      }
+      setData(newData);
+      setIsLoading(false);
+    };
+    asyncRun();
+  }, []);
+
   return (
-    <div className=' rounded-lg border p-4'>
+    <div className='relative rounded-lg border p-4'>
       <div className='text-xl font-bold'>Age Range of Missing Persons</div>
       <div className='relative'>
-        <BarCanvas
+        <Bar
           enableGridY={false}
           keys={['male', 'female']}
           enableLabel={false}
           borderRadius={6}
           colorBy='id'
-          colors={({ id, data }) => data[`${id}Color`] as string}
+          colors={({ id, data }) =>
+            data[`${id}Color` as keyof (typeof defaultData)[number]] as string
+          }
           height={300}
           width={1080}
           groupMode='grouped'
           padding={0.6}
           innerPadding={8}
           margin={{ bottom: 30, top: 30, right: 100, left: 30 }}
-          data={[
-            {
-              id: '0-5 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '5-10 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '10-15 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '15-20 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '20-25 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '25-30 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '30-35 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '35-40 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '40-45 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '45-50 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '50-55 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-            {
-              id: '55-60 Years',
-              female: 200,
-              male: 300,
-              maleColor: '#BECAC3',
-              femaleColor: '#042614',
-            },
-          ]}
+          data={data}
           legends={[
             {
               dataFrom: 'keys',
@@ -130,6 +105,11 @@ export default function AgeSubmissionsChart() {
           ]}
         />
       </div>
+      {isLoading && (
+        <div className='absolute inset-0 flex items-center justify-center rounded-lg bg-[#00000016]'>
+          <Loading />
+        </div>
+      )}
     </div>
   );
 }
