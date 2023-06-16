@@ -2,7 +2,7 @@ import { Menu, MenuItem } from '@szhsin/react-menu';
 import { QueryConstraint } from 'firebase/firestore';
 import { Select, TextInput } from 'flowbite-react';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { BiEdit } from 'react-icons/bi';
 import { BsFillEyeFill } from 'react-icons/bs';
@@ -17,9 +17,7 @@ import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 import Button from '@/components/buttons/Button';
 import TableSearchInput from '@/components/inputs/table-search-input';
 import DashboardLayout2 from '@/components/layout/DashboardLayout2';
-import { UserContext } from '@/components/layout/GetAuthStatus';
 import TabBar from '@/components/layout/TabBar';
-import ProfilePicture from '@/components/profile/ProfilePicture';
 import Role from '@/components/profile/Role';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -35,11 +33,6 @@ const tableColumns: TableColumn<User>[] = [
     sortField: 'createdAt',
   },
   {
-    name: '',
-    cell: (cell) => <ProfilePicture user={cell} />,
-    grow: 0,
-  },
-  {
     name: 'Full Name',
     selector: (cell) => `${cell.username}`,
     cell: (cell) => (
@@ -47,6 +40,10 @@ const tableColumns: TableColumn<User>[] = [
         <div className='font-bold'>{cell.username}</div>
       </div>
     ),
+  },
+  {
+    name: 'Phone Number',
+    cell: (row) => <div>{row.phoneNumber}</div>,
   },
   {
     name: 'Email',
@@ -92,37 +89,27 @@ const tableColumns: TableColumn<User>[] = [
 ];
 
 export default AuthGuardHOC(() => {
-  const user = useContext(UserContext);
+  // const user = useContext(UserContext);
   const [idx, setIdx] = useState(0);
-  const [mySubmissionsCount, setMySubmissionsCount] = useState(0);
-  const [allSubmissionsCount, setAllSubmissionsCount] = useState(0);
   const router = useRouter();
 
-  useEffect(() => {
-    const a = async () => {
-      const b = await FirestoreService.getSubmissionCountWhere({
-        createdBy: user?.id,
-      });
-      setMySubmissionsCount(b.data().count);
-      const c = await FirestoreService.getSubmissionCountWhere({});
-      setAllSubmissionsCount(c.data().count);
-    };
-    a();
-  }, [user?.id]);
+  // useEffect(() => {
+  //   const a = async () => {
+  //     eval('');
+  //   };
+  //   a();
+  // }, [user?.id]);
 
   const c = useMemo(() => {
     const constraints: QueryConstraint[][] = [
-      FirestoreService.getListingsConstraints({ createdBy: user?.id }),
-      [],
-      FirestoreService.getListingsConstraints({ status: 'found-alive' }),
+      FirestoreService.getUsersConstraints({ role: 'user' }),
+      FirestoreService.getUsersConstraints({ role: 'admin' }),
+      FirestoreService.getUsersConstraints({ role: 'manager' }),
+      FirestoreService.getUsersConstraints({ role: 'volunteer' }),
     ];
     return constraints[idx];
-  }, [idx, user?.id]);
-  const { docs, error, setSortByField } = useCollectionPaginated(
-    'listings',
-    5,
-    c
-  );
+  }, [idx]);
+  const { docs, error, setSortByField } = useCollectionPaginated('users', 5, c);
 
   return (
     <DashboardLayout2>
@@ -136,16 +123,17 @@ export default AuthGuardHOC(() => {
             </div>
           </div>
           <Button onClick={() => router.push('/admin/submissions/create')}>
-            Add New Submission
+            Add New User
           </Button>
         </div>
         <TabBar
           currentIdx={idx}
           onChange={setIdx}
           items={[
-            { label: `My Submissions (${mySubmissionsCount})` },
-            { label: `All Submissions (${allSubmissionsCount})` },
-            { label: 'Missing and Found (0)' },
+            { label: `General Users (${0})` },
+            { label: `Admins (${0})` },
+            { label: 'Managers (0)' },
+            { label: `Volunteers (${0})` },
           ]}
         />
         {error && (

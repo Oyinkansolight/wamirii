@@ -140,7 +140,7 @@ export default AuthGuardHOC(() => {
   }, [idx, user?.id]);
   const { docs, error, setSortByField } = useCollectionPaginated(
     'listings',
-    5,
+    20,
     c
   );
 
@@ -208,7 +208,7 @@ export default AuthGuardHOC(() => {
       </div>
     </DashboardLayout2>
   );
-});
+}, ['admin']);
 
 function DeleteMenuItem({ submission }: { submission: Listing }) {
   const m = useContext(GeneralModalContext);
