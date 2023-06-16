@@ -27,6 +27,7 @@ import ActionSuccessView from '@/components/modal-views/ActionSuccess';
 
 import { allStates, status } from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
+import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
 const missingPersonInputProps: (TextInputProps & {
   options?: RegisterOptions<FieldValues, string> | undefined;
@@ -156,7 +157,7 @@ const contactPersonInputProps: TextInputProps[] = [
   },
 ];
 
-export default function ViewSubmission() {
+export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
   const generalModal = useContext(GeneralModalContext);
   const router = useRouter();
@@ -367,4 +368,4 @@ export default function ViewSubmission() {
       </form>
     </DashboardLayout2>
   );
-}
+}, ['admin']);
