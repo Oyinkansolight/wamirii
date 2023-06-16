@@ -51,4 +51,4 @@ export default AuthGuardHOC(() => {
       </div>
     </DashboardLayout2>
   );
-});
+}, ['admin']);
