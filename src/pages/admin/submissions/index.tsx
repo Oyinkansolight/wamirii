@@ -19,8 +19,10 @@ import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 import Button from '@/components/buttons/Button';
 import TableSearchInput from '@/components/inputs/table-search-input';
 import DashboardLayout2 from '@/components/layout/DashboardLayout2';
+import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import TabBar from '@/components/layout/TabBar';
+import DeleteSubmissionView from '@/components/modal-views/DeleteSubmissionView';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
@@ -103,12 +105,7 @@ const tableColumns: TableColumn<Listing>[] = [
             <div>Edit</div>
           </div>
         </MenuItem>
-        <MenuItem>
-          <div className='flex gap-2'>
-            <FaTrashAlt />
-            <div>Delete</div>
-          </div>
-        </MenuItem>
+        <DeleteMenuItem submission={row} />
       </Menu>
     ),
   },
@@ -212,3 +209,20 @@ export default AuthGuardHOC(() => {
     </DashboardLayout2>
   );
 });
+
+function DeleteMenuItem({ submission }: { submission: Listing }) {
+  const m = useContext(GeneralModalContext);
+  return (
+    <MenuItem
+      onClick={() => {
+        m?.setContent(<DeleteSubmissionView submission={submission} />);
+        m?.setIsOpen(true);
+      }}
+    >
+      <div className='flex gap-2 text-red-500'>
+        <FaTrashAlt />
+        <div>Delete</div>
+      </div>
+    </MenuItem>
+  );
+}

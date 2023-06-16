@@ -18,6 +18,7 @@ import {
   where,
   WhereFilterOp,
 } from 'firebase/firestore';
+import moment from 'moment';
 
 import { db } from '@/firebase/init';
 import { StorageService } from '@/firebase/storage/storage-service';
@@ -81,6 +82,17 @@ export class FirestoreService {
 
   static async getUsersCount() {
     return await getCountFromServer(query(collection(db, 'users')));
+  }
+
+  static async getUserCountWhereOp(
+    op: { key: keyof User; op: WhereFilterOp; value: unknown }[]
+  ) {
+    return await getCountFromServer(
+      query(
+        collection(db, 'users'),
+        ...op.map((v) => where(v.key, v.op, v.value))
+      )
+    );
   }
 
   static async updateUserDocument(user: User) {
@@ -266,6 +278,30 @@ export class FirestoreService {
           query(collection(db, `listings-by-month/${month}/listings`), ...q)
         )
       : await getCountFromServer(query(collection(db, 'listings'), ...q));
+  }
+
+  static async getSubmissionCountWhereOp(
+    op: { key: keyof Listing; op: WhereFilterOp; value: unknown }[],
+    month?: number
+  ) {
+    if (month) {
+      const m = moment();
+      m.day(1);
+      m.month(month);
+      const format = m.format('MMMM YYYY');
+      return await getCountFromServer(
+        query(
+          collection(db, `listings-by-month/${format}/listings`),
+          ...op.map((v) => where(v.key, v.op, v.value))
+        )
+      );
+    }
+    return await getCountFromServer(
+      query(
+        collection(db, 'listings'),
+        ...op.map((v) => where(v.key, v.op, v.value))
+      )
+    );
   }
 }
 

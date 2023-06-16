@@ -7,8 +7,8 @@ import {
 } from 'flowbite-react';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { useDocument } from 'react-firebase-hooks/firestore';
 import {
   Controller,
   FieldValues,
@@ -26,6 +26,7 @@ import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import ActionFailedView from '@/components/modal-views/ActionFailed';
 import ActionSuccessView from '@/components/modal-views/ActionSuccess';
+import DeleteSubmissionView from '@/components/modal-views/DeleteSubmissionView';
 
 import { allStates, status } from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -164,8 +165,13 @@ export default function ViewSubmission() {
   const user = useContext(UserContext);
   const router = useRouter();
   const { id } = router.query;
-  const [submission] = useDocumentData<Listing>(
-    id ? FirestoreService.getDocRef(`listings/${id}`) : undefined
+  const [submissionDoc, , error] = useDocument(
+    id ? FirestoreService.getDocRef(`listings/${id}`) : undefined,
+    {}
+  );
+  const submission = useMemo(
+    () => ({ _id: id as string, ...submissionDoc?.data() } as Listing),
+    [id, submissionDoc]
   );
   const [isEditing, setIsEditing] = useState(false);
 
@@ -179,6 +185,17 @@ export default function ViewSubmission() {
   } = useForm({ mode: 'onChange' });
   const [, setIsSubmitting] = useState(false);
   const generalModal = useContext(GeneralModalContext);
+
+  const handleDelete = async () => {
+    if (generalModal) {
+      generalModal.setContent(
+        <DeleteSubmissionView
+          submission={{ _id: id as string, ...submission }}
+        />
+      );
+      generalModal.setIsOpen(true);
+    }
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
@@ -252,6 +269,21 @@ export default function ViewSubmission() {
         onSubmit={handleSubmit(onSubmit)}
         className='layout flex h-screen flex-col gap-6'
       >
+        {(error || (submissionDoc && !submissionDoc?.exists())) && (
+          <div
+            className='mb-4 flex rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400'
+            role='alert'
+          >
+            <div>
+              <span className='font-medium'>Error!</span>{' '}
+              {error
+                ? error.message
+                : !submissionDoc?.exists()
+                ? 'This submission does not exist'
+                : 'Unknown Error'}
+            </div>
+          </div>
+        )}
         <div className='flex items-start justify-between'>
           <div>
             <div
@@ -271,6 +303,7 @@ export default function ViewSubmission() {
                 type='button'
                 variant='outline'
                 className='border-red-500 text-red-500 hover:bg-red-200'
+                onClick={handleDelete}
               >
                 Delete Submission
               </Button>

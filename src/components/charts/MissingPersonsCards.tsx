@@ -7,13 +7,18 @@ import { FirestoreService } from '@/firebase/firestore/firestore-service';
 export default function MissingPersonsCards() {
   const [missingCardStats, setMissingCardStats] = useState({
     foundPersons: 0,
+    foundPersonsPercent: 0,
     missingPersons: 0,
+    missingPersonsPercent: 0,
     missingFemales: 0,
+    missingFemalesPercent: 0,
     missingMales: 0,
+    missingMalesPercent: 0,
   });
 
   useEffect(() => {
     const asyncRun = async () => {
+      // const month = moment().month();
       const foundPersons = await FirestoreService.getSubmissionCountWhere({
         status: 'found-alive',
       });
@@ -28,11 +33,21 @@ export default function MissingPersonsCards() {
       const missingMales = await FirestoreService.getSubmissionCountWhere({
         missingGender: 'male',
       });
+      // const missingPersonsMonth = (
+      //   await FirestoreService.getSubmissionCountWhereOp([], month)
+      // ).data().count;
+      // const missingPersonsLastMonth = (
+      //   await FirestoreService.getSubmissionCountWhereOp([], month - 1)
+      // ).data().count;
       setMissingCardStats({
         missingFemales: missingFemales.data().count,
         missingMales: missingMales.data().count,
         missingPersons: missingPersons.data().count,
         foundPersons: foundPersons.data().count + foundPersons2.data().count,
+        foundPersonsPercent: 0,
+        missingFemalesPercent: 0,
+        missingMalesPercent: 0,
+        missingPersonsPercent: 0,
       });
     };
     asyncRun();
@@ -42,22 +57,22 @@ export default function MissingPersonsCards() {
     {
       n: missingCardStats.foundPersons,
       subText: 'Found Persons',
-      percent: 10,
+      percent: missingCardStats.foundPersonsPercent,
     },
     {
       n: missingCardStats.missingPersons,
       subText: 'Total Missing Persons',
-      percent: -10,
+      percent: missingCardStats.missingPersonsPercent,
     },
     {
       n: missingCardStats.missingMales,
       subText: 'Missing Males',
-      percent: 10,
+      percent: missingCardStats.missingMalesPercent,
     },
     {
       n: missingCardStats.missingFemales,
       subText: 'Missing Females',
-      percent: 10,
+      percent: missingCardStats.missingFemalesPercent,
     },
   ];
   return (
