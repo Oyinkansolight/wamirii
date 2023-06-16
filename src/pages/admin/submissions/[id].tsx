@@ -30,6 +30,7 @@ import DeleteSubmissionView from '@/components/modal-views/DeleteSubmissionView'
 
 import { allStates, status } from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
+import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
 import { Listing, toLocalListings } from '@/types/listing';
 
@@ -161,7 +162,7 @@ const contactPersonInputProps: TextInputProps[] = [
   },
 ];
 
-export default function ViewSubmission() {
+export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
   const router = useRouter();
   const { id } = router.query;
@@ -455,4 +456,4 @@ export default function ViewSubmission() {
       </form>
     </DashboardLayout2>
   );
-}
+}, ['admin']);
