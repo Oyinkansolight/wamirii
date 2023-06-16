@@ -12,7 +12,7 @@ import Loading from '@/components/generic/Loading';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import { StorageService } from '@/firebase/storage/storage-service';
 
-import { Listing } from '@/types/listing';
+import { Listing, Status } from '@/types/listing';
 
 export const ListingCardFromId = ({ listingId }: { listingId: string }) => {
   const [listing] = useDocument(
@@ -42,8 +42,21 @@ const ListingCard = ({
     // fontFamily: ['Arial'],
   });
 
+  // const Reporter = GetDocumentHOC(
+  //   (props) => (
+  //     <p className='mb-2 text-xs text-gray-700'>
+  //       Reported By: {props?.doc.username}
+  //     </p>
+  //   ),
+  //   `users/${listing?.createdBy}`
+  // );
+
   return (
-    <div className='w-full overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
+    <div className='relative w-full overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
+      {/* <div className='absolute top-2 right-2 flex justify-center rounded-lg text-xs'>
+        <Status status={listing?.status ?? 'active'} />
+      </div> */}
+
       <div className='h-full w-full'>
         <div
           style={{ aspectRatio: 2, position: 'relative' }}
@@ -114,7 +127,9 @@ const ListingCard = ({
           <p className='mb-2 text-xs text-gray-700'>
             Last Seen State: {listing?.missingLastSeenSate}
           </p>
-
+          <p className='mb-2 text-xs text-gray-700'>
+            Reported By: {listing?.contactRelationship ?? 'Unknown'}
+          </p>
           <Link
             href={path}
             aria-label=''
@@ -127,5 +142,13 @@ const ListingCard = ({
     </div>
   );
 };
+
+export function Status({ status }: { status: Status }) {
+  return (
+    <div className='rounded-full bg-green-500 px-4 py-1 capitalize text-white'>
+      {status}
+    </div>
+  );
+}
 
 export default ListingCard;

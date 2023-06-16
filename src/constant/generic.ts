@@ -151,3 +151,20 @@ export const allStates = [
 
 // eslint-disable-next-line unused-imports/no-unused-vars
 const removeDark = /`(dark:.*?)[\w\d\-:]*`/gi;
+
+export const roles = <const>[
+  'admin',
+  'user',
+  'organization',
+  'manager',
+  'volunteer',
+];
+
+export const statuses = <const>['active', 'inactive'];
+
+export const status = <const>[
+  'active',
+  'duplicate',
+  'found-alive',
+  'found-deceased',
+];

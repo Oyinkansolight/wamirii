@@ -4,8 +4,6 @@ import {
   signOut,
 } from 'firebase/auth';
 
-import logger from '@/lib/logger';
-
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import { auth } from '@/firebase/init';
 
@@ -14,10 +12,11 @@ export class AuthService {
     email: string,
     password: string,
     username?: string
-  ): Promise<void> {
+  ) {
     try {
       const u = await createUserWithEmailAndPassword(auth, email, password);
-      FirestoreService.createNewUserDocument(u.user.uid, email, username);
+      await FirestoreService.createNewUserDocument(u.user.uid, email, username);
+      return u;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       throw { message: this.getErrorMessage(error.code), code: error.code };
@@ -50,7 +49,6 @@ export class AuthService {
       case 'auth/weak-password':
         return 'Password is too weak';
       default:
-        logger(code);
         return 'Unknown error';
     }
   }

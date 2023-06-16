@@ -10,12 +10,12 @@ import { FieldValues, RegisterOptions, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import clsxm from '@/lib/clsxm';
-import logger from '@/lib/logger';
 
 import Button from '@/components/buttons/Button';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import ProfilePicture from '@/components/profile/ProfilePicture';
+import Role from '@/components/profile/Role';
 
 import { allStates } from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -65,7 +65,6 @@ export default AuthGuardHOC(() => {
 
   useEffect(() => {
     if (user) {
-      logger(user);
       const keys = Object.keys(user) as (keyof User)[];
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
@@ -100,7 +99,12 @@ export default AuthGuardHOC(() => {
     <DashboardLayout>
       <form className='flex flex-col gap-y-8' onSubmit={handleSubmit(onSubmit)}>
         <Card>
-          <div className=' font-bold'>Profile Information</div>
+          <div className='flex flex-row items-center gap-2'>
+            <div className='font-bold'>Profile Information</div>
+            <span className='flex !max-w-[100px]'>
+              <Role role={user?.role ?? ''} />
+            </span>
+          </div>
           <div>
             <ProfilePicture user={user} size={100} />
           </div>

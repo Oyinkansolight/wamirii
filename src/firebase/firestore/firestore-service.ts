@@ -1,8 +1,10 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   FirestoreError,
+  getCountFromServer,
   getDoc,
   onSnapshot,
   orderBy,
@@ -16,6 +18,7 @@ import {
   where,
   WhereFilterOp,
 } from 'firebase/firestore';
+import moment from 'moment';
 
 import { db } from '@/firebase/init';
 import { StorageService } from '@/firebase/storage/storage-service';
@@ -33,9 +36,63 @@ export class FirestoreService {
       id,
       username,
       email,
-      role: 'visitor',
+      role: 'volunteer',
+      status: 'active',
       createdAt: serverTimestamp(),
     });
+  }
+
+  static getListingsConstraints(listing: Listing) {
+    const q: QueryConstraint[] = [];
+    const keys = Object.keys(listing) as (keyof Listing)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (listing[key]) {
+        q.push(where(key, '==', listing[key]));
+      }
+    }
+    return q;
+  }
+
+  static getUsersConstraints(user: User) {
+    const q: QueryConstraint[] = [];
+    const keys = Object.keys(user) as (keyof User)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (user[key]) {
+        q.push(where(key, '==', user[key]));
+      }
+    }
+    return q;
+  }
+
+  static getUsersConstraintsOp(
+    key: keyof User,
+    op: WhereFilterOp,
+    value: unknown
+  ) {
+    return [where(key, op, value)];
+  }
+
+  static async getGenderCount(gender: 'male' | 'female') {
+    return await getCountFromServer(
+      query(collection(db, 'listings'), where('missingGender', '==', gender))
+    );
+  }
+
+  static async getUsersCount() {
+    return await getCountFromServer(query(collection(db, 'users')));
+  }
+
+  static async getUserCountWhereOp(
+    op: { key: keyof User; op: WhereFilterOp; value: unknown }[]
+  ) {
+    return await getCountFromServer(
+      query(
+        collection(db, 'users'),
+        ...op.map((v) => where(v.key, v.op, v.value))
+      )
+    );
   }
 
   static async updateUserDocument(user: User) {
@@ -54,14 +111,14 @@ export class FirestoreService {
     await updateDoc(doc(db, `users/${user.id}`), { ...user });
   }
 
-  static async createListing(listing: Listing) {
+  static async createListing(listing: Listing, submissionId?: string) {
     if (listing?.missingImageUrl) {
       const f = listing.missingImageUrl as unknown as FileList;
-      if (f.length > 0) {
+      if (f.length > 0 && typeof listing.missingImageUrl !== 'string') {
         const r = await StorageService.uploadFile(f);
         listing.missingImageUrl = r.ref.fullPath;
       } else {
-        listing.missingImageUrl = '';
+        delete listing.missingImageUrl;
       }
     }
     if (listing?.missingSince) {
@@ -74,10 +131,27 @@ export class FirestoreService {
         new Date((listing.missingDateReported as unknown as string) ?? '')
       );
     }
-    return await addDoc(collection(db, 'listings'), {
-      ...listing,
-      createdAt: serverTimestamp(),
-    });
+    if (submissionId) {
+      return await updateDoc(doc(db, `listings/${submissionId}`), {
+        ...listing,
+        missingAge: listing.missingAge
+          ? Number.parseInt(listing.missingAge)
+          : null,
+      });
+    } else {
+      return await addDoc(collection(db, 'listings'), {
+        ...listing,
+        status: 'active',
+        missingAge: listing.missingAge
+          ? Number.parseInt(listing.missingAge)
+          : null,
+        createdAt: serverTimestamp(),
+      });
+    }
+  }
+
+  static async deleteListing(id: string) {
+    await deleteDoc(doc(db, `listings/${id}`));
   }
 
   static async userDocExists(id: string) {
@@ -175,6 +249,58 @@ export class FirestoreService {
         onData(snap.data() as User);
       },
       onError
+    );
+  }
+
+  static async getUserCountWhere(user: User) {
+    const q: QueryConstraint[] = [];
+    const keys = Object.keys(user) as (keyof User)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (user[key]) {
+        q.push(where(key, '==', user[key]));
+      }
+    }
+    return await getCountFromServer(query(collection(db, 'users'), ...q));
+  }
+
+  static async getSubmissionCountWhere(submission: Listing, month?: string) {
+    const q: QueryConstraint[] = [];
+    const keys = Object.keys(submission) as (keyof Listing)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (submission[key]) {
+        q.push(where(key, '==', submission[key]));
+      }
+    }
+    return month
+      ? await getCountFromServer(
+          query(collection(db, `listings-by-month/${month}/listings`), ...q)
+        )
+      : await getCountFromServer(query(collection(db, 'listings'), ...q));
+  }
+
+  static async getSubmissionCountWhereOp(
+    op: { key: keyof Listing; op: WhereFilterOp; value: unknown }[],
+    month?: number
+  ) {
+    if (month) {
+      const m = moment();
+      m.day(1);
+      m.month(month);
+      const format = m.format('MMMM YYYY');
+      return await getCountFromServer(
+        query(
+          collection(db, `listings-by-month/${format}/listings`),
+          ...op.map((v) => where(v.key, v.op, v.value))
+        )
+      );
+    }
+    return await getCountFromServer(
+      query(
+        collection(db, 'listings'),
+        ...op.map((v) => where(v.key, v.op, v.value))
+      )
     );
   }
 }

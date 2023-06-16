@@ -23,7 +23,7 @@
   },
   "functions": [
     {
-      "source": "functions",
+      "source": "wamirii_functions",
       "codebase": "default",
       "ignore": [
         "node_modules",

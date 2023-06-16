@@ -11,8 +11,6 @@ import {
   AuthStatusContext,
   UserContext,
 } from '@/components/layout/GetAuthStatus';
-import { BasicModal } from '@/components/modals';
-import SignUpModal from '@/components/modals/SignUpModal';
 import ProfilePicture from '@/components/profile/ProfilePicture';
 
 import { AuthService } from '@/firebase/auth/auth-service';
@@ -66,7 +64,9 @@ const Nav = () => {
           <>
             <div
               className='hidden cursor-pointer items-center gap-x-4 lg:flex'
-              onClick={() => router.push('/home')}
+              onClick={() =>
+                router.push(user?.role === 'admin' ? '/admin' : '/home')
+              }
             >
               <ProfilePicture user={user} />
               <div className='font-bold text-primary'>
@@ -76,7 +76,7 @@ const Nav = () => {
 
             <div className='ml-4 hidden md:block'>
               <Link
-                href='/home'
+                href={user?.role === 'admin' ? '/admin' : '/home'}
                 aria-label='Dashboard'
                 title='Dashboard'
                 className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
@@ -95,18 +95,21 @@ const Nav = () => {
         ) : (
           <ul className='hidden items-center space-x-8 lg:flex'>
             <li>
-              <BasicModal>
-                <Button className='h-12' variant='ghost'>
-                  Sign In
-                </Button>
-              </BasicModal>
+              <Button
+                onClick={() => router.push('/auth/login')}
+                className='h-12'
+                variant='ghost'
+              >
+                Sign In
+              </Button>
             </li>
             <li>
-              <SignUpModal>
-                <Button className='focus:shadow-outline inline-flex h-12 items-center justify-center rounded bg-primary px-6 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
-                  Report a missing Person
-                </Button>
-              </SignUpModal>
+              <Button
+                onClick={() => router.push('/auth/register')}
+                className='focus:shadow-outline inline-flex h-12 items-center justify-center rounded bg-primary px-6 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'
+              >
+                Report a missing Person
+              </Button>
             </li>
           </ul>
         )}
@@ -213,18 +216,19 @@ const Nav = () => {
                       <div className='flex flex-col gap-y-4'>
                         <div className='lg:hidden'>
                           <div
-                            onClick={() => router.replace('/?auth=0')}
+                            onClick={() => router.push('/auth/login')}
                             className='hover:text-deep-purple-accent-400 cursor-pointer font-medium tracking-wide text-gray-700 transition-colors duration-200'
                           >
                             Sign In
                           </div>
                         </div>
 
-                        <SignUpModal>
-                          <Button className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'>
-                            Report a missing Person
-                          </Button>
-                        </SignUpModal>
+                        <Button
+                          onClick={() => router.push('/auth/register')}
+                          className='focus:shadow-outline inline-flex h-8 items-center justify-center rounded bg-primary px-4 font-medium tracking-wide text-white shadow-md transition duration-200 hover:bg-primary-600 focus:outline-none'
+                        >
+                          Report a missing Person
+                        </Button>
                       </div>
                     )}
                   </ul>

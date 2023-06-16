@@ -135,7 +135,7 @@ export default function SingleSubmission() {
                     {' '}
                     Reported By
                   </span>
-                  : <span>{submission?.reporterRelationship ?? 'Unknown'}</span>
+                  : <span>{submission?.contactRelationship ?? 'Unknown'}</span>
                 </div>
               </div>
             </div>

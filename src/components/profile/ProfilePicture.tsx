@@ -16,7 +16,7 @@ export default function ProfilePicture({
 }) {
   // eslint-disable-next-line unused-imports/no-unused-vars
   const [url, loading, error] = useDownloadURL(
-    StorageService.getRef(`${user?.imageURL}`)
+    StorageService.getRef(user?.imageURL ? `${user?.imageURL}` : undefined)
   );
   const avatar = createAvatar(thumbs, {
     seed: user?.username ?? '',
