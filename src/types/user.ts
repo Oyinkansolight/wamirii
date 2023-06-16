@@ -16,6 +16,7 @@ export class User {
   createdAt?: Timestamp;
   joinedAt?: Timestamp;
   status?: UserStatus;
+  phoneNumber?: string;
 }
 
 export type Role = (typeof roles)[number];

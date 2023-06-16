@@ -1,13 +1,11 @@
 import { Menu, MenuItem } from '@szhsin/react-menu';
-import { DocumentData, QueryConstraint } from 'firebase/firestore';
+import { QueryConstraint } from 'firebase/firestore';
 import { Select, TextInput } from 'flowbite-react';
-import moment from 'moment';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { BiEdit } from 'react-icons/bi';
 import { BsFillEyeFill } from 'react-icons/bs';
-import { FaTrashAlt } from 'react-icons/fa';
 import { ImInfo } from 'react-icons/im';
 import { SlOptions } from 'react-icons/sl';
 
@@ -19,62 +17,41 @@ import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 import Button from '@/components/buttons/Button';
 import TableSearchInput from '@/components/inputs/table-search-input';
 import DashboardLayout2 from '@/components/layout/DashboardLayout2';
-import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
-import { UserContext } from '@/components/layout/GetAuthStatus';
 import TabBar from '@/components/layout/TabBar';
-import DeleteSubmissionView from '@/components/modal-views/DeleteSubmissionView';
+import Role from '@/components/profile/Role';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
-import GetDocumentHOC from '@/hocs/get-document';
 
-import { Listing } from '@/types/listing';
+import { User } from '@/types/user';
 
-const tableColumns: TableColumn<Listing>[] = [
+const tableColumns: TableColumn<User>[] = [
   {
-    name: 'Date Posted',
-    cell: (row) => (
-      <div>{moment(row.createdAt?.toDate()).format('D/MM/YYYY')}</div>
-    ),
+    name: 'Date Created',
+    cell: (row) => <div>{row.createdAt?.toDate().toDateString()}</div>,
     sortable: true,
     sortField: 'createdAt',
   },
   {
-    name: 'Missing Person',
-    selector: (cell) => `${cell.missingFirstName} ${cell.missingLastName}`,
+    name: 'Full Name',
+    selector: (cell) => `${cell.username}`,
     cell: (cell) => (
       <div>
-        <div className='font-bold'>{`${cell.missingFirstName} ${cell.missingLastName}`}</div>
+        <div className='font-bold'>{cell.username}</div>
       </div>
     ),
   },
   {
-    name: 'Reporter',
-    cell: (row) => {
-      const C = GetDocumentHOC(
-        ({ doc }: { doc: DocumentData }) => <div>{doc.username}</div>,
-        `users/${row.createdBy}`
-      );
-      return <C />;
-    },
+    name: 'Phone Number',
+    cell: (row) => <div>{row.phoneNumber}</div>,
   },
   {
-    name: 'Age',
-    cell: (row) => <div>{row.missingAge}</div>,
+    name: 'Email',
+    cell: (row) => <div>{row.email}</div>,
   },
   {
-    name: 'Last Known Location',
-    cell: (row) => <div>{row.missingLastSeenSate}</div>,
-  },
-  {
-    name: 'Gender',
-    cell: (row) => <div>{row.missingGender}</div>,
-  },
-  {
-    name: 'Missing Since',
-    cell: (row) => (
-      <div>{moment(row.missingSince?.toDate()).format('D/MM/YYYY')}</div>
-    ),
+    name: 'Status',
+    cell: (row) => <Role role={row.status ?? 'active'} />,
   },
   {
     // width: '20px',
@@ -90,7 +67,7 @@ const tableColumns: TableColumn<Listing>[] = [
         <MenuItem
           onClick={() => {
             if (window.location) {
-              window.location.href = `/admin/submissions/${row._id}`;
+              window.location.href = `/admin/submissions/${row.id}`;
             }
           }}
         >
@@ -105,66 +82,58 @@ const tableColumns: TableColumn<Listing>[] = [
             <div>Edit</div>
           </div>
         </MenuItem>
-        <DeleteMenuItem submission={row} />
+        {/* <DeleteMenuItem submission={row} /> */}
       </Menu>
     ),
   },
 ];
 
 export default AuthGuardHOC(() => {
-  const user = useContext(UserContext);
+  // const user = useContext(UserContext);
   const [idx, setIdx] = useState(0);
-  const [mySubmissionsCount, setMySubmissionsCount] = useState(0);
-  const [allSubmissionsCount, setAllSubmissionsCount] = useState(0);
   const router = useRouter();
 
-  useEffect(() => {
-    const a = async () => {
-      const b = await FirestoreService.getSubmissionCountWhere({
-        createdBy: user?.id,
-      });
-      setMySubmissionsCount(b.data().count);
-      const c = await FirestoreService.getSubmissionCountWhere({});
-      setAllSubmissionsCount(c.data().count);
-    };
-    a();
-  }, [user?.id]);
+  // useEffect(() => {
+  //   const a = async () => {
+  //     eval('');
+  //   };
+  //   a();
+  // }, [user?.id]);
 
   const c = useMemo(() => {
     const constraints: QueryConstraint[][] = [
-      FirestoreService.getListingsConstraints({ createdBy: user?.id }),
-      [],
-      FirestoreService.getListingsConstraints({ status: 'found-alive' }),
+      FirestoreService.getUsersConstraints({ role: 'user' }),
+      FirestoreService.getUsersConstraints({ role: 'admin' }),
+      FirestoreService.getUsersConstraints({ role: 'manager' }),
+      FirestoreService.getUsersConstraints({ role: 'volunteer' }),
     ];
     return constraints[idx];
-  }, [idx, user?.id]);
-  const { docs, error, setSortByField } = useCollectionPaginated(
-    'listings',
-    20,
-    c
-  );
+  }, [idx]);
+  const { docs, error, setSortByField } = useCollectionPaginated('users', 5, c);
 
   return (
     <DashboardLayout2>
       <div className='layout flex h-screen flex-col gap-6'>
         <div className='flex items-start justify-between'>
           <div>
-            <div className='text-3xl font-extrabold'>Submission</div>
+            <div className='text-3xl font-extrabold'>Users</div>
             <div className='font-light text-[#819289]'>
-              Stay up to date with submissions made on the platform
+              Manage all types of users and create sub admins to enable you
+              manage data better
             </div>
           </div>
           <Button onClick={() => router.push('/admin/submissions/create')}>
-            Add New Submission
+            Add New User
           </Button>
         </div>
         <TabBar
           currentIdx={idx}
           onChange={setIdx}
           items={[
-            { label: `My Submissions (${mySubmissionsCount})` },
-            { label: `All Submissions (${allSubmissionsCount})` },
-            { label: 'Missing and Found (0)' },
+            { label: `General Users (${0})` },
+            { label: `Admins (${0})` },
+            { label: 'Managers (0)' },
+            { label: `Volunteers (${0})` },
           ]}
         />
         {error && (
@@ -202,27 +171,27 @@ export default AuthGuardHOC(() => {
               });
             }}
             columns={tableColumns}
-            data={docs?.map((doc) => ({ _id: doc.id, ...doc.data() })) ?? []}
+            data={docs?.map((doc) => ({ id: doc.id, ...doc.data() })) ?? []}
           />
         </div>
       </div>
     </DashboardLayout2>
   );
-}, ['admin']);
+});
 
-function DeleteMenuItem({ submission }: { submission: Listing }) {
-  const m = useContext(GeneralModalContext);
-  return (
-    <MenuItem
-      onClick={() => {
-        m?.setContent(<DeleteSubmissionView submission={submission} />);
-        m?.setIsOpen(true);
-      }}
-    >
-      <div className='flex gap-2 text-red-500'>
-        <FaTrashAlt />
-        <div>Delete</div>
-      </div>
-    </MenuItem>
-  );
-}
+// function DeleteMenuItem({ submission }: { submission: Listing }) {
+//   const m = useContext(GeneralModalContext);
+//   return (
+//     <MenuItem
+//       onClick={() => {
+//         m?.setContent(<DeleteSubmissionView submission={submission} />);
+//         m?.setIsOpen(true);
+//       }}
+//     >
+//       <div className='flex gap-2 text-red-500'>
+//         <FaTrashAlt />
+//         <div>Delete</div>
+//       </div>
+//     </MenuItem>
+//   );
+// }
