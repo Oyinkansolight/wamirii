@@ -62,7 +62,7 @@ export default function AgeSubmissionsChart() {
   return (
     <div className='relative rounded-lg border p-4'>
       <div className='text-xl font-bold'>Age Range of Missing Persons</div>
-      <div className='relative'>
+      <div className='relative overflow-hidden overflow-x-scroll'>
         <Bar
           enableGridY={false}
           keys={['male', 'female']}
@@ -85,7 +85,7 @@ export default function AgeSubmissionsChart() {
               anchor: 'bottom-right',
               direction: 'column',
               justify: false,
-              translateX: 120,
+              translateX: 80,
               translateY: 0,
               itemsSpacing: 2,
               itemWidth: 100,

@@ -76,7 +76,7 @@ export default function MissingPersonsCards() {
     },
   ];
   return (
-    <div className='flex justify-between gap-6'>
+    <div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4'>
       {Array(4)
         .fill(0)
         .map((v, i) => (

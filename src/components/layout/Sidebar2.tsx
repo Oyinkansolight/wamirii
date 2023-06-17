@@ -51,7 +51,7 @@ const Sidebar = () => {
 
   const { size } = useResponsive(breakpoints);
   return (
-    <Bar backgroundColor='#F5FDF8' defaultCollapsed={size === 'xs'}>
+    <Bar backgroundColor='#F5FDF8' defaultCollapsed={size !== 'md'}>
       <Link href='/'>
         <Image
           width={70}
