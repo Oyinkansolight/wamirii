@@ -22,7 +22,7 @@ export default function RegisteredUsersChart() {
   return (
     <div className='rounded-lg border p-4'>
       <div className='text-xl font-bold'>Registered Users</div>
-      <div className='relative'>
+      <div className='relative flex items-center justify-center'>
         <div className='absolute inset-0 flex items-center justify-center text-center'>
           <div>
             <div className='text-sm text-[#819289]'>Total No Of Users</div>

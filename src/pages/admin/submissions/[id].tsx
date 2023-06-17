@@ -285,7 +285,7 @@ export default AuthGuardHOC(() => {
             </div>
           </div>
         )}
-        <div className='flex items-start justify-between'>
+        <div className='flex flex-col items-start justify-between gap-4 xl:flex-row'>
           <div>
             <div
               onClick={() => router.back()}
@@ -294,7 +294,9 @@ export default AuthGuardHOC(() => {
               <IoCaretBackOutline className='text-[#819289]' />
               <div>Back</div>
             </div>
-            <div className='text-3xl font-extrabold'>View Submission</div>
+            <div className='text-2xl font-extrabold md:text-3xl'>
+              View Submission
+            </div>
           </div>
           {isEditing ? (
             <Button type='submit'>Submit</Button>
@@ -318,9 +320,11 @@ export default AuthGuardHOC(() => {
             </div>
           )}
         </div>
-        <div className='flex gap-4'>
+        <div className='flex flex-col gap-4 xl:flex-row'>
           <div className='flex-1 rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4'>
-            <div className='text-xl font-bold'>Missing Person Information</div>
+            <div className='text-lg font-bold lg:text-xl'>
+              Missing Person Information
+            </div>
             <div className='py-6'>
               <Controller
                 name='missingImageUrl'
@@ -333,13 +337,13 @@ export default AuthGuardHOC(() => {
                 )}
               />
             </div>
-            <div className='grid grid-cols-2 gap-x-10 gap-y-6'>
+            <div className='grid grid-cols-1 gap-x-10 gap-y-6 lg:grid-cols-2'>
               {missingPersonInputProps.map((v, i) => (
                 <div
                   className={clsxm([
-                    'min-w-[15rem] flex-1',
+                    'w-full flex-1 lg:min-w-[15rem]',
                     v.name === 'missingMoreInformation' &&
-                      'col-span-2  flex-initial',
+                      'flex-initial  lg:col-span-2',
                   ])}
                   key={i}
                 >
@@ -432,7 +436,7 @@ export default AuthGuardHOC(() => {
               ))}
             </div>
           </div>
-          <div className='w-full max-w-sm rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4'>
+          <div className='w-full rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4 xl:max-w-sm'>
             <div className='text-xl font-bold'>
               Contact Information{' '}
               <span className='text-[#819289]'>(If Found)</span>

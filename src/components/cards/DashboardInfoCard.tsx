@@ -47,7 +47,7 @@ export default function DashboardInfoCard({
   return (
     <div
       className={clsxm(
-        'flex h-[120px] w-[255px] flex-col items-center justify-center rounded-lg',
+        'flex h-[120px] w-full flex-col items-center justify-center rounded-lg xl:max-w-[255px]',
         use.cardClassName
       )}
     >

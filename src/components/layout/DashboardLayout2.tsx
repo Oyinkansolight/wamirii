@@ -9,7 +9,7 @@ const DashboardLayout2 = ({ children }: { children: React.ReactNode }) => (
       <Sidebar2 />
       <div className='flex flex-1 flex-col overflow-x-hidden'>
         <DashboardHeader />
-        <main className='flex-1 overflow-y-auto overflow-x-hidden px-4'>
+        <main className='mb-10 flex-1 overflow-y-auto overflow-x-hidden px-4'>
           {children}
         </main>
       </div>

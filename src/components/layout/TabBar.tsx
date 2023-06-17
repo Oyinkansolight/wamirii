@@ -10,7 +10,7 @@ export default function TabBar({
   onChange: (idx: number) => void;
 }) {
   return (
-    <div className='flex'>
+    <div className='flex overflow-hidden overflow-x-scroll'>
       {items.map((v, i) => (
         <div
           key={i}
