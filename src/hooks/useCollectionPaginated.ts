@@ -103,6 +103,6 @@ export function useCollectionPaginated(
     setSortByField,
     hasNextPage,
     hasPreviousPage,
-    pageNumber: cursors.length,
+    pageNumber: cursors.length + 1,
   };
 }

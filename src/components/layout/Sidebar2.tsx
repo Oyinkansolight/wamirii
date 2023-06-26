@@ -25,7 +25,7 @@ const NavItems = [
   {
     icon: <HiUsers className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Users',
-    link: '#',
+    link: '/admin/users',
   },
   {
     icon: <BsFillBuildingsFill className='h-6 w-6 md:h-auto md:w-auto' />,
