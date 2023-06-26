@@ -76,7 +76,7 @@ export default function GenderSubmissionsChart() {
   }, []);
 
   return (
-    <div className='relative flex-1 rounded-lg border p-4'>
+    <div className='relative flex-1 overflow-hidden overflow-x-scroll rounded-lg border p-4'>
       <div className='text-xl font-bold'>Submissions</div>
       <div className='relative'>
         <Bar
@@ -101,7 +101,7 @@ export default function GenderSubmissionsChart() {
               anchor: 'bottom-right',
               direction: 'column',
               justify: false,
-              translateX: 120,
+              translateX: 100,
               translateY: 0,
               itemsSpacing: 2,
               itemWidth: 100,

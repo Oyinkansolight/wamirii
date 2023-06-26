@@ -35,16 +35,16 @@ export default AuthGuardHOC(() => {
           </div>
         </div>
         <MissingPersonsCards />
-        <div className='flex justify-between gap-6'>
+        <div className='flex flex-col justify-between gap-6 xl:flex-row'>
           <RegisteredUsersChart />
           <GenderSubmissionsChart />
         </div>
         <AgeSubmissionsChart />
-        <div className='grid grid-cols-5 justify-between gap-6'>
-          <div className='col-span-3'>
+        <div className='grid grid-cols-1 justify-between gap-6 lg:grid-cols-5'>
+          <div className='lg:col-span-3'>
             <RecentSubmissionsTable />
           </div>
-          <div className='col-span-2'>
+          <div className='lg:col-span-2'>
             <RecentUsersTable />
           </div>
         </div>

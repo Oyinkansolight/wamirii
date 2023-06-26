@@ -50,7 +50,7 @@ export default function ImagePicker({
           </div>
         )}
         {(initialImage || fileUrl) && (
-          <div className='absolute inset-0 flex h-full items-center justify-center gap-4 bg-[#00000074]'>
+          <div className='absolute inset-0 flex h-full flex-col items-center justify-center gap-4 bg-[#00000074] md:flex-row'>
             {actions}
           </div>
         )}
