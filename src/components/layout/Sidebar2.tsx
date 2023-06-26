@@ -30,12 +30,12 @@ const NavItems = [
   {
     icon: <BsFillBuildingsFill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Organization',
-    link: '#',
+    link: '/admin/organizations',
   },
   {
     icon: <RiSettings4Fill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Settings',
-    link: '#',
+    link: '/admin/settings',
   },
   {
     icon: <RiDashboardFill className='h-6 w-6 md:h-auto md:w-auto' />,
@@ -51,7 +51,11 @@ const Sidebar = () => {
 
   const { size } = useResponsive(breakpoints);
   return (
-    <Bar backgroundColor='#F5FDF8' defaultCollapsed={size !== 'md'}>
+    <Bar
+      className='flex flex-col'
+      backgroundColor='#F5FDF8'
+      defaultCollapsed={size !== 'md'}
+    >
       <Link href='/'>
         <Image
           width={70}

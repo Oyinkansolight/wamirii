@@ -151,7 +151,48 @@ const allInputs: Record<
       },
     },
   ],
-  organization: [],
+  organization: [
+    {
+      placeholder: '',
+      title: 'Organization Name',
+      name: 'username',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
+    },
+    {
+      placeholder: '',
+      title: 'Acronym',
+      name: 'acronym',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
+    },
+    {
+      placeholder: '',
+      title: 'Email',
+      name: 'email',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
+    },
+    {
+      placeholder: '',
+      title: 'Password',
+      name: 'password',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
+    },
+  ],
   volunteer: [],
 };
 

@@ -96,7 +96,8 @@ export class FirestoreService {
   }
 
   static async updateUserDocument(user: User) {
-    if (user?.imageURL) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (user?.imageURL && (user?.imageURL as any) instanceof FileList) {
       const f = user.imageURL as unknown as FileList;
       if (f.length > 0) {
         const r = await StorageService.uploadFile(
