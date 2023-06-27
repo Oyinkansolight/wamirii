@@ -4,6 +4,7 @@ import { Select, TextInput } from 'flowbite-react';
 import Image from 'next/image';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
+import { BiEdit } from 'react-icons/bi';
 import { BsFillEyeFill } from 'react-icons/bs';
 import { ImInfo } from 'react-icons/im';
 import { SlOptions } from 'react-icons/sl';
@@ -19,12 +20,11 @@ import TableSearchInput from '@/components/inputs/table-search-input';
 import DashboardLayout2 from '@/components/layout/DashboardLayout2';
 import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import CreateUserView from '@/components/modal-views/CreateUserView';
-import { EditUserMenuItem } from '@/components/users/MenuItems';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
-import { Role as R, User } from '@/types/user';
+import { Role as R, Role, User } from '@/types/user';
 
 const tableColumns: TableColumn<User>[] = [
   {
@@ -228,5 +228,30 @@ function TotalVolunteers({ count }: { count: number }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function EditUserMenuItem({ user, role }: { user?: User; role: Role }) {
+  const g = useContext(GeneralModalContext);
+  return (
+    <MenuItem
+      onClick={() => {
+        if (g) {
+          g.setContent(
+            <CreateUserView
+              onClose={() => g.setIsOpen(false)}
+              role={role}
+              userToEdit={user}
+            />
+          );
+          g.setIsOpen(true);
+        }
+      }}
+    >
+      <div className='flex gap-2'>
+        <BiEdit />
+        <div>Edit</div>
+      </div>
+    </MenuItem>
   );
 }
