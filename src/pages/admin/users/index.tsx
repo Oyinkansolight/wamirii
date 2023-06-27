@@ -3,7 +3,6 @@ import { QueryConstraint } from 'firebase/firestore';
 import { Select, TextInput } from 'flowbite-react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { BiEdit } from 'react-icons/bi';
 import { BsFillEyeFill } from 'react-icons/bs';
 import { ImInfo } from 'react-icons/im';
 import { SlOptions } from 'react-icons/sl';
@@ -21,6 +20,7 @@ import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import TabBar from '@/components/layout/TabBar';
 import CreateUserView from '@/components/modal-views/CreateUserView';
 import Role from '@/components/profile/Role';
+import { EditUserMenuItem } from '@/components/users/MenuItems';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
@@ -78,12 +78,7 @@ const tableColumns: TableColumn<User>[] = [
             <div>View</div>
           </div>
         </MenuItem>
-        <MenuItem>
-          <div className='flex gap-2'>
-            <BiEdit />
-            <div>Edit</div>
-          </div>
-        </MenuItem>
+        <EditUserMenuItem role={row.role ?? 'user'} user={row} />
         {/* <DeleteMenuItem submission={row} /> */}
       </Menu>
     ),
