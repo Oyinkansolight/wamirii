@@ -3,16 +3,20 @@ import { createAvatar } from '@dicebear/core';
 import Image from 'next/image';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
 
+import clsxm from '@/lib/clsxm';
+
 import { StorageService } from '@/firebase/storage/storage-service';
 
 import { User } from '@/types/user';
 
 export default function ProfilePicture({
   user,
+  className,
   size = 50,
 }: {
   user?: User | null;
   size?: number;
+  className?: string;
 }) {
   // eslint-disable-next-line unused-imports/no-unused-vars
   const [url, loading, error] = useDownloadURL(
@@ -32,7 +36,10 @@ export default function ProfilePicture({
       ) : (
         <Image
           fill
-          className='overflow-hidden rounded-full object-cover'
+          className={clsxm(
+            'overflow-hidden rounded-full object-cover',
+            className
+          )}
           src={
             url ??
             `data:image/svg+xml;utf8,${encodeURIComponent(avatar.toString())}`

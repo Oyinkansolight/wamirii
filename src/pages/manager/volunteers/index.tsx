@@ -19,6 +19,7 @@ import Pagination from '@/components/buttons/Pagination';
 import TableSearchInput from '@/components/inputs/table-search-input';
 import DashboardLayout2 from '@/components/layout/DashboardLayout2';
 import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
+import { UserContext } from '@/components/layout/GetAuthStatus';
 import CreateUserView from '@/components/modal-views/CreateUserView';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -85,27 +86,35 @@ const tableColumns: TableColumn<User>[] = [
 ];
 
 export default AuthGuardHOC(() => {
-  // const user = useContext(UserContext);
+  const user = useContext(UserContext);
   const [usersCount, setUsersCount] = useState({
     volunteer: 0,
   });
 
   useEffect(() => {
     const a = async () => {
-      const volunteer = (
-        await FirestoreService.getUserCountWhere({ role: 'volunteer' })
-      ).data().count;
-      setUsersCount({ volunteer });
+      if (user?.organizationId) {
+        const volunteer = (
+          await FirestoreService.getUserCountWhere({
+            role: 'volunteer',
+            organizationId: user?.organizationId,
+          })
+        ).data().count;
+        setUsersCount({ volunteer });
+      }
     };
     a();
-  }, []);
+  }, [user?.organizationId]);
 
   const c = useMemo(() => {
     const constraints: QueryConstraint[][] = [
-      FirestoreService.getUsersConstraints({ role: 'volunteer' }),
+      FirestoreService.getUsersConstraints({
+        role: 'volunteer',
+        organizationId: user?.organizationId,
+      }),
     ];
     return constraints[0];
-  }, []);
+  }, [user?.organizationId]);
   const {
     docs,
     error,
