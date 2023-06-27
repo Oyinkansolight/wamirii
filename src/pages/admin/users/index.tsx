@@ -69,7 +69,7 @@ const tableColumns: TableColumn<User>[] = [
         <MenuItem
           onClick={() => {
             if (window.location) {
-              window.location.href = `/admin/submissions/${row.id}`;
+              // window.location.href = `/admin/submissions/${row.id}`;
             }
           }}
         >
