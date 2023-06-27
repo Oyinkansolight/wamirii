@@ -16,32 +16,49 @@ const NavItems = [
     icon: <RiDashboardFill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Dashboard',
     link: '/admin',
+    roles: ['admin'],
   },
   {
     icon: <FaFileAlt className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Submissions',
     link: '/admin/submissions',
+    roles: ['admin'],
   },
   {
     icon: <HiUsers className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Users',
     link: '/admin/users',
+    roles: ['admin'],
   },
   {
     icon: <BsFillBuildingsFill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Organization',
     link: '/admin/organizations',
+    roles: ['admin'],
+  },
+  {
+    icon: <RiDashboardFill className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Dashboard',
+    link: '/manager',
+    roles: ['manager'],
+  },
+  {
+    icon: <FaFileAlt className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Submissions',
+    link: '/manager/submissions',
+    roles: ['manager'],
+  },
+  {
+    icon: <HiUsers className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Volunteers',
+    link: '/manager/volunteers',
+    roles: ['manager'],
   },
   {
     icon: <RiSettings4Fill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Settings',
     link: '/admin/settings',
-  },
-  {
-    icon: <RiDashboardFill className='h-6 w-6 md:h-auto md:w-auto' />,
-    label: 'Dashboard',
-    link: '#',
-    roles: [''],
+    roles: ['admin', 'manager'],
   },
 ];
 const breakpoints = { xs: 0, sm: 480, md: 1024 };

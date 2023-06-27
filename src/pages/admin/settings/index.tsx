@@ -57,7 +57,7 @@ export default AuthGuardHOC(() => {
       </div>
     </DashboardLayout2>
   );
-}, ['admin']);
+}, ['admin', 'manager']);
 
 function ProfileInformation() {
   const user = useContext(UserContext);

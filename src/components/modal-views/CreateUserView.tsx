@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { TextInput, TextInputProps } from 'flowbite-react';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Controller,
   FieldValues,
@@ -15,7 +15,10 @@ import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
 import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
+import { UserContext } from '@/components/layout/GetAuthStatus';
 import OrganizationSelector from '@/components/selectors/OrganizationSelector';
+
+import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
 import { Role, User } from '@/types/user';
 
@@ -60,6 +63,7 @@ const allInputs: Record<
       placeholder: '',
       title: 'Password',
       name: 'password',
+      type: 'password',
       options: {
         validate: {
           notEmpty: (v) => v !== '' || 'This field must not be empty',
@@ -102,6 +106,7 @@ const allInputs: Record<
       placeholder: '',
       title: 'Password',
       name: 'password',
+      type: 'password',
       options: {
         validate: {
           notEmpty: (v) => v !== '' || 'This field must not be empty',
@@ -144,6 +149,7 @@ const allInputs: Record<
       placeholder: '',
       title: 'Password',
       name: 'password',
+      type: 'password',
       options: {
         validate: {
           notEmpty: (v) => v !== '' || 'This field must not be empty',
@@ -186,6 +192,7 @@ const allInputs: Record<
       placeholder: '',
       title: 'Password',
       name: 'password',
+      type: 'password',
       options: {
         validate: {
           notEmpty: (v) => v !== '' || 'This field must not be empty',
@@ -193,20 +200,68 @@ const allInputs: Record<
       },
     },
   ],
-  volunteer: [],
+  volunteer: [
+    {
+      placeholder: '',
+      title: 'Full Name',
+      name: 'username',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
+    },
+    {
+      placeholder: '',
+      title: 'Email Address',
+      name: 'email',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
+    },
+    {
+      placeholder: '',
+      title: 'Organization',
+      name: 'organizationId',
+      disabled: true,
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
+    },
+    {
+      placeholder: '',
+      title: 'Password',
+      name: 'password',
+      type: 'password',
+      options: {
+        validate: {
+          notEmpty: (v) => v !== '' || 'This field must not be empty',
+        },
+      },
+    },
+  ],
 };
 
 export default function CreateUserView({
   role,
   onClose,
+  userToEdit,
 }: {
   role: Role;
   onClose?: () => void;
+  userToEdit?: User;
 }) {
+  const user = useContext(UserContext);
+
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm({ mode: 'onChange' });
 
@@ -214,16 +269,37 @@ export default function CreateUserView({
 
   const g = useContext(GeneralModalContext);
 
+  useEffect(() => {
+    if (user) {
+      setValue('organizationId', user.organizationId);
+    }
+  }, [setValue, user]);
+
+  useEffect(() => {
+    if (userToEdit) {
+      const k = Object.keys(userToEdit) as (keyof User)[];
+      for (let i = 0; i < k.length; i++) {
+        const key = k[i];
+        setValue(key, userToEdit[key]);
+      }
+    }
+  }, [userToEdit, setValue]);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
-      const f = httpsCallable(getFunctions(), 'createUser', {});
-      const r = await f({ ...data, role });
-      if ((r.data as any)?.errorInfo?.message) {
-        toast((r.data as any).errorInfo.message, { type: 'error' });
+      if (userToEdit) {
+        delete data.password;
+        await FirestoreService.updateUserDocument(data);
       } else {
-        g?.success(`${role} created successfully`);
+        const f = httpsCallable(getFunctions(), 'createUser', {});
+        const r = await f({ ...data, role });
+        if ((r.data as any)?.errorInfo?.message) {
+          toast((r.data as any).errorInfo.message, { type: 'error' });
+        } else {
+          g?.success(`${role} created successfully`);
+        }
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -237,9 +313,13 @@ export default function CreateUserView({
     <form onSubmit={handleSubmit(onSubmit)} className='text-start'>
       <div className='flex items-start justify-between'>
         <div>
-          <div className='text-xl font-bold'>Add New {role}</div>
+          <div className='text-xl font-bold'>
+            {userToEdit ? `Edit ${role} Information` : `Add New ${role}`}
+          </div>
           <div className='max-w-[18rem] font-extralight'>
-            Complete the form below to add a new {role} to the platform.
+            {userToEdit
+              ? `Edit the information below to add a edit ${role} information.`
+              : `Complete the form below to add a new ${role} to the platform.`}
           </div>
         </div>
         <div
@@ -264,7 +344,7 @@ export default function CreateUserView({
               className={clsxm(
                 v.name &&
                   errors[v.name as keyof User]?.message &&
-                  ' text-red-500 focus:outline-none'
+                  'text-red-500 focus:outline-none'
               )}
             >
               {v.title}
@@ -272,14 +352,19 @@ export default function CreateUserView({
             {v.name === 'organizationId' ? (
               <Controller
                 control={control}
-                render={({ field }) => <OrganizationSelector {...field} />}
+                render={({ field }) => (
+                  <OrganizationSelector {...field} disabled={v.disabled} />
+                )}
                 name={v.name}
               />
             ) : (
               <TextInput
                 id={v.name}
                 type={v.type}
-                disabled={v.disabled}
+                disabled={
+                  v.disabled ||
+                  (v.type === 'password' && typeof userToEdit !== 'undefined')
+                }
                 placeholder={v.placeholder}
                 {...register((v.name ?? `${i}`) as keyof User, v.options)}
               />
@@ -298,7 +383,7 @@ export default function CreateUserView({
         className='w-full justify-center py-3 capitalize'
         type='submit'
       >
-        {isSubmitting ? 'Loading' : `Add ${role}`}
+        {isSubmitting ? 'Loading' : userToEdit ? `Edit ${role}` : `Add ${role}`}
       </Button>
     </form>
   );

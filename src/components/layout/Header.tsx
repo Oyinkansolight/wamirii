@@ -65,7 +65,13 @@ const Nav = () => {
             <div
               className='hidden cursor-pointer items-center gap-x-4 lg:flex'
               onClick={() =>
-                router.push(user?.role === 'admin' ? '/admin' : '/home')
+                router.push(
+                  user?.role === 'admin'
+                    ? '/admin'
+                    : user?.role === 'manager'
+                    ? '/manager'
+                    : '/home'
+                )
               }
             >
               <ProfilePicture user={user} />
@@ -76,7 +82,13 @@ const Nav = () => {
 
             <div className='ml-4 hidden md:block'>
               <Link
-                href={user?.role === 'admin' ? '/admin' : '/home'}
+                href={
+                  user?.role === 'admin'
+                    ? '/admin'
+                    : user?.role === 'manager'
+                    ? '/manager'
+                    : '/home'
+                }
                 aria-label='Dashboard'
                 title='Dashboard'
                 className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
