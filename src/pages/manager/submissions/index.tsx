@@ -90,7 +90,7 @@ const tableColumns: TableColumn<Listing>[] = [
         <MenuItem
           onClick={() => {
             if (window.location) {
-              window.location.href = `/admin/submissions/${row._id}`;
+              window.location.href = `/manage-submissions/${row._id}`;
             }
           }}
         >
@@ -102,7 +102,7 @@ const tableColumns: TableColumn<Listing>[] = [
         <MenuItem
           onClick={() => {
             if (window.location) {
-              window.location.href = `/admin/submissions/${row._id}?mode=edit`;
+              window.location.href = `/manage-submissions/${row._id}?mode=edit`;
             }
           }}
         >
@@ -159,7 +159,7 @@ export default AuthGuardHOC(() => {
               Stay up to date with submissions made on the platform
             </div>
           </div>
-          <Button onClick={() => router.push('/admin/submissions/create')}>
+          <Button onClick={() => router.push('/manage-submissions/create')}>
             Add New Submission
           </Button>
         </div>

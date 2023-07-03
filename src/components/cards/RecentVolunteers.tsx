@@ -47,14 +47,22 @@ export default AuthGuardHOC(() => {
   const { docs } = useCollectionPaginated('users', 10, c);
 
   return (
-    <div className='rounded-lg border border-dashed p-4'>
+    <div className='rounded-lg border border-dashed bg-[#EDF3F0] p-4'>
       <div className='flex items-center justify-between'>
         <div className='font-bold'>Recent Volunteers</div>
         <Link href='/manager/volunteers'>
-          <Button variant='ghost'>View All</Button>
+          <Button variant='outline'>View All</Button>
         </Link>
       </div>
+      <div className='h-6' />
       <DataTable
+        customStyles={{
+          table: { style: { backgroundColor: '#FFFFFF66' } },
+          rows: { style: { backgroundColor: '#00000000' } },
+          headRow: {
+            style: { backgroundColor: '#00000000', color: '#819289' },
+          },
+        }}
         columns={tableColumns}
         data={docs?.map((doc) => ({ id: doc.id, ...doc.data() })) ?? []}
       />
