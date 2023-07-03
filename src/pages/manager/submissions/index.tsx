@@ -99,7 +99,13 @@ const tableColumns: TableColumn<Listing>[] = [
             <div>View</div>
           </div>
         </MenuItem>
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            if (window.location) {
+              window.location.href = `/admin/submissions/${row._id}?mode=edit`;
+            }
+          }}
+        >
           <div className='flex gap-2'>
             <BiEdit />
             <div>Edit</div>

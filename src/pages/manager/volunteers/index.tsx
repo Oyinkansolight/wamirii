@@ -170,13 +170,10 @@ export default AuthGuardHOC(() => {
             <div className='flex-1'>
               <TableSearchInput />
             </div>
-            <Select>
-              <option>Select Gender</option>
-            </Select>
-            <Select>
-              <option>Last Location</option>
-            </Select>
             <TextInput type='date' />
+            <Select>
+              <option>Total Submissions</option>
+            </Select>
           </div>
           <DataTable
             sortServer

@@ -180,10 +180,7 @@ export default AuthGuardHOC(() => {
               <TableSearchInput />
             </div>
             <Select>
-              <option>Select Gender</option>
-            </Select>
-            <Select>
-              <option>Last Location</option>
+              <option>Status</option>
             </Select>
             <TextInput type='date' />
           </div>

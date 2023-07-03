@@ -6,6 +6,7 @@ import { useResponsive } from 'react-hooks-responsive';
 import { BsFillBuildingsFill } from 'react-icons/bs';
 import { FaFileAlt } from 'react-icons/fa';
 import { HiUsers } from 'react-icons/hi';
+import { IoLogOut } from 'react-icons/io5';
 import { RiDashboardFill, RiSettings4Fill } from 'react-icons/ri';
 import { Menu, menuClasses, MenuItem, Sidebar as Bar } from 'react-pro-sidebar';
 
@@ -60,6 +61,11 @@ const NavItems = [
     link: '/admin/settings',
     roles: ['admin', 'manager'],
   },
+  {
+    icon: <IoLogOut className='h-6 w-6 rotate-180 md:h-auto md:w-auto' />,
+    label: 'Logout',
+    link: '/logout',
+  },
 ];
 const breakpoints = { xs: 0, sm: 480, md: 1024 };
 const Sidebar = () => {
@@ -87,28 +93,6 @@ const Sidebar = () => {
           {NavItems.filter(
             (v) => !v.roles || v.roles.includes(user?.role ?? 'null')
           ).map((m, i) => {
-            // if (m.children) {
-            //   // return (
-            //   //   <SubMenu defaultOpen key={i} label={m.label} icon={m.icon}>
-            //   //     {m.children.map((sub, j) => (
-            //   //       <MenuItem
-            //   //         active={router.pathname === sub.link}
-            //   //         className={clsxm(
-            //   //           'hover:bg-black',
-            //   //           router.pathname === sub.link
-            //   //             ? 'bg-gray-400 '
-            //   //             : 'text-black'
-            //   //         )}
-            //   //         key={j}
-            //   //         icon={sub.icon}
-            //   //         component={<Link href={sub.link ?? '#'} />}
-            //   //       >
-            //   //         {sub.label}
-            //   //       </MenuItem>
-            //   //     ))}
-            //   //   </SubMenu>
-            //   // );
-            // } else {
             const isActive = router.pathname === m.link;
             return (
               <MenuItem

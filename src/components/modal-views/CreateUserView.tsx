@@ -313,9 +313,10 @@ export default function CreateUserView({
     <form onSubmit={handleSubmit(onSubmit)} className='text-start'>
       <div className='flex items-start justify-between'>
         <div>
-          <div className='text-xl font-bold'>
+          <div className='text-2xl font-bold'>
             {userToEdit ? `Edit ${role} Information` : `Add New ${role}`}
           </div>
+          <div className='h-4' />
           <div className='max-w-[18rem] font-extralight'>
             {userToEdit
               ? `Edit the information below to add a edit ${role} information.`
@@ -330,7 +331,7 @@ export default function CreateUserView({
         </div>
       </div>
       <div className='h-10' />
-      <div className='flex flex-wrap justify-between gap-x-2 gap-y-4'>
+      <div className='flex flex-wrap justify-between gap-x-2 gap-y-6'>
         {allInputs[role].map((v, i) => (
           <div
             className={clsxm([
@@ -349,6 +350,7 @@ export default function CreateUserView({
             >
               {v.title}
             </label>
+            <div className='h-2' />
             {v.name === 'organizationId' ? (
               <Controller
                 control={control}
