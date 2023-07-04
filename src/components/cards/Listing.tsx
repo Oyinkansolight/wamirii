@@ -42,21 +42,8 @@ const ListingCard = ({
     // fontFamily: ['Arial'],
   });
 
-  // const Reporter = GetDocumentHOC(
-  //   (props) => (
-  //     <p className='mb-2 text-xs text-gray-700'>
-  //       Reported By: {props?.doc.username}
-  //     </p>
-  //   ),
-  //   `users/${listing?.createdBy}`
-  // );
-
   return (
     <div className='relative w-full overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
-      {/* <div className='absolute top-2 right-2 flex justify-center rounded-lg text-xs'>
-        <Status status={listing?.status ?? 'active'} />
-      </div> */}
-
       <div className='h-full w-full'>
         <div
           style={{ aspectRatio: 2, position: 'relative' }}

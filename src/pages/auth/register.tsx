@@ -26,6 +26,9 @@ export default function LoginPage() {
         }
         if (user.role === 'manager') {
           router.push('/manager');
+        }
+        if (user.role === 'volunteer') {
+          router.push('/volunteer');
         } else {
           router.push('/home');
         }

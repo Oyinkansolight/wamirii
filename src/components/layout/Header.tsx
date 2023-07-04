@@ -70,6 +70,8 @@ const Nav = () => {
                     ? '/admin'
                     : user?.role === 'manager'
                     ? '/manager'
+                    : user?.role === 'volunteer'
+                    ? '/volunteer'
                     : '/home'
                 )
               }
@@ -87,6 +89,8 @@ const Nav = () => {
                     ? '/admin'
                     : user?.role === 'manager'
                     ? '/manager'
+                    : user?.role === 'volunteer'
+                    ? '/volunteer'
                     : '/home'
                 }
                 aria-label='Dashboard'

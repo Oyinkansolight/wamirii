@@ -2,11 +2,13 @@ import { createContext, useCallback, useState } from 'react';
 
 import ActionFailedView from '@/components/modal-views/ActionFailed';
 import ActionSuccessView from '@/components/modal-views/ActionSuccess';
-import GeneralModal from '@/components/modals/GeneralModal';
+import GeneralModal, {
+  BasicModalProps,
+} from '@/components/modals/GeneralModal';
 
 export const GeneralModalContext = createContext<{
   setIsOpen: (value: boolean) => void;
-  setContent: (value: JSX.Element) => void;
+  setContent: (value: JSX.Element, size?: BasicModalProps['size']) => void;
   error: (tryAgain: () => void, errMsg: string) => void;
   success: (msg: string) => void;
 } | null>(null);
@@ -17,6 +19,7 @@ export default function GeneralModalLayout({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [content, setContent] = useState<JSX.Element>(<div></div>);
+  const [size, setSize] = useState<BasicModalProps['size']>('md');
 
   const error = useCallback((tryAgain: () => void, errMsg: string) => {
     setContent(
@@ -39,10 +42,19 @@ export default function GeneralModalLayout({
   }, []);
   return (
     <GeneralModalContext.Provider
-      value={{ setIsOpen, setContent, error, success }}
+      value={{
+        setIsOpen,
+        setContent: (v, size) => {
+          if (size) setSize(size);
+          else setSize('md');
+          setContent(v);
+        },
+        error,
+        success,
+      }}
     >
       {children}
-      <GeneralModal setIsOpen={setIsOpen} isOpen={isOpen}>
+      <GeneralModal size={size} setIsOpen={setIsOpen} isOpen={isOpen}>
         {content}
       </GeneralModal>
     </GeneralModalContext.Provider>

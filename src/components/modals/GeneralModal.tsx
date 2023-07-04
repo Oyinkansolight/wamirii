@@ -1,16 +1,20 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
-interface BasicModalProps {
+import clsxm from '@/lib/clsxm';
+
+export interface BasicModalProps {
   children: JSX.Element;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
+  size?: 'md' | 'lg';
 }
 
 export default function GeneralModal({
   children,
   isOpen,
   setIsOpen,
+  size = 'md',
 }: BasicModalProps) {
   function closeModal() {
     setIsOpen(false);
@@ -43,7 +47,12 @@ export default function GeneralModal({
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all'>
+                <Dialog.Panel
+                  className={clsxm(
+                    'w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all',
+                    size === 'lg' ? 'max-w-4xl' : ''
+                  )}
+                >
                   <div className=' flex min-h-[15rem] flex-col'>
                     <div className=' flex flex-col justify-center transition-all delay-1000'>
                       {children}
