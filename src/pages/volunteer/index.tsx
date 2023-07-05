@@ -12,6 +12,7 @@ import SubmissionView from '@/components/cards/SubmissionView';
 import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import VolunteerHeader from '@/components/layout/VolunteerHeader';
+import VolunteerStatistics from '@/components/views/volunteer/VolunteerStatistics';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
@@ -50,9 +51,9 @@ function TabContent({ idx }: { idx: number }) {
   const { docs } = useCollectionPaginated('listings', 20, c);
   return (
     <div>
-      <div className='text-2xl font-extrabold'>{labels[idx]}</div>
+      {idx > 0 && <div className='text-2xl font-extrabold'>{labels[idx]}</div>}
       {idx === 0 ? (
-        <div>Statistics</div>
+        <VolunteerStatistics />
       ) : (
         <div>
           <div className='flex items-center overflow-hidden rounded-lg border'>

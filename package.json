@@ -31,6 +31,8 @@
     "firebase": "^9.18.0",
     "flowbite": "^1.6.4",
     "flowbite-react": "^0.4.2",
+    "highcharts": "^11.1.0",
+    "highcharts-react-official": "^3.2.0",
     "moment": "^2.29.4",
     "next": "^13.2.4",
     "react": "^18.2.0",
