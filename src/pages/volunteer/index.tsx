@@ -12,6 +12,7 @@ import SubmissionView from '@/components/cards/SubmissionView';
 import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import VolunteerHeader from '@/components/layout/VolunteerHeader';
+import SettingsView from '@/components/views/settings/SettingsView';
 import VolunteerStatistics from '@/components/views/volunteer/VolunteerStatistics';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -20,11 +21,15 @@ import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 import Genders from '../../../public/svg/genders.svg';
 
 export default AuthGuardHOC(() => {
-  const [idx, setIdx] = useState(0);
+  const [idx, setIdx] = useState<number>(0);
 
   return (
     <div className='px-24'>
-      <VolunteerHeader idx={idx} setIdx={setIdx} />
+      <VolunteerHeader
+        onProfileClicked={() => setIdx(4)}
+        idx={idx}
+        setIdx={setIdx}
+      />
       <TabContent idx={idx} />
     </div>
   );
@@ -54,6 +59,8 @@ function TabContent({ idx }: { idx: number }) {
       {idx > 0 && <div className='text-2xl font-extrabold'>{labels[idx]}</div>}
       {idx === 0 ? (
         <VolunteerStatistics />
+      ) : idx === 4 ? (
+        <SettingsView />
       ) : (
         <div>
           <div className='flex items-center overflow-hidden rounded-lg border'>

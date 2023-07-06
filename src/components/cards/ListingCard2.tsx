@@ -59,7 +59,7 @@ const ListingCard2 = ({
   return (
     <div
       className={clsxm(
-        'relative overflow-hidden bg-white',
+        'relative cursor-pointer overflow-hidden bg-white',
         size === 'sm' ? 'text-xs' : 'text-base',
         className
       )}

@@ -58,7 +58,7 @@ const NavItems = [
   {
     icon: <RiSettings4Fill className='h-6 w-6 md:h-auto md:w-auto' />,
     label: 'Settings',
-    link: '/admin/settings',
+    link: '/settings',
     roles: ['admin', 'manager'],
   },
   {

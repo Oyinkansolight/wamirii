@@ -6,58 +6,53 @@ import { toast } from 'react-toastify';
 import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
-import DashboardLayout2 from '@/components/layout/DashboardLayout2';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import ProfilePicture from '@/components/profile/ProfilePicture';
 
 import { allStates } from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
-import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
 import { User } from '@/types/user';
 
-export default AuthGuardHOC(() => {
+export default function SettingsView() {
   const [tabIdx, setTabIdx] = useState(0);
-
   return (
-    <DashboardLayout2>
-      <div className='layout flex h-screen flex-col gap-6'>
-        <div>
-          <div className='text-3xl font-extrabold'>Settings</div>
-          <div className='font-light text-[#819289]'>
-            Manage and personalize your account settings and profile here now
-          </div>
-        </div>
-        <div className='flex gap-8'>
-          <div className='flex w-56 flex-col gap-6'>
-            <div
-              className={clsxm(
-                'cursor-pointer rounded-md px-3 py-1.5 text-center',
-                tabIdx === 0 && 'bg-[#EEFDF4] font-bold text-primary'
-              )}
-              onClick={() => setTabIdx(0)}
-            >
-              Profile Information
-            </div>
-            <div
-              className={clsxm(
-                'cursor-pointer rounded-md px-3 py-1.5 text-center',
-                tabIdx === 1 && 'bg-[#EEFDF4] font-bold text-primary'
-              )}
-              onClick={() => setTabIdx(1)}
-            >
-              Password and Security
-            </div>
-          </div>
-          <div className='flex-1'>
-            {tabIdx === 0 && <ProfileInformation />}
-            {tabIdx === 1 && <PasswordAndSecurity />}
-          </div>
+    <div className='layout flex h-screen flex-col gap-6'>
+      <div>
+        <div className='text-3xl font-extrabold'>Settings</div>
+        <div className='font-light text-[#819289]'>
+          Manage and personalize your account settings and profile here now
         </div>
       </div>
-    </DashboardLayout2>
+      <div className='flex gap-8'>
+        <div className='flex w-56 flex-col gap-6'>
+          <div
+            className={clsxm(
+              'cursor-pointer rounded-md px-3 py-1.5 text-center',
+              tabIdx === 0 && 'bg-[#EEFDF4] font-bold text-primary'
+            )}
+            onClick={() => setTabIdx(0)}
+          >
+            Profile Information
+          </div>
+          <div
+            className={clsxm(
+              'cursor-pointer rounded-md px-3 py-1.5 text-center',
+              tabIdx === 1 && 'bg-[#EEFDF4] font-bold text-primary'
+            )}
+            onClick={() => setTabIdx(1)}
+          >
+            Password and Security
+          </div>
+        </div>
+        <div className='flex-1'>
+          {tabIdx === 0 && <ProfileInformation />}
+          {tabIdx === 1 && <PasswordAndSecurity />}
+        </div>
+      </div>
+    </div>
   );
-}, ['admin', 'manager']);
+}
 
 function ProfileInformation() {
   const user = useContext(UserContext);

@@ -16,7 +16,7 @@ const DashboardHeader = () => {
               className='inline-block rounded-full py-2 px-3 hover:bg-gray-200'
               href={
                 user?.role === 'admin' || user?.role === 'manager'
-                  ? '/admin/settings'
+                  ? '/settings'
                   : '/home/profile'
               }
             >
@@ -32,7 +32,7 @@ const DashboardHeader = () => {
                 className='inline-block rounded-full py-2 px-3 hover:bg-gray-200'
                 href={
                   user?.role === 'admin' || user?.role === 'manager'
-                    ? '/admin/settings'
+                    ? '/settings'
                     : '/home/profile'
                 }
               >

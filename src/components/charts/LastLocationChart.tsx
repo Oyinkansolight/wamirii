@@ -1,220 +1,92 @@
 import Highcharts from 'highcharts';
 import HighchartsExporting from 'highcharts/modules/map';
 import HighchartsReact from 'highcharts-react-official';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { allStates } from '@/constant/generic';
+import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
 import Data from './topology.json';
 
-const d1 = [
-  {
-    id: '1',
-    name: 'ABIA',
-  },
-  {
-    id: '2',
-    name: 'ADAMAWA',
-  },
-  {
-    id: '3',
-    name: 'AKWA IBOM',
-  },
-  {
-    id: '4',
-    name: 'ANAMBRA',
-  },
-  {
-    id: '5',
-    name: 'BAUCHI',
-  },
-  {
-    id: '6',
-    name: 'BAYELSA',
-  },
-  {
-    id: '7',
-    name: 'BENUE',
-  },
-  {
-    id: '8',
-    name: 'BORNO',
-  },
-  {
-    id: '9',
-    name: 'CROSS RIVER',
-  },
-  {
-    id: '10',
-    name: 'DELTA',
-  },
-].map((v) => ({ name: `${v.name[0]}${v.name.slice(1).toLocaleLowerCase()}` }));
-
-const d2 = [
-  {
-    id: '11',
-    name: 'EBONYI',
-  },
-  {
-    id: '12',
-    name: 'EDO',
-  },
-  {
-    id: '13',
-    name: 'EKITI',
-  },
-  {
-    id: '14',
-    name: 'ENUGU',
-  },
-  {
-    id: '15',
-    name: 'GOMBE',
-  },
-  {
-    id: '16',
-    name: 'IMO',
-  },
-  {
-    id: '17',
-    name: 'JIGAWA',
-  },
-  {
-    id: '18',
-    name: 'KADUNA',
-  },
-  {
-    id: '19',
-    name: 'KANO',
-  },
-  {
-    id: '20',
-    name: 'KATSINA',
-  },
-].map((v) => ({ name: `${v.name[0]}${v.name.slice(1).toLocaleLowerCase()}` }));
-
-const d3 = [
-  {
-    id: '21',
-    name: 'KEBBI',
-  },
-  {
-    id: '22',
-    name: 'KOGI',
-  },
-  {
-    id: '23',
-    name: 'KWARA',
-  },
-  {
-    id: '24',
-    name: 'LAGOS',
-  },
-  {
-    id: '25',
-    name: 'NASARAWA',
-  },
-  {
-    id: '26',
-    name: 'NIGER',
-  },
-  {
-    id: '27',
-    name: 'OGUN',
-  },
-  {
-    id: '28',
-    name: 'ONDO',
-  },
-  {
-    id: '29',
-    name: 'OSUN',
-  },
-  {
-    id: '30',
-    name: 'OYO',
-  },
-  {
-    id: '31',
-    name: 'PLATEAU',
-  },
-  {
-    id: '32',
-    name: 'RIVERS',
-  },
-  {
-    id: '33',
-    name: 'SOKOTO',
-  },
-  {
-    id: '34',
-    name: 'TARABA',
-  },
-  {
-    id: '35',
-    name: 'YOBE',
-  },
-  {
-    id: '36',
-    name: 'ZAMFARA',
-  },
-  {
-    id: '37',
-    name: 'Federal Capital Territory',
-  },
-].map((v) => ({
-  name:
-    v.name !== 'Federal Capital Territory'
-      ? `${v.name[0]}${v.name.slice(1).toLocaleLowerCase()}`
-      : v.name,
-}));
-
-const options: Highcharts.Options = {
-  title: {
-    text: '',
-  },
-  plotOptions: {
-    map: {
-      allAreas: false,
-      joinBy: ['name', 'name'],
-      dataLabels: {
-        enabled: true,
-        color: '#FFFFFF',
-        style: {
-          fontWeight: 'bold',
+export default function LastLocationChart() {
+  const [low, setLow] = useState<{ name: string }[]>([]);
+  const [mid, setMid] = useState<{ name: string }[]>([]);
+  const [high, setHigh] = useState<{ name: string }[]>([]);
+  const options: Highcharts.Options = {
+    title: {
+      text: '',
+    },
+    plotOptions: {
+      map: {
+        allAreas: false,
+        joinBy: ['name', 'name'],
+        dataLabels: {
+          enabled: true,
+          color: '#FFFFFF',
+          style: {
+            fontWeight: 'bold',
+          },
+        },
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '{point.name}: <b>{series.name}</b>',
         },
       },
-      tooltip: {
-        headerFormat: '',
-        pointFormat: '{point.name}: <b>{series.name}</b>',
+    },
+    chart: { map: Data },
+    series: [
+      {
+        data: high,
+        color: 'red',
+        name: 'High',
+        type: 'map',
+        joinBy: ['name', 'name'],
       },
-    },
-  },
-  chart: { map: Data },
-  series: [
-    {
-      data: d1,
-      color: 'red',
-      name: 'High',
-      type: 'map',
-      joinBy: ['name', 'name'],
-    },
-    {
-      data: d2,
-      color: '#FBBA50',
-      name: 'Medium',
-      type: 'map',
-      joinBy: ['name', 'name'],
-    },
-    {
-      data: d3,
-      color: '#ABCDB7',
-      name: 'Low',
-      type: 'map',
-      joinBy: ['name'],
-    },
-  ],
-};
+      {
+        data: mid,
+        color: '#FBBA50',
+        name: 'Medium',
+        type: 'map',
+        joinBy: ['name', 'name'],
+      },
+      {
+        data: low,
+        color: '#ABCDB7',
+        name: 'Low',
+        type: 'map',
+        joinBy: ['name'],
+      },
+    ],
+  };
 
-export default function LastLocationChart() {
+  useEffect(() => {
+    const run = async () => {
+      const h: { name: string }[] = [];
+      const m: { name: string }[] = [];
+      const l: { name: string }[] = [];
+      await Promise.all(
+        allStates.map(async (v) => {
+          const count = (
+            await FirestoreService.getSubmissionCountWhere({
+              missingLastSeenSate: v.name,
+            })
+          ).data().count;
+          if (count > 10) {
+            h.push(v);
+          } else if (count > 0) {
+            m.push(v);
+          } else {
+            l.push(v);
+          }
+        })
+      );
+      setHigh(h);
+      setMid(m);
+      setLow(l);
+    };
+    run();
+  }, []);
+
   if (typeof Highcharts === 'object') {
     HighchartsExporting(Highcharts);
     return (

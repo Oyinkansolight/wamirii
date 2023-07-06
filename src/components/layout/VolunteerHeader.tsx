@@ -8,9 +8,11 @@ import UserMiniProfile from '@/components/profile/UserMiniProfile';
 export default function VolunteerHeader({
   idx,
   setIdx,
+  onProfileClicked,
 }: {
   idx: number;
   setIdx: (idx: number) => void;
+  onProfileClicked: () => void;
 }) {
   const user = useContext(UserContext);
   return (
@@ -28,7 +30,7 @@ export default function VolunteerHeader({
         onChange={setIdx}
         inactiveItemClassName='border-transparent'
       />
-      <UserMiniProfile user={user} />
+      <UserMiniProfile onClick={onProfileClicked} user={user} />
     </div>
   );
 }
