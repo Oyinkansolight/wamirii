@@ -36,7 +36,7 @@ export class FirestoreService {
       id,
       username,
       email,
-      role: 'volunteer',
+      role: 'user',
       status: 'active',
       createdAt: serverTimestamp(),
     });
@@ -303,6 +303,14 @@ export class FirestoreService {
         ...op.map((v) => where(v.key, v.op, v.value))
       )
     );
+  }
+
+  static async isDocExists(docPath: string) {
+    return (await getDoc(doc(db, docPath))).exists();
+  }
+
+  static async isUserExists(userId: string) {
+    return await this.isDocExists(`users/${userId}`);
   }
 }
 
