@@ -19,7 +19,11 @@ export default function LoginPage() {
   const onSubmit = async (data: any) => {
     setLoading(true);
     try {
-      const u = await AuthService.signUpWithEmail(data.email, data.password);
+      const u = await AuthService.signUpWithEmail(
+        data.email,
+        data.password,
+        data.username
+      );
       FirestoreService.getUserDoc(u.user.uid, (user) => {
         if (user.role === 'admin') {
           router.push('/admin');
@@ -91,6 +95,22 @@ export default function LoginPage() {
             >
               <div>
                 <label
+                  htmlFor='full-name'
+                  className='mb-2 block text-sm font-medium text-gray-900 '
+                >
+                  Your Full Name
+                </label>
+                <input
+                  type='full-name'
+                  {...register('username')}
+                  id='full-name'
+                  className='block w-full rounded border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-primary-600 focus:ring-primary-600       sm:text-sm'
+                  placeholder='First Name Last Name'
+                  required
+                />
+              </div>
+              <div>
+                <label
                   htmlFor='email'
                   className='mb-2 block text-sm font-medium text-gray-900 '
                 >
@@ -129,7 +149,7 @@ export default function LoginPage() {
                   Confirm password
                 </label>
                 <input
-                  type='confirm-password'
+                  type='password'
                   {...register('confirm-password')}
                   id='confirm-password'
                   placeholder='••••••••'
