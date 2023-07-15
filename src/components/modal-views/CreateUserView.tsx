@@ -270,7 +270,7 @@ export default function CreateUserView({
   const g = useContext(GeneralModalContext);
 
   useEffect(() => {
-    if (user) {
+    if (user && user.role === 'manager') {
       setValue('organizationId', user.organizationId);
     }
   }, [setValue, user]);
