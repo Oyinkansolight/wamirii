@@ -70,7 +70,7 @@ const Nav = () => {
                     ? '/admin'
                     : user?.role === 'manager'
                     ? '/manager'
-                    : user?.role === 'volunteer'
+                    : user?.role === 'volunteer' || user?.role === 'user'
                     ? '/volunteer'
                     : '/home'
                 )
@@ -89,7 +89,7 @@ const Nav = () => {
                     ? '/admin'
                     : user?.role === 'manager'
                     ? '/manager'
-                    : user?.role === 'volunteer'
+                    : user?.role === 'volunteer' || user?.role === 'user'
                     ? '/volunteer'
                     : '/home'
                 }

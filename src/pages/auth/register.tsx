@@ -29,7 +29,7 @@ export default function LoginPage() {
           router.push('/admin');
         } else if (user.role === 'manager') {
           router.push('/manager');
-        } else if (user.role === 'volunteer') {
+        } else if (user.role === 'volunteer' || user.role === 'user') {
           router.push('/volunteer');
         } else {
           router.push('/home');
