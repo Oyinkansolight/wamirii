@@ -27,11 +27,9 @@ export default function LoginPage() {
       FirestoreService.getUserDoc(u.user.uid, (user) => {
         if (user.role === 'admin') {
           router.push('/admin');
-        }
-        if (user.role === 'manager') {
+        } else if (user.role === 'manager') {
           router.push('/manager');
-        }
-        if (user.role === 'volunteer') {
+        } else if (user.role === 'volunteer') {
           router.push('/volunteer');
         } else {
           router.push('/home');
