@@ -1,6 +1,17 @@
-import { FileInput, Select, TextInput, TextInputProps } from 'flowbite-react';
+import {
+  Alert,
+  FileInput,
+  Select,
+  TextInput,
+  TextInputProps,
+} from 'flowbite-react';
 import { useContext, useEffect, useState } from 'react';
-import { FieldValues, RegisterOptions, useForm } from 'react-hook-form';
+import {
+  FieldErrors,
+  FieldValues,
+  RegisterOptions,
+  useForm,
+} from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import clsxm from '@/lib/clsxm';
@@ -10,6 +21,7 @@ import { UserContext } from '@/components/layout/GetAuthStatus';
 import ProfilePicture from '@/components/profile/ProfilePicture';
 
 import { allStates } from '@/constant/generic';
+import { AuthService } from '@/firebase/auth/auth-service';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
 import { User } from '@/types/user';
@@ -217,27 +229,43 @@ function ProfileInformation() {
 }
 
 function PasswordAndSecurity() {
+  const user = useContext(UserContext);
   const {
     register,
     handleSubmit,
-    // eslint-disable-next-line unused-imports/no-unused-vars
+    getValues,
     formState: { errors },
-  } = useForm({ mode: 'onChange' });
+  } = useForm({ mode: 'onBlur' });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, unused-imports/no-unused-vars
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
+    try {
+      await AuthService.changePassword(
+        data['oldPassword'],
+        data['newPassword'],
+        user?.email ?? ''
+      );
+      toast.success('Password Updated');
+    } catch (error: unknown) {
+      toast.error((error as { message: string }).message);
+    }
     return;
   };
   return (
-    <form className='rounded-md border p-6'>
-      <div className='grid grid-cols-2 gap-8' onSubmit={handleSubmit(onSubmit)}>
+    <form className='rounded-md border p-6' onSubmit={handleSubmit(onSubmit)}>
+      <div className='grid grid-cols-2 gap-8'>
         <div className='flex flex-col gap-2'>
           <label>Old Password</label>
           <TextInput
             id='oldPassword'
             type='password'
             placeholder='Enter your current password'
-            {...register('oldPassword')}
+            {...register('oldPassword', {
+              validate: {
+                notEmpty: (v) => v !== '' || 'This field must not be empty',
+              },
+            })}
           />
+          <ErrorView errorKey='oldPassword' errors={errors} />
         </div>
         <div className='flex flex-col gap-2'>
           <label>New Password</label>
@@ -245,8 +273,13 @@ function PasswordAndSecurity() {
             id='newPassword'
             type='password'
             placeholder='Enter your new password'
-            {...register('newPassword')}
+            {...register('newPassword', {
+              validate: {
+                notEmpty: (v) => v !== '' || 'This field must not be empty',
+              },
+            })}
           />
+          <ErrorView errorKey='newPassword' errors={errors} />
         </div>
         <div className='flex flex-col gap-2'>
           <label>Re-Enter New Password</label>
@@ -257,13 +290,33 @@ function PasswordAndSecurity() {
             {...register('_newPassword', {
               validate: {
                 notEmpty: (v) => v !== '' || 'This field must not be empty',
+                notEqual: (v) =>
+                  v === getValues('newPassword') ||
+                  'Confirm password must be equal to password.',
               },
             })}
           />
+          <ErrorView errorKey='_newPassword' errors={errors} />
         </div>
       </div>
       <div className='h-12' />
-      <Button className='w-full justify-center'>Reset Password</Button>
+      <Button type='submit' className='w-full justify-center'>
+        Reset Password
+      </Button>
     </form>
+  );
+}
+
+export function ErrorView({
+  errors,
+  errorKey,
+}: {
+  errors: FieldErrors<FieldValues>;
+  errorKey: string;
+}) {
+  return errors[errorKey] ? (
+    <Alert color='red'>{errors[errorKey]?.message?.toString()}</Alert>
+  ) : (
+    <div></div>
   );
 }

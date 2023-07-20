@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
 } from 'firebase/auth';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -33,6 +34,20 @@ export class AuthService {
         res.user.email?.split('@')[0]
       );
       return res;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      throw { message: this.getErrorMessage(error.code), code: error.code };
+    }
+  }
+
+  static async changePassword(
+    currentPassword: string,
+    newPassword: string,
+    email: string
+  ) {
+    try {
+      const userCredential = await this.signInWithEmail(email, currentPassword);
+      await updatePassword(userCredential.user, newPassword);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       throw { message: this.getErrorMessage(error.code), code: error.code };
