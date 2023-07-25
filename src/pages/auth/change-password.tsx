@@ -1,36 +1,33 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useLocalStorage } from 'usehooks-ts';
 
 import ListingFoundCard from '@/components/cards/ListingFoundCard';
 
 import { AuthService } from '@/firebase/auth/auth-service';
-import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
+  const params = useSearchParams();
+  const [email] = useLocalStorage('change-password-email', '');
   const router = useRouter();
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     setLoading(true);
     try {
-      const u = await AuthService.signInWithEmail(data.email, data.password);
-      FirestoreService.getUserDoc(u.user.uid, (user) => {
-        if (user.role === 'admin') {
-          router.push('/admin');
-        } else if (user.role === 'manager') {
-          router.push('/manager');
-        } else if (user.role === 'volunteer' || user.role === 'user') {
-          router.push('/volunteer');
-        } else {
-          router.push('/home');
-        }
-      });
+      await AuthService.resetPassword(
+        params.get('oobCode') ?? '',
+        email,
+        data.password
+      );
+      toast.success('Password Changed');
+      router.push('/auth/login');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message);
@@ -87,7 +84,7 @@ export default function LoginPage() {
               />
             </a>
             <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900  md:text-2xl'>
-              Login
+              Change Password
             </h1>
             <form
               className='space-y-4 md:space-y-6'
@@ -95,39 +92,17 @@ export default function LoginPage() {
             >
               <div>
                 <label
-                  htmlFor='email'
+                  htmlFor='password'
                   className='mb-2 block text-sm font-medium text-gray-900 '
                 >
-                  Your email
-                </label>
-                <input
-                  type='email'
-                  {...register('email')}
-                  id='email'
-                  className='block w-full rounded border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-primary-600 focus:ring-primary-600       sm:text-sm'
-                  placeholder='name@company.com'
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor='password'
-                  className='mb-2 flex justify-between text-sm font-medium text-gray-900 '
-                >
-                  <div>Password</div>
-                  <Link
-                    href='/auth/forgot-password'
-                    className='text-sm font-medium text-primary hover:underline '
-                  >
-                    Forgot password?
-                  </Link>
+                  Your New Password
                 </label>
                 <input
                   type='password'
                   {...register('password')}
                   id='password'
-                  placeholder='••••••••'
                   className='block w-full rounded border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-primary-600 focus:ring-primary-600       sm:text-sm'
+                  placeholder='••••••••'
                   required
                 />
               </div>
@@ -136,15 +111,15 @@ export default function LoginPage() {
                 type='submit'
                 className='w-full rounded bg-primary px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300   '
               >
-                Login
+                Change Password
               </button>
               <p className='text-sm font-light text-gray-500 '>
-                Don’t have an account yet?{' '}
+                Already have an account{' '}
                 <Link
-                  href='/auth/register'
+                  href='/auth/login'
                   className='font-medium text-primary hover:underline '
                 >
-                  Sign up
+                  Login
                 </Link>
               </p>
             </form>

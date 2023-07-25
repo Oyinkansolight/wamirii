@@ -1,8 +1,12 @@
+import { FirebaseError } from 'firebase/app';
 import {
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updatePassword,
+  verifyPasswordResetCode,
 } from 'firebase/auth';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -54,6 +58,24 @@ export class AuthService {
     }
   }
 
+  static async sendPasswordReset(email: string) {
+    await sendPasswordResetEmail(auth, email);
+  }
+
+  static async resetPassword(code: string, email: string, newPassword: string) {
+    try {
+      const _email = await verifyPasswordResetCode(auth, code);
+      if (_email === email) {
+        await confirmPasswordReset(auth, code, newPassword);
+      } else {
+        throw new FirebaseError('auth/invalid-action-code', '');
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      throw { message: this.getErrorMessage(error.code), code: error.code };
+    }
+  }
+
   static async signOut() {
     return await signOut(auth);
   }
@@ -70,6 +92,8 @@ export class AuthService {
         return 'Invalid email address';
       case 'auth/weak-password':
         return 'Password is too weak';
+      case 'auth/invalid-action-code':
+        return 'Invalid reset code';
       default:
         // eslint-disable-next-line no-console
         console.log(code);
