@@ -12,6 +12,8 @@
     "firebaseapp",
     "Firestore",
     "Highcharts",
+    "toastify",
+    "usehooks",
     "wamirii"
   ],
   "typescript.tsdk": "node_modules/typescript/lib",
