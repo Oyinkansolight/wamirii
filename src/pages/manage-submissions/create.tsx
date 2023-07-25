@@ -14,6 +14,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import { IoCaretBackOutline } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
 import clsxm from '@/lib/clsxm';
 
@@ -183,6 +184,10 @@ export default AuthGuardHOC(() => {
         ) {
           data[key] = null;
         }
+      }
+      if (!data['missingImageUrl']) {
+        toast.error('Please select an image to continue');
+        return;
       }
       await FirestoreService.createListing({
         createdBy:
