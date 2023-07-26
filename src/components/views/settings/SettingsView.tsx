@@ -18,6 +18,7 @@ import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
 import { UserContext } from '@/components/layout/GetAuthStatus';
+import TabBar from '@/components/layout/TabBar';
 import ProfilePicture from '@/components/profile/ProfilePicture';
 
 import { allStates } from '@/constant/generic';
@@ -36,8 +37,8 @@ export default function SettingsView() {
           Manage and personalize your account settings and profile here now
         </div>
       </div>
-      <div className='flex gap-8'>
-        <div className='flex w-56 flex-col gap-6'>
+      <div className='flex flex-col gap-8 lg:flex-row'>
+        <div className='hidden w-56 flex-col gap-6 lg:flex'>
           <div
             className={clsxm(
               'cursor-pointer rounded-md px-3 py-1.5 text-center',
@@ -57,6 +58,15 @@ export default function SettingsView() {
             Password and Security
           </div>
         </div>
+        <TabBar
+          items={[
+            { label: 'Profile Information' },
+            { label: 'Password and Security' },
+          ]}
+          className='lg:hidden'
+          currentIdx={tabIdx}
+          onChange={setTabIdx}
+        />
         <div className='flex-1'>
           {tabIdx === 0 && <ProfileInformation />}
           {tabIdx === 1 && <PasswordAndSecurity />}
@@ -146,7 +156,7 @@ function ProfileInformation() {
   return (
     <form className='flex flex-col gap-y-8' onSubmit={handleSubmit(onSubmit)}>
       <div className='flex flex-col gap-8 rounded-md border p-6'>
-        <div className='flex items-start gap-4'>
+        <div className='flex flex-wrap items-start gap-4'>
           <ProfilePicture user={user} size={100} />
           <Button
             variant='outline'
@@ -167,11 +177,11 @@ function ProfileInformation() {
             {...register('imageURL')}
           />
         </div>
-        <div className='grid grid-cols-2 justify-between gap-4'>
+        <div className='grid w-full grid-cols-1 items-stretch justify-between gap-4 lg:grid-cols-2'>
           {profileInputProps.map((v, i) => (
             <div
               className={clsxm([
-                'min-w-[15rem] flex-1',
+                ' flex-1',
                 v.name === 'missingMoreInformation' && 'w-full  flex-initial',
               ])}
               key={i}
@@ -205,6 +215,7 @@ function ProfileInformation() {
                   type={v.type}
                   disabled={v.disabled}
                   placeholder={v.placeholder}
+                  className='w-full min-w-min'
                   {...register((v.name ?? `${i}`) as keyof User, v.options)}
                 />
               )}
@@ -252,7 +263,7 @@ function PasswordAndSecurity() {
   };
   return (
     <form className='rounded-md border p-6' onSubmit={handleSubmit(onSubmit)}>
-      <div className='grid grid-cols-2 gap-8'>
+      <div className='grid grid-cols-1 gap-8 lg:grid-cols-2'>
         <div className='flex flex-col gap-2'>
           <label>Old Password</label>
           <TextInput

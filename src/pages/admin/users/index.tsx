@@ -158,7 +158,7 @@ export default AuthGuardHOC(() => {
   return (
     <DashboardLayout2>
       <div className='layout flex h-screen flex-col gap-6'>
-        <div className='flex items-start justify-between'>
+        <div className='flex flex-col items-start justify-between gap-4 lg:flex-row'>
           <div>
             <div className='text-3xl font-extrabold'>Users</div>
             <div className='font-light text-[#819289]'>
@@ -193,7 +193,7 @@ export default AuthGuardHOC(() => {
           </div>
         )}
         <div className='rounded-lg border p-5'>
-          <div className='flex items-stretch gap-4'>
+          <div className='flex flex-col items-stretch gap-4 lg:flex-row'>
             <div className='flex-1'>
               <TableSearchInput />
             </div>

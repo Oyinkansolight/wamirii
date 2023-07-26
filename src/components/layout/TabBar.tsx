@@ -4,23 +4,25 @@ export default function TabBar({
   currentIdx,
   onChange,
   items,
+  className,
   activeItemClassName,
   inactiveItemClassName,
 }: {
   items: { label: string; icon?: JSX.Element }[];
   currentIdx: number;
   onChange: (idx: number) => void;
+  className?: string;
   activeItemClassName?: string;
   inactiveItemClassName?: string;
 }) {
   return (
-    <div className='flex overflow-hidden overflow-x-auto'>
+    <div className={clsxm('flex overflow-hidden overflow-x-auto', className)}>
       {items.map((v, i) => (
         <div
           key={i}
           onClick={() => onChange(i)}
           className={clsxm(
-            'flex h-12 min-w-[15rem] cursor-pointer items-center justify-center gap-2 border-b-2 border-[#13602C1A]',
+            'flex h-12 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-b-2 border-[#13602C1A] px-2 lg:min-w-[15rem] lg:px-0',
             currentIdx === i && 'border-primary font-bold text-primary',
             currentIdx === i ? activeItemClassName : inactiveItemClassName
           )}

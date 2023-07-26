@@ -132,7 +132,17 @@ const Nav = () => {
         {status === 'logged-in' && (
           <div
             className='flex cursor-pointer items-center gap-x-4 lg:hidden'
-            onClick={() => router.push('/home')}
+            onClick={() =>
+              router.push(
+                user?.role === 'admin'
+                  ? '/admin'
+                  : user?.role === 'manager'
+                  ? '/manager'
+                  : user?.role === 'volunteer' || user?.role === 'user'
+                  ? '/volunteer'
+                  : '/home'
+              )
+            }
           >
             <div className='mr-4 font-bold text-primary'>{user?.username}</div>{' '}
           </div>
