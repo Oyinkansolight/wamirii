@@ -1,4 +1,5 @@
 import { QueryConstraint } from 'firebase/firestore';
+import Link from 'next/link';
 import { useContext, useMemo, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BsFillCalendarFill, BsSearch } from 'react-icons/bs';
@@ -7,6 +8,7 @@ import ReactSelect from 'react-select';
 
 import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 
+import Button from '@/components/buttons/Button';
 import ListingCard2 from '@/components/cards/ListingCard2';
 import SubmissionView from '@/components/cards/SubmissionView';
 import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
@@ -56,7 +58,16 @@ function TabContent({ idx }: { idx: number }) {
   const { docs } = useCollectionPaginated('listings', 20, c);
   return (
     <div>
-      {idx > 0 && <div className='text-2xl font-extrabold'>{labels[idx]}</div>}
+      {idx > 0 && (
+        <div className='flex justify-between'>
+          <div className='my-8 text-2xl font-extrabold'>{labels[idx]}</div>
+          <div className='flex items-center'>
+            <Link href='/manage-submissions/create'>
+              <Button>Register New Submission</Button>
+            </Link>
+          </div>
+        </div>
+      )}
       {idx === 0 ? (
         <VolunteerStatistics />
       ) : idx === 4 ? (

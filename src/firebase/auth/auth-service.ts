@@ -83,7 +83,7 @@ export class AuthService {
   private static getErrorMessage(code: string) {
     switch (code) {
       case 'auth/user-not-found':
-        return 'No user with this email address exists. Create account to continue.';
+        return 'The submitted information does not have an account with us. Kindly register a new account using the "Register" button.';
       case 'auth/wrong-password':
         return 'Incorrect Password';
       case 'auth/email-already-in-use':

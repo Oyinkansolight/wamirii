@@ -377,4 +377,4 @@ export default AuthGuardHOC(() => {
       </form>
     </DashboardLayout2>
   );
-}, ['admin', 'manager']);
+}, ['admin', 'manager', 'volunteer', 'user', 'organization']);

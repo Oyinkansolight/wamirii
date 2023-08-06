@@ -12,7 +12,7 @@ import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const router = useRouter();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,6 +25,7 @@ export default function LoginPage() {
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      reset({ email: '', password: '' });
       toast.error(error.message);
     } finally {
       setLoading(false);

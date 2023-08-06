@@ -4,15 +4,11 @@ import moment from 'moment';
 import Image from 'next/image';
 import React from 'react';
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { useDownloadURL } from 'react-firebase-hooks/storage';
 import { BiChevronRight } from 'react-icons/bi';
 
 import clsxm from '@/lib/clsxm';
 
-import Loading from '@/components/generic/Loading';
-
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
-import { StorageService } from '@/firebase/storage/storage-service';
 import GetDocumentHOC from '@/hocs/get-document';
 
 import { Listing, Status } from '@/types/listing';
@@ -38,8 +34,6 @@ const ListingCard2 = ({
   className?: string;
   fromAlgolia?: boolean;
 }) => {
-  const [url] = useDownloadURL(StorageService.getRef(listing?.missingImageUrl));
-
   const name =
     listing?.missingFirstName || listing?.missingLastName
       ? `${listing?.missingLastName} ${listing?.missingFirstName}`
@@ -69,23 +63,15 @@ const ListingCard2 = ({
         style={{ aspectRatio: 0.8897, position: 'relative' }}
         className='overflow-hidden rounded-lg'
       >
-        {!name ? (
-          <div className='h-full w-full bg-gray-200' />
-        ) : !url && listing?.missingImageUrl ? (
-          <div className='flex h-full w-full items-center justify-center'>
-            <Loading />
-          </div>
-        ) : (
-          <Image
-            fill
-            src={`${
-              url ??
-              `data:image/svg+xml;utf8,${encodeURIComponent(avatar.toString())}`
-            }`}
-            className='h-64 w-full object-cover transition-all duration-300 ease-in hover:scale-110'
-            alt=''
-          />
-        )}
+        <Image
+          fill
+          src={`${
+            listing?.missingImageUrlLink ??
+            `data:image/svg+xml;utf8,${encodeURIComponent(avatar.toString())}`
+          }`}
+          className='h-64 w-full object-cover transition-all duration-300 ease-in hover:scale-110'
+          alt=''
+        />
       </div>
       <div className='h-4' />
       <div
