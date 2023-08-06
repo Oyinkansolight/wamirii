@@ -1,19 +1,16 @@
 import { initials } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import moment from 'moment';
+import { GetServerSideProps } from 'next';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useDownloadURL } from 'react-firebase-hooks/storage';
-
-import useGetSingleSubmission from '@/hooks/useGetSingleSubmission';
 
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
-import { StorageService } from '@/firebase/storage/storage-service';
+import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
-import { Listing } from '@/types/listing';
+import { LocalListing, toLocalListings } from '@/types/listing';
 
 /**
  * SVGR Support
@@ -27,18 +24,11 @@ import { Listing } from '@/types/listing';
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-export default function SingleSubmission() {
-  const router = useRouter();
-  const { id } = router.query;
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const [submission, loading, error] = useGetSingleSubmission<Listing>(
-    id as string | undefined
-  );
-
-  const [url] = useDownloadURL(
-    StorageService.getRef(submission?.missingImageUrl)
-  );
-
+export default function SingleSubmission({
+  submission,
+}: {
+  submission: LocalListing;
+}) {
   const name =
     submission?.missingFirstName || submission?.missingLastName
       ? `${submission?.missingLastName} ${submission?.missingFirstName}`
@@ -52,17 +42,29 @@ export default function SingleSubmission() {
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
-      <Seo templateTitle='Wamirii Single Submission View' />
+      <Seo
+        image={submission.missingImageUrlLink}
+        title={name}
+        type='profile'
+        date={submission.missingSince ?? undefined}
+        description={submission.missingMoreInformation}
+        templateTitle='Wamirii Single Submission View'
+      />
 
-      <section className='bg-white capitalize dark:bg-gray-900'>
+      <section
+        itemScope
+        itemType='https://schema.org/Person'
+        className='bg-white capitalize dark:bg-gray-900'
+      >
         <div className='relative flex'>
           <div className='min-h-screen lg:w-1/3'></div>
           <div className='hidden min-h-screen w-3/4 bg-gray-100 dark:bg-gray-800 lg:block'></div>
 
           <div className='container mx-auto flex min-h-screen w-full flex-col justify-center px-6 py-10 lg:absolute lg:inset-x-0'>
             <h1 className='text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl'>
-              {submission?.missingFirstName} <br />{' '}
-              <span className='text-primary-500'>
+              <span itemProp='givenName'>{submission?.missingFirstName}</span>{' '}
+              <br />{' '}
+              <span itemProp='familyName' className='text-primary-500'>
                 {submission?.missingLastName}
               </span>
               <span>, </span>
@@ -75,7 +77,7 @@ export default function SingleSubmission() {
                 height={96}
                 alt='person'
                 src={`${
-                  url ??
+                  submission?.missingImageUrlLink ??
                   `data:image/svg+xml;utf8,${encodeURIComponent(
                     avatar.toString()
                   )}`
@@ -87,7 +89,7 @@ export default function SingleSubmission() {
                 <h1 className='whitespace-nowrap text-2xl font-semibold text-gray-800 dark:text-white lg:w-72'>
                   Missing Since:{' '}
                   <span>
-                    {moment(submission?.missingSince?.toDate()).format(
+                    {moment(submission?.missingSince).format(
                       'ddd, DD/MMM/YYYY'
                     )}
                   </span>
@@ -125,9 +127,7 @@ export default function SingleSubmission() {
                   </span>
                   :{' '}
                   <span>
-                    {moment(submission?.createdAt?.toDate()).format(
-                      'ddd, DD/MMM/YYYY'
-                    )}
+                    {moment(submission?.createdAt).format('ddd, DD/MMM/YYYY')}
                   </span>
                 </div>
                 <div>
@@ -145,3 +145,13 @@ export default function SingleSubmission() {
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<{
+  submission: LocalListing;
+}> = async ({ query }) => {
+  const submission = toLocalListings(
+    await FirestoreService.getSubmissionById(query['id'] as string)
+  );
+
+  return { props: { submission } };
+};

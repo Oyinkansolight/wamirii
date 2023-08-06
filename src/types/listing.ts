@@ -33,9 +33,11 @@ export type Status = (typeof status)[number];
 export function toLocalListings(l: Listing) {
   const c = {
     ...l,
-    missingSince: l.missingSince?.toDate(),
-    missingDateReported: l.missingDateReported?.toDate(),
-    createdAt: l.createdAt?.toDate(),
+    missingSince: l.missingSince?.toDate()?.toISOString() ?? null,
+    missingDateReported: l.missingDateReported?.toDate()?.toISOString() ?? null,
+    createdAt: l.createdAt?.toDate()?.toISOString() ?? null,
   };
   return c;
 }
+
+export type LocalListing = ReturnType<typeof toLocalListings>;

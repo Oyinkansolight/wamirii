@@ -307,6 +307,11 @@ export class FirestoreService {
     );
   }
 
+  static async getSubmissionById(id: string) {
+    const d = await getDoc(doc(db, `listings/${id}`));
+    return d.data() as Listing;
+  }
+
   static async isDocExists(docPath: string) {
     return (await getDoc(doc(db, docPath))).exists();
   }
