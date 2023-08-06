@@ -25,15 +25,7 @@ export default function LoginPage() {
         data.username
       );
       FirestoreService.getUserDoc(u.user.uid, (user) => {
-        if (user.role === 'admin') {
-          router.push('/admin');
-        } else if (user.role === 'manager') {
-          router.push('/manager');
-        } else if (user.role === 'volunteer' || user.role === 'user') {
-          router.push('/volunteer');
-        } else {
-          router.push('/home');
-        }
+        router.push(`/${user.role}`);
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

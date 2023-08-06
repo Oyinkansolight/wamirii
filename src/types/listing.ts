@@ -8,6 +8,7 @@ export class Listing {
   missingFirstName?: string;
   missingLastName?: string;
   missingImageUrl?: string;
+  missingImageUrlLink?: string;
   missingGender?: string;
   missingAge?: string;
   missingSince?: Timestamp;

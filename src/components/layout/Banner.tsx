@@ -16,6 +16,7 @@ const Banner = () => {
       <Image
         width={1260}
         height={750}
+        priority
         src='https://images.pexels.com/photos/764681/pexels-photo-764681.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2&amp;h=750&amp;w=1260'
         className='absolute inset-0 h-full w-full object-cover'
         alt=''

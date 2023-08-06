@@ -104,7 +104,8 @@ export class FirestoreService {
           f,
           `profile_images/${user.id}`
         );
-        user.imageURL = r.ref.fullPath;
+        user.imageURL = r.uploadResult.ref.fullPath;
+        user.imageURLLink = r.publicURL;
       } else {
         user.imageURL = '';
       }
@@ -117,7 +118,8 @@ export class FirestoreService {
       const f = listing.missingImageUrl as unknown as FileList;
       if (f.length > 0 && typeof listing.missingImageUrl !== 'string') {
         const r = await StorageService.uploadFile(f);
-        listing.missingImageUrl = r.ref.fullPath;
+        listing.missingImageUrl = r.uploadResult.ref.fullPath;
+        listing.missingImageUrlLink = r.publicURL;
       } else {
         delete listing.missingImageUrl;
       }
