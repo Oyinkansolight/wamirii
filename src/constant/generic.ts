@@ -172,4 +172,5 @@ export const status = <const>[
   'duplicate',
   'found-alive',
   'found-deceased',
+  'inactive',
 ];

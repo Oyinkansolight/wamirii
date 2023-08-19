@@ -134,6 +134,11 @@ export class FirestoreService {
         new Date((listing.missingDateReported as unknown as string) ?? '')
       );
     }
+    if (listing?.createdAt) {
+      listing.createdAt = Timestamp.fromDate(
+        new Date((listing.createdAt as unknown as string) ?? '')
+      );
+    }
     if (submissionId) {
       return await updateDoc(doc(db, `listings/${submissionId}`), {
         ...listing,
