@@ -122,6 +122,7 @@ export default AuthGuardHOC(() => {
   const [idx, setIdx] = useState(0);
   const [mySubmissionsCount, setMySubmissionsCount] = useState(0);
   const [allSubmissionsCount, setAllSubmissionsCount] = useState(0);
+  const [foundCount, setFountCount] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -132,6 +133,13 @@ export default AuthGuardHOC(() => {
       setMySubmissionsCount(b.data().count);
       const c = await FirestoreService.getSubmissionCountWhere({});
       setAllSubmissionsCount(c.data().count);
+      const fa = await FirestoreService.getSubmissionCountWhere({
+        status: 'found-alive',
+      });
+      const fd = await FirestoreService.getSubmissionCountWhere({
+        status: 'found-deceased',
+      });
+      setFountCount(fa.data().count + fd.data().count);
     };
     a();
   }, [user?.id]);
@@ -170,7 +178,7 @@ export default AuthGuardHOC(() => {
           items={[
             { label: `My Submissions (${mySubmissionsCount})` },
             { label: `All Submissions (${allSubmissionsCount})` },
-            { label: 'Found (0)' },
+            { label: `Found (${foundCount})` },
           ]}
         />
         {error && (
