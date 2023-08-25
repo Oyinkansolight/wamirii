@@ -1,4 +1,3 @@
-import { FirebaseError } from 'firebase/app';
 import {
   confirmPasswordReset,
   createUserWithEmailAndPassword,
@@ -6,7 +5,6 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updatePassword,
-  verifyPasswordResetCode,
 } from 'firebase/auth';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -62,14 +60,9 @@ export class AuthService {
     await sendPasswordResetEmail(auth, email);
   }
 
-  static async resetPassword(code: string, email: string, newPassword: string) {
+  static async resetPassword(code: string, newPassword: string) {
     try {
-      const _email = await verifyPasswordResetCode(auth, code);
-      if (_email === email) {
-        await confirmPasswordReset(auth, code, newPassword);
-      } else {
-        throw new FirebaseError('auth/invalid-action-code', '');
-      }
+      await confirmPasswordReset(auth, code, newPassword);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       throw { message: this.getErrorMessage(error.code), code: error.code };

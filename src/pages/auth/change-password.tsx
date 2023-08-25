@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { useLocalStorage } from 'usehooks-ts';
 
 import ListingFoundCard from '@/components/cards/ListingFoundCard';
 
@@ -15,7 +14,6 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
   const params = useSearchParams();
-  const [email] = useLocalStorage('change-password-email', '');
   const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
@@ -23,7 +21,6 @@ export default function ForgotPasswordPage() {
     try {
       await AuthService.resetPassword(
         params.get('oobCode') ?? '',
-        email,
         data.password
       );
       toast.success('Password Changed');
