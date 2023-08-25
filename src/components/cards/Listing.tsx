@@ -5,12 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { useDownloadURL } from 'react-firebase-hooks/storage';
-
-import Loading from '@/components/generic/Loading';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
-import { StorageService } from '@/firebase/storage/storage-service';
 
 import { Listing, Status } from '@/types/listing';
 
@@ -28,8 +24,6 @@ const ListingCard = ({
   listing?: Listing;
   fromAlgolia?: boolean;
 }) => {
-  const [url] = useDownloadURL(StorageService.getRef(listing?.missingImageUrl));
-
   const path = `/submissions/${listing?._id}`;
 
   const name =
@@ -42,45 +36,23 @@ const ListingCard = ({
     // fontFamily: ['Arial'],
   });
 
-  // const Reporter = GetDocumentHOC(
-  //   (props) => (
-  //     <p className='mb-2 text-xs text-gray-700'>
-  //       Reported By: {props?.doc.username}
-  //     </p>
-  //   ),
-  //   `users/${listing?.createdBy}`
-  // );
-
   return (
     <div className='relative w-full overflow-hidden rounded bg-white shadow-sm transition-shadow duration-300'>
-      {/* <div className='absolute top-2 right-2 flex justify-center rounded-lg text-xs'>
-        <Status status={listing?.status ?? 'active'} />
-      </div> */}
-
       <div className='h-full w-full'>
         <div
           style={{ aspectRatio: 2, position: 'relative' }}
           className='overflow-hidden'
         >
-          {!name ? (
-            <div className='h-full w-full bg-gray-200' />
-          ) : !url && listing?.missingImageUrl ? (
-            <div className='flex h-full w-full items-center justify-center'>
-              <Loading />
-            </div>
-          ) : (
-            <Image
-              fill
-              src={`${
-                url ??
-                `data:image/svg+xml;utf8,${encodeURIComponent(
-                  avatar.toString()
-                )}`
-              }`}
-              className='h-64 w-full object-contain transition-all duration-300 ease-in hover:scale-110'
-              alt=''
-            />
-          )}
+          <Image
+            fill
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+            src={`${
+              listing?.missingImageUrlLink ??
+              `data:image/svg+xml;utf8,${encodeURIComponent(avatar.toString())}`
+            }`}
+            className='h-64 w-full object-contain transition-all duration-300 ease-in hover:scale-110'
+            alt=''
+          />
         </div>
         <div className='h-full border border-t-0 p-5'>
           <p className='mb-3 text-xs font-semibold uppercase tracking-wide'>

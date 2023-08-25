@@ -14,6 +14,7 @@ const nextConfig = {
       'localhost',
       'images.unsplash.com',
       'api.dicebear.com',
+      'storage.googleapis.com',
       'firebasestorage.googleapis.com',
     ],
   },

@@ -96,14 +96,16 @@ export class FirestoreService {
   }
 
   static async updateUserDocument(user: User) {
-    if (user?.imageURL) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (user?.imageURL && (user?.imageURL as any) instanceof FileList) {
       const f = user.imageURL as unknown as FileList;
       if (f.length > 0) {
         const r = await StorageService.uploadFile(
           f,
           `profile_images/${user.id}`
         );
-        user.imageURL = r.ref.fullPath;
+        user.imageURL = r.uploadResult.ref.fullPath;
+        user.imageURLLink = r.publicURL;
       } else {
         user.imageURL = '';
       }
@@ -116,7 +118,8 @@ export class FirestoreService {
       const f = listing.missingImageUrl as unknown as FileList;
       if (f.length > 0 && typeof listing.missingImageUrl !== 'string') {
         const r = await StorageService.uploadFile(f);
-        listing.missingImageUrl = r.ref.fullPath;
+        listing.missingImageUrl = r.uploadResult.ref.fullPath;
+        listing.missingImageUrlLink = r.publicURL;
       } else {
         delete listing.missingImageUrl;
       }
@@ -129,6 +132,11 @@ export class FirestoreService {
     if (listing?.missingDateReported) {
       listing.missingDateReported = Timestamp.fromDate(
         new Date((listing.missingDateReported as unknown as string) ?? '')
+      );
+    }
+    if (listing?.createdAt) {
+      listing.createdAt = Timestamp.fromDate(
+        new Date((listing.createdAt as unknown as string) ?? '')
       );
     }
     if (submissionId) {
@@ -302,6 +310,11 @@ export class FirestoreService {
         ...op.map((v) => where(v.key, v.op, v.value))
       )
     );
+  }
+
+  static async getSubmissionById(id: string) {
+    const d = await getDoc(doc(db, `listings/${id}`));
+    return d.data() as Listing;
   }
 
   static async isDocExists(docPath: string) {

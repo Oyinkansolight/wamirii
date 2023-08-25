@@ -165,7 +165,7 @@ const contactPersonInputProps: TextInputProps[] = [
 export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
   const router = useRouter();
-  const { id } = router.query;
+  const { id, mode } = router.query;
   const [submissionDoc, , error] = useDocument(
     id ? FirestoreService.getDocRef(`listings/${id}`) : undefined,
     {}
@@ -175,6 +175,12 @@ export default AuthGuardHOC(() => {
     [id, submissionDoc]
   );
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (mode) {
+      setIsEditing(mode === 'edit');
+    }
+  }, [mode]);
 
   const {
     register,
@@ -460,4 +466,4 @@ export default AuthGuardHOC(() => {
       </form>
     </DashboardLayout2>
   );
-}, ['admin']);
+}, ['admin', 'manager']);

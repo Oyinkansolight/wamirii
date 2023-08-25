@@ -90,7 +90,7 @@ const tableColumns: TableColumn<Listing>[] = [
         <MenuItem
           onClick={() => {
             if (window.location) {
-              window.location.href = `/admin/submissions/${row._id}`;
+              window.location.href = `/manage-submissions/${row._id}`;
             }
           }}
         >
@@ -99,7 +99,13 @@ const tableColumns: TableColumn<Listing>[] = [
             <div>View</div>
           </div>
         </MenuItem>
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            if (window.location) {
+              window.location.href = `/manage-submissions/${row._id}?mode=edit`;
+            }
+          }}
+        >
           <div className='flex gap-2'>
             <BiEdit />
             <div>Edit</div>
@@ -116,6 +122,7 @@ export default AuthGuardHOC(() => {
   const [idx, setIdx] = useState(0);
   const [mySubmissionsCount, setMySubmissionsCount] = useState(0);
   const [allSubmissionsCount, setAllSubmissionsCount] = useState(0);
+  const [foundCount, setFountCount] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -126,6 +133,13 @@ export default AuthGuardHOC(() => {
       setMySubmissionsCount(b.data().count);
       const c = await FirestoreService.getSubmissionCountWhere({});
       setAllSubmissionsCount(c.data().count);
+      const fa = await FirestoreService.getSubmissionCountWhere({
+        status: 'found-alive',
+      });
+      const fd = await FirestoreService.getSubmissionCountWhere({
+        status: 'found-deceased',
+      });
+      setFountCount(fa.data().count + fd.data().count);
     };
     a();
   }, [user?.id]);
@@ -154,7 +168,7 @@ export default AuthGuardHOC(() => {
               Stay up to date with submissions made on the platform
             </div>
           </div>
-          <Button onClick={() => router.push('/admin/submissions/create')}>
+          <Button onClick={() => router.push('/manage-submissions/create')}>
             Add New Submission
           </Button>
         </div>
@@ -164,7 +178,7 @@ export default AuthGuardHOC(() => {
           items={[
             { label: `My Submissions (${mySubmissionsCount})` },
             { label: `All Submissions (${allSubmissionsCount})` },
-            { label: 'Found (0)' },
+            { label: `Found (${foundCount})` },
           ]}
         />
         {error && (

@@ -147,7 +147,12 @@ export const allStates = [
     id: '37',
     name: 'FEDERAL CAPITAL TERRITORY',
   },
-];
+].map((v) => ({
+  name:
+    v.name !== 'FEDERAL CAPITAL TERRITORY'
+      ? `${v.name[0]}${v.name.slice(1).toLocaleLowerCase()}`
+      : 'Federal Capital Territory',
+}));
 
 // eslint-disable-next-line unused-imports/no-unused-vars
 const removeDark = /`(dark:.*?)[\w\d\-:]*`/gi;
@@ -167,4 +172,5 @@ export const status = <const>[
   'duplicate',
   'found-alive',
   'found-deceased',
+  'inactive',
 ];

@@ -1,8 +1,7 @@
 import { Menu, MenuItem } from '@szhsin/react-menu';
 import { QueryConstraint } from 'firebase/firestore';
 import { Select, TextInput } from 'flowbite-react';
-import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { BiEdit } from 'react-icons/bi';
 import { BsFillEyeFill } from 'react-icons/bs';
@@ -15,15 +14,18 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
 import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 
 import Button from '@/components/buttons/Button';
+import Pagination from '@/components/buttons/Pagination';
 import TableSearchInput from '@/components/inputs/table-search-input';
 import DashboardLayout2 from '@/components/layout/DashboardLayout2';
+import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import TabBar from '@/components/layout/TabBar';
+import CreateUserView from '@/components/modal-views/CreateUserView';
 import Role from '@/components/profile/Role';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
-import { User } from '@/types/user';
+import { Role as R, User } from '@/types/user';
 
 const tableColumns: TableColumn<User>[] = [
   {
@@ -54,7 +56,7 @@ const tableColumns: TableColumn<User>[] = [
     cell: (row) => <Role role={row.status ?? 'active'} />,
   },
   {
-    // width: '20px',
+    width: '40px',
     cell: (row) => (
       <Menu
         menuButton={
@@ -67,7 +69,7 @@ const tableColumns: TableColumn<User>[] = [
         <MenuItem
           onClick={() => {
             if (window.location) {
-              window.location.href = `/admin/submissions/${row.id}`;
+              // window.location.href = `/admin/submissions/${row.id}`;
             }
           }}
         >
@@ -76,29 +78,51 @@ const tableColumns: TableColumn<User>[] = [
             <div>View</div>
           </div>
         </MenuItem>
-        <MenuItem>
-          <div className='flex gap-2'>
-            <BiEdit />
-            <div>Edit</div>
-          </div>
-        </MenuItem>
+        <EditUserMenuItem role={row.role ?? 'user'} user={row} />
         {/* <DeleteMenuItem submission={row} /> */}
       </Menu>
     ),
   },
 ];
 
+const possibleColumns = [
+  tableColumns,
+  tableColumns,
+  tableColumns,
+  tableColumns,
+];
+
+const addNewPrompt = ['User', 'Admin User', 'Manager', 'Volunteer'];
+const allRoles: R[] = ['user', 'admin', 'manager', 'volunteer'];
+
 export default AuthGuardHOC(() => {
   // const user = useContext(UserContext);
   const [idx, setIdx] = useState(0);
-  const router = useRouter();
+  const [usersCount, setUsersCount] = useState({
+    user: 0,
+    admin: 0,
+    manager: 0,
+    volunteer: 0,
+  });
 
-  // useEffect(() => {
-  //   const a = async () => {
-  //     eval('');
-  //   };
-  //   a();
-  // }, [user?.id]);
+  useEffect(() => {
+    const a = async () => {
+      const user = (
+        await FirestoreService.getUserCountWhere({ role: 'user' })
+      ).data().count;
+      const admin = (
+        await FirestoreService.getUserCountWhere({ role: 'admin' })
+      ).data().count;
+      const manager = (
+        await FirestoreService.getUserCountWhere({ role: 'manager' })
+      ).data().count;
+      const volunteer = (
+        await FirestoreService.getUserCountWhere({ role: 'volunteer' })
+      ).data().count;
+      setUsersCount({ user, admin, manager, volunteer });
+    };
+    a();
+  }, []);
 
   const c = useMemo(() => {
     const constraints: QueryConstraint[][] = [
@@ -109,12 +133,32 @@ export default AuthGuardHOC(() => {
     ];
     return constraints[idx];
   }, [idx]);
-  const { docs, error, setSortByField } = useCollectionPaginated('users', 5, c);
+  const {
+    docs,
+    error,
+    setSortByField,
+    hasNextPage,
+    hasPreviousPage,
+    nextPage,
+    previousPage,
+    pageNumber,
+  } = useCollectionPaginated('users', 5, c);
+
+  const general = useContext(GeneralModalContext);
+
+  const handleCreateNewUser = (role: R) => {
+    if (general) {
+      general.setContent(
+        <CreateUserView onClose={() => general.setIsOpen(false)} role={role} />
+      );
+      general.setIsOpen(true);
+    }
+  };
 
   return (
     <DashboardLayout2>
       <div className='layout flex h-screen flex-col gap-6'>
-        <div className='flex items-start justify-between'>
+        <div className='flex flex-col items-start justify-between gap-4 lg:flex-row'>
           <div>
             <div className='text-3xl font-extrabold'>Users</div>
             <div className='font-light text-[#819289]'>
@@ -122,18 +166,18 @@ export default AuthGuardHOC(() => {
               manage data better
             </div>
           </div>
-          <Button onClick={() => router.push('/admin/submissions/create')}>
-            Add New User
+          <Button onClick={() => handleCreateNewUser(allRoles[idx])}>
+            Add New {addNewPrompt[idx]}
           </Button>
         </div>
         <TabBar
           currentIdx={idx}
           onChange={setIdx}
           items={[
-            { label: `General Users (${0})` },
-            { label: `Admins (${0})` },
-            { label: 'Managers (0)' },
-            { label: `Volunteers (${0})` },
+            { label: `General Users (${usersCount.user})` },
+            { label: `Admins (${usersCount.admin})` },
+            { label: `Managers (${usersCount.manager})` },
+            { label: `Volunteers (${usersCount.volunteer})` },
           ]}
         />
         {error && (
@@ -149,15 +193,12 @@ export default AuthGuardHOC(() => {
           </div>
         )}
         <div className='rounded-lg border p-5'>
-          <div className='flex items-stretch gap-4'>
+          <div className='flex flex-col items-stretch gap-4 lg:flex-row'>
             <div className='flex-1'>
               <TableSearchInput />
             </div>
             <Select>
-              <option>Select Gender</option>
-            </Select>
-            <Select>
-              <option>Last Location</option>
+              <option>Status</option>
             </Select>
             <TextInput type='date' />
           </div>
@@ -170,14 +211,21 @@ export default AuthGuardHOC(() => {
                 direction: dir,
               });
             }}
-            columns={tableColumns}
+            columns={possibleColumns[idx]}
             data={docs?.map((doc) => ({ id: doc.id, ...doc.data() })) ?? []}
           />
         </div>
+        <Pagination
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          nextPage={nextPage}
+          previousPage={previousPage}
+          pageNumber={pageNumber}
+        />
       </div>
     </DashboardLayout2>
   );
-});
+}, ['admin']);
 
 // function DeleteMenuItem({ submission }: { submission: Listing }) {
 //   const m = useContext(GeneralModalContext);
@@ -195,3 +243,28 @@ export default AuthGuardHOC(() => {
 //     </MenuItem>
 //   );
 // }
+
+export function EditUserMenuItem({ user, role }: { user?: User; role: R }) {
+  const g = useContext(GeneralModalContext);
+  return (
+    <MenuItem
+      onClick={() => {
+        if (g) {
+          g.setContent(
+            <CreateUserView
+              onClose={() => g.setIsOpen(false)}
+              role={role}
+              userToEdit={user}
+            />
+          );
+          g.setIsOpen(true);
+        }
+      }}
+    >
+      <div className='flex gap-2'>
+        <BiEdit />
+        <div>Edit</div>
+      </div>
+    </MenuItem>
+  );
+}

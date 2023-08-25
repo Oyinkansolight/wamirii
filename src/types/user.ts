@@ -11,6 +11,7 @@ export class User {
   firstName?: string;
   lastName?: string;
   imageURL?: string;
+  imageURLLink?: string;
   organizationId?: string;
   submissionsCount?: number;
   createdAt?: Timestamp;

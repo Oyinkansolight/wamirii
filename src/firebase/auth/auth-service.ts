@@ -1,7 +1,10 @@
 import {
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
 } from 'firebase/auth';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
@@ -39,6 +42,33 @@ export class AuthService {
     }
   }
 
+  static async changePassword(
+    currentPassword: string,
+    newPassword: string,
+    email: string
+  ) {
+    try {
+      const userCredential = await this.signInWithEmail(email, currentPassword);
+      await updatePassword(userCredential.user, newPassword);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      throw { message: this.getErrorMessage(error.code), code: error.code };
+    }
+  }
+
+  static async sendPasswordReset(email: string) {
+    await sendPasswordResetEmail(auth, email);
+  }
+
+  static async resetPassword(code: string, newPassword: string) {
+    try {
+      await confirmPasswordReset(auth, code, newPassword);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      throw { message: this.getErrorMessage(error.code), code: error.code };
+    }
+  }
+
   static async signOut() {
     return await signOut(auth);
   }
@@ -46,7 +76,7 @@ export class AuthService {
   private static getErrorMessage(code: string) {
     switch (code) {
       case 'auth/user-not-found':
-        return 'No user with this email address exists. Create account to continue.';
+        return 'The submitted information does not have an account with us. Kindly register a new account using the "Register" button.';
       case 'auth/wrong-password':
         return 'Incorrect Password';
       case 'auth/email-already-in-use':
@@ -55,6 +85,8 @@ export class AuthService {
         return 'Invalid email address';
       case 'auth/weak-password':
         return 'Password is too weak';
+      case 'auth/invalid-action-code':
+        return 'Invalid reset code';
       default:
         // eslint-disable-next-line no-console
         console.log(code);

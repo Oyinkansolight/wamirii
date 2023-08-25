@@ -12,7 +12,7 @@ import { FirestoreService } from '@/firebase/firestore/firestore-service';
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const router = useRouter();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,14 +21,11 @@ export default function LoginPage() {
     try {
       const u = await AuthService.signInWithEmail(data.email, data.password);
       FirestoreService.getUserDoc(u.user.uid, (user) => {
-        if (user.role === 'admin') {
-          router.push('/admin');
-        } else {
-          router.push('/home');
-        }
+        router.push(`/${user.role}`);
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      reset({ email: '', password: '' });
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -111,12 +108,12 @@ export default function LoginPage() {
                   className='mb-2 flex justify-between text-sm font-medium text-gray-900 '
                 >
                   <div>Password</div>
-                  <a
-                    href='#'
+                  <Link
+                    href='/auth/forgot-password'
                     className='text-sm font-medium text-primary hover:underline '
                   >
                     Forgot password?
-                  </a>
+                  </Link>
                 </label>
                 <input
                   type='password'

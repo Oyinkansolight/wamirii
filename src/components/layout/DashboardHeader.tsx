@@ -14,7 +14,11 @@ const DashboardHeader = () => {
           <div className='mr-4 flex items-center'>
             <Link
               className='inline-block rounded-full py-2 px-3 hover:bg-gray-200'
-              href={user?.role === 'admin' ? '#' : '/home/profile'}
+              href={
+                user?.role === 'admin' || user?.role === 'manager'
+                  ? '/settings'
+                  : '/home/profile'
+              }
             >
               <div className='relative flex cursor-pointer items-center whitespace-nowrap'>
                 Hello, {user?.username}
@@ -24,14 +28,18 @@ const DashboardHeader = () => {
 
           <div className='block'>
             <div className='relative inline'>
-              <button
-                type='button'
-                className='relative inline-flex items-center rounded-full border hover:shadow-lg'
+              <Link
+                className='inline-block rounded-full py-2 px-3 hover:bg-gray-200'
+                href={
+                  user?.role === 'admin' || user?.role === 'manager'
+                    ? '/settings'
+                    : '/home/profile'
+                }
               >
                 <div>
                   <ProfilePicture user={user} />
                 </div>
-              </button>
+              </Link>
             </div>
           </div>
         </div>

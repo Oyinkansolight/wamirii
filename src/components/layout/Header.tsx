@@ -41,6 +41,7 @@ const Nav = () => {
               width={100}
               height={50}
               alt='Wamirii Logo'
+              style={{ height: 'auto' }}
               src='/images/logo.png'
             />
           </Link>
@@ -64,9 +65,7 @@ const Nav = () => {
           <>
             <div
               className='hidden cursor-pointer items-center gap-x-4 lg:flex'
-              onClick={() =>
-                router.push(user?.role === 'admin' ? '/admin' : '/home')
-              }
+              onClick={() => router.push(`/${user?.role}`)}
             >
               <ProfilePicture user={user} />
               <div className='font-bold text-primary'>
@@ -76,7 +75,7 @@ const Nav = () => {
 
             <div className='ml-4 hidden md:block'>
               <Link
-                href={user?.role === 'admin' ? '/admin' : '/home'}
+                href={`/${user?.role}`}
                 aria-label='Dashboard'
                 title='Dashboard'
                 className='hover:text-deep-purple-accent-400 font-medium tracking-wide text-gray-700 transition-colors duration-200'
@@ -116,7 +115,7 @@ const Nav = () => {
         {status === 'logged-in' && (
           <div
             className='flex cursor-pointer items-center gap-x-4 lg:hidden'
-            onClick={() => router.push('/home')}
+            onClick={() => router.push(`/${user?.role}`)}
           >
             <div className='mr-4 font-bold text-primary'>{user?.username}</div>{' '}
           </div>
@@ -158,6 +157,7 @@ const Nav = () => {
                         width={100}
                         height={50}
                         alt='Wamirii Logo'
+                        style={{ height: '' }}
                         src='/images/logo.png'
                       />
                       <span className='ml-2 text-xl font-bold uppercase tracking-wide text-gray-800'>
