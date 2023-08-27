@@ -2,6 +2,7 @@ import { initials } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import moment from 'moment';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { BiChevronRight } from 'react-icons/bi';
@@ -24,16 +25,15 @@ export const ListingCardFromId2 = ({ listingId }: { listingId: string }) => {
 const ListingCard2 = ({
   listing,
   className,
-  onClick,
   size = 'lg',
   fromAlgolia = false,
 }: {
   listing?: Listing;
   size?: 'sm' | 'lg';
-  onClick?: () => void;
   className?: string;
   fromAlgolia?: boolean;
 }) => {
+  const router = useRouter();
   const name =
     listing?.missingFirstName || listing?.missingLastName
       ? `${listing?.missingLastName} ${listing?.missingFirstName}`
@@ -57,7 +57,7 @@ const ListingCard2 = ({
         size === 'sm' ? 'text-xs' : 'text-base',
         className
       )}
-      onClick={onClick}
+      onClick={() => router.push(`/submissions/${listing?._id}`)}
     >
       <div
         style={{ aspectRatio: 0.8897, position: 'relative' }}
