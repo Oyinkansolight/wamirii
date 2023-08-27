@@ -154,7 +154,7 @@ export class FirestoreService {
           : null,
       });
     } else {
-      return await addDoc(collection(db, 'listings'), {
+      const ref = await addDoc(collection(db, 'listings'), {
         ...listing,
         status: 'active',
         missingAge: listing.missingAge
@@ -162,6 +162,7 @@ export class FirestoreService {
           : null,
         createdAt: serverTimestamp(),
       });
+      return ref.id;
     }
   }
 

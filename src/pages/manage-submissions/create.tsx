@@ -245,7 +245,7 @@ export default AuthGuardHOC(() => {
         toast.error('Please select an image to continue');
         return;
       }
-      await FirestoreService.createListing({
+      const id = await FirestoreService.createListing({
         createdBy: user?.id,
         ...data,
         missingAge: data.missingAge ? Number.parseInt(data.missingAge) : null,
@@ -253,7 +253,10 @@ export default AuthGuardHOC(() => {
       if (generalModal?.setContent) {
         generalModal.setContent(
           <ActionSuccessView
-            onClose={() => generalModal.setIsOpen(false)}
+            onClose={() => {
+              router.push(`/submissions/${id}`);
+              generalModal?.setIsOpen(false);
+            }}
             title='Submission Created'
             subtitle=''
           />
