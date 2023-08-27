@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useInfiniteHits, useSearchBox } from 'react-instantsearch-hooks-web';
 
-import ListingCard from '@/components/cards/Listing';
+import ListingCard2 from '@/components/cards/ListingCard2';
 import SearchInput from '@/components/inputs/search-input';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
@@ -66,7 +66,7 @@ export default function Submissions() {
             const id = hit.objectID;
             const listing = hit as unknown as Listing;
             listing._id = id;
-            return <ListingCard fromAlgolia key={id} listing={listing} />;
+            return <ListingCard2 fromAlgolia key={id} listing={listing} />;
           })}
         </div>
         {!isLastPage && (

@@ -28,18 +28,25 @@ import { Role, User } from '@/types/user';
 
 export class FirestoreService {
   static async createNewUserDocument(
-    id: string,
+    id?: string,
     email?: string,
-    username?: string
+    username?: string,
+    extraData?: { [x: string]: string | number | Timestamp | null }
   ) {
-    await setDoc(doc(db, `users/${id}`), {
-      id,
-      username,
-      email,
-      role: 'user',
+    const data = {
+      id: id ?? null,
+      username: username ?? null,
+      email: email ?? null,
       status: 'active',
       createdAt: serverTimestamp(),
-    });
+      ...extraData,
+    };
+    if (!id) {
+      const ref = await addDoc(collection(db, `users`), data);
+      await updateDoc(doc(db, `users/${ref.id}`), { id: ref.id });
+    } else {
+      await setDoc(doc(db, `users/${id}`), data);
+    }
   }
 
   static getListingsConstraints(listing: Listing) {

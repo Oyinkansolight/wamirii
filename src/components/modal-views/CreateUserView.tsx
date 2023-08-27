@@ -178,27 +178,6 @@ const allInputs: Record<
         },
       },
     },
-    {
-      placeholder: '',
-      title: 'Email',
-      name: 'email',
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
-    },
-    {
-      placeholder: '',
-      title: 'Password',
-      name: 'password',
-      type: 'password',
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
-    },
   ],
   volunteer: [
     {
@@ -293,12 +272,25 @@ export default function CreateUserView({
         delete data.password;
         await FirestoreService.updateUserDocument(data);
       } else {
-        const f = httpsCallable(getFunctions(), 'createUser', {});
-        const r = await f({ ...data, role });
-        if ((r.data as any)?.errorInfo?.message) {
-          toast((r.data as any).errorInfo.message, { type: 'error' });
+        if (role !== 'organization') {
+          const f = httpsCallable(getFunctions(), 'createUser', {});
+          const r = await f({ ...data, role });
+          if ((r.data as any)?.errorInfo?.message) {
+            toast((r.data as any).errorInfo.message, { type: 'error' });
+          } else {
+            g?.success(`${role} created successfully`);
+          }
         } else {
-          g?.success(`${role} created successfully`);
+          await FirestoreService.createNewUserDocument(
+            undefined,
+            undefined,
+            data.username,
+            {
+              acronym: data.acronym,
+              role,
+            }
+          );
+          g?.success('Organization created successfully!');
         }
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

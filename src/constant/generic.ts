@@ -174,3 +174,21 @@ export const status = <const>[
   'found-deceased',
   'inactive',
 ];
+
+export const reporterRelationship = <const>[
+  'parent',
+  'relative',
+  'spouse/partner',
+  'aquaintance',
+  'stranger',
+];
+
+export const channel = <const>[
+  'instagram',
+  'twitter',
+  'whatsapp',
+  'nairaland',
+  'facebook',
+  'tiktok',
+  'other',
+];

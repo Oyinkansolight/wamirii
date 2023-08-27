@@ -48,7 +48,7 @@ export default function AuthGuard({
         <div>You do not have permission to view this page</div>
         <Button
           onClick={() => {
-            router.push('/home');
+            router.push(`/${user.role ?? 'user'}`);
           }}
         >
           Home
