@@ -37,7 +37,7 @@ const ListingCard2 = ({
   const name =
     listing?.missingFirstName || listing?.missingLastName
       ? `${listing?.missingLastName} ${listing?.missingFirstName}`
-      : listing?._id;
+      : listing?._id?.slice(0, 10);
 
   const avatar = createAvatar(initials, {
     seed: name ?? 'NO',

@@ -14,7 +14,6 @@ import {
   useForm,
 } from 'react-hook-form';
 import { IoCaretBackOutline } from 'react-icons/io5';
-import { toast } from 'react-toastify';
 
 import clsxm from '@/lib/clsxm';
 
@@ -44,23 +43,23 @@ const missingPersonInputProps: (TextInputProps & { roles?: Role[] } & {
     placeholder: 'Enter first name of missing person',
     title: 'First name',
     name: 'missingFirstName',
-    required: true,
-    options: {
-      validate: {
-        notEmpty: (v) => v !== '' || 'This field must not be empty',
-      },
-    },
+    //required: true,
+    //options: {
+    //  validate: {
+    //    notEmpty: (v) => v !== '' || 'This field must not be empty',
+    //  },
+    //},
   },
   {
     placeholder: 'Enter last name of missing person',
     title: 'Last name',
     name: 'missingLastName',
-    required: true,
-    options: {
-      validate: {
-        notEmpty: (v) => v !== '' || 'This field must not be empty',
-      },
-    },
+    //required: true,
+    //options: {
+    //  validate: {
+    //    notEmpty: (v) => v !== '' || 'This field must not be empty',
+    //  },
+    //},
   },
   // {
   //   placeholder: 'Select image of missing person',
@@ -236,20 +235,23 @@ export default AuthGuardHOC(() => {
         const key = Object.keys(data)[i];
         if (
           data[key] === '' ||
-          (typeof data[key] === 'string' && data[key].split()[0] === 'Select')
+          (typeof data[key] === 'string' &&
+            data[key].split()[0] === 'Select') ||
+          typeof data[key] === 'undefined'
         ) {
           data[key] = null;
         }
       }
-      if (!data['missingImageUrl']) {
-        toast.error('Please select an image to continue');
-        return;
-      }
+      //if (!data['missingImageUrl']) {
+      //  toast.error('Please select an image to continue');
+      //  return;
+      //}
       const id = await FirestoreService.createListing({
         createdBy: user?.id,
         ...data,
         missingAge: data.missingAge ? Number.parseInt(data.missingAge) : null,
       });
+
       if (generalModal?.setContent) {
         generalModal.setContent(
           <ActionSuccessView
@@ -274,7 +276,7 @@ export default AuthGuardHOC(() => {
               onSubmit(getValues());
             }}
             title='Submission Failed'
-            subtitle={error}
+            subtitle={error.message}
           />
         );
         generalModal.setIsOpen(true);
