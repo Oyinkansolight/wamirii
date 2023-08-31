@@ -187,6 +187,11 @@ const contactPersonInputProps: (TextInputProps & { roles?: Role[] } & {
     title: 'Relationship',
     name: 'contactRelationship',
   },
+];
+
+const channelInputProps: (TextInputProps & { roles?: Role[] } & {
+  options?: RegisterOptions<FieldValues, string> | undefined;
+})[] = [
   {
     placeholder: 'Enter Channel',
     title: 'Channel',
@@ -431,52 +436,101 @@ export default AuthGuardHOC(() => {
               ))}
             </div>
           </div>
-          <div className='w-full rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4 xl:max-w-sm'>
-            <div className='mb-2 text-lg font-bold md:text-xl'>
-              Contact Information{' '}
-              <span className='text-[#819289]'>(If Found)</span>
+          <div className='flex flex-col gap-4'>
+            <div className='w-full rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4 xl:max-w-sm'>
+              <div className='mb-2 text-lg font-bold md:text-xl'>
+                Contact Information{' '}
+                <span className='text-[#819289]'>(If Found)</span>
+              </div>
+              <div className='flex flex-col gap-y-6'>
+                {contactPersonInputProps
+                  .filter(
+                    (v) => !v.roles || v.roles.includes(user?.role ?? 'user')
+                  )
+                  .map((v, i) => (
+                    <div className='min-w-[15rem] flex-1' key={i}>
+                      <label htmlFor={`${i}`} className='text-[#819289]'>
+                        {v.title}
+                        {v.required && <span className='text-red-500'>*</span>}
+                      </label>
+                      {v.name === 'channel' ? (
+                        <Select
+                          key={i}
+                          className='capitalize'
+                          {...register(v.name, v.options)}
+                        >
+                          <option value='select'>Select Channel</option>
+                          {channel.map((channel, i) => {
+                            return (
+                              <option key={i} value={channel}>
+                                {channel}
+                              </option>
+                            );
+                          })}
+                        </Select>
+                      ) : (
+                        <TextInput
+                          id={v.name}
+                          type={v.type}
+                          placeholder={v.placeholder}
+                          {...register(v.name ?? `${i}`, v.options)}
+                        />
+                      )}
+                      {v.name && errors[v.name]?.message && (
+                        <div className='text-xs font-bold text-red-500'>
+                          {errors[v.name]?.message?.toString()}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
             </div>
-            <div className='flex flex-col gap-y-6'>
-              {contactPersonInputProps
-                .filter(
-                  (v) => !v.roles || v.roles.includes(user?.role ?? 'user')
-                )
-                .map((v, i) => (
-                  <div className='min-w-[15rem] flex-1' key={i}>
-                    <label htmlFor={`${i}`} className='text-[#819289]'>
-                      {v.title}
-                      {v.required && <span className='text-red-500'>*</span>}
-                    </label>
-                    {v.name === 'channel' ? (
-                      <Select
-                        key={i}
-                        className='capitalize'
-                        {...register(v.name, v.options)}
-                      >
-                        <option value='select'>Select Channel</option>
-                        {channel.map((channel, i) => {
-                          return (
-                            <option key={i} value={channel}>
-                              {channel}
-                            </option>
-                          );
-                        })}
-                      </Select>
-                    ) : (
-                      <TextInput
-                        id={v.name}
-                        type={v.type}
-                        placeholder={v.placeholder}
-                        {...register(v.name ?? `${i}`, v.options)}
-                      />
-                    )}
-                    {v.name && errors[v.name]?.message && (
-                      <div className='text-xs font-bold text-red-500'>
-                        {errors[v.name]?.message?.toString()}
-                      </div>
-                    )}
-                  </div>
-                ))}
+            <div className='w-full rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4 xl:max-w-sm'>
+              <div className='mb-2 text-lg font-bold md:text-xl'>
+                Data Source
+              </div>
+              <div className='flex flex-col gap-y-6'>
+                {channelInputProps
+                  .filter(
+                    (v) => !v.roles || v.roles.includes(user?.role ?? 'user')
+                  )
+                  .map((v, i) => (
+                    <div className='min-w-[15rem] flex-1' key={i}>
+                      <label htmlFor={`${i}`} className='text-[#819289]'>
+                        {v.title}
+                        {v.required && <span className='text-red-500'>*</span>}
+                      </label>
+                      {v.name === 'channel' ? (
+                        <Select
+                          key={i}
+                          className='capitalize'
+                          {...register(v.name, v.options)}
+                        >
+                          <option value='select'>Select Channel</option>
+                          {channel.map((channel, i) => {
+                            return (
+                              <option key={i} value={channel}>
+                                {channel}
+                              </option>
+                            );
+                          })}
+                        </Select>
+                      ) : (
+                        <TextInput
+                          id={v.name}
+                          type={v.type}
+                          placeholder={v.placeholder}
+                          {...register(v.name ?? `${i}`, v.options)}
+                        />
+                      )}
+                      {v.name && errors[v.name]?.message && (
+                        <div className='text-xs font-bold text-red-500'>
+                          {errors[v.name]?.message?.toString()}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>

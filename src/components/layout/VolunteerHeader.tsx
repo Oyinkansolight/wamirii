@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import TabBar from '@/components/layout/TabBar';
@@ -17,13 +16,12 @@ export default function VolunteerHeader({
   onProfileClicked: () => void;
 }) {
   const user = useContext(UserContext);
-  const router = useRouter();
 
-  useEffect(() => {
-    if (idx === 2) {
-      router.push('/submissions');
-    }
-  }, [idx, router]);
+  //useEffect(() => {
+  //  if (idx === 2) {
+  //    router.push('/submissions');
+  //  }
+  //}, [idx, router]);
 
   return (
     <div className='flex items-center justify-between py-6'>
