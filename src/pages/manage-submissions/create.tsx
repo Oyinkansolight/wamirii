@@ -182,11 +182,6 @@ const contactPersonInputProps: (TextInputProps & { roles?: Role[] } & {
     title: 'Address',
     name: 'contactAddress',
   },
-  {
-    placeholder: 'Relationship to missing person',
-    title: 'Relationship',
-    name: 'contactRelationship',
-  },
 ];
 
 const channelInputProps: (TextInputProps & { roles?: Role[] } & {
