@@ -1,7 +1,6 @@
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   FirestoreError,
   getCountFromServer,
@@ -167,7 +166,7 @@ export class FirestoreService {
   }
 
   static async deleteListing(id: string) {
-    await deleteDoc(doc(db, `listings/${id}`));
+    await updateDoc(doc(db, `listings/${id}`), { deleted: true });
   }
 
   static async userDocExists(id: string) {
