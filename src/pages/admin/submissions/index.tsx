@@ -147,7 +147,7 @@ export default AuthGuardHOC(() => {
   const c = useMemo(() => {
     const constraints: QueryConstraint[][] = [
       FirestoreService.getListingsConstraints({ createdBy: user?.id }),
-      [],
+      FirestoreService.getListingsConstraints({}),
       FirestoreService.getListingsConstraints({ status: 'found-alive' }),
     ];
     return constraints[idx];

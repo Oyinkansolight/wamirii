@@ -1,7 +1,6 @@
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   FirestoreError,
   getCountFromServer,
@@ -49,9 +48,12 @@ export class FirestoreService {
     }
   }
 
-  static getListingsConstraints(listing: Listing) {
+  static getListingsConstraints(listing: Listing, excludeDeleted = true) {
     const q: QueryConstraint[] = [];
     const keys = Object.keys(listing) as (keyof Listing)[];
+    if (excludeDeleted) {
+      q.push(where('deleted', '==', false));
+    }
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       if (listing[key]) {
@@ -167,7 +169,7 @@ export class FirestoreService {
   }
 
   static async deleteListing(id: string) {
-    await deleteDoc(doc(db, `listings/${id}`));
+    await updateDoc(doc(db, `listings/${id}`), { deleted: true });
   }
 
   static async userDocExists(id: string) {
@@ -280,8 +282,15 @@ export class FirestoreService {
     return await getCountFromServer(query(collection(db, 'users'), ...q));
   }
 
-  static async getSubmissionCountWhere(submission: Listing, month?: string) {
+  static async getSubmissionCountWhere(
+    submission: Listing,
+    month?: string,
+    excludeDeleted = true
+  ) {
     const q: QueryConstraint[] = [];
+    if (excludeDeleted) {
+      q.push(where('deleted', '==', false));
+    }
     const keys = Object.keys(submission) as (keyof Listing)[];
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];

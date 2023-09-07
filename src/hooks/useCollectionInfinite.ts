@@ -7,6 +7,7 @@ import {
   orderBy,
   query,
   QueryConstraint,
+  where,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
@@ -32,6 +33,7 @@ export function useCollectionInfinite<T>(
   useEffect(() => {
     setIsLoading(true);
     const constraints: QueryConstraint[] = [
+      where('deleted', '==', false),
       orderBy('createdAt', 'desc'),
       limit(l + 1),
     ];
