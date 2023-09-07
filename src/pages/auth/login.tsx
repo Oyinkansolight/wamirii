@@ -147,7 +147,7 @@ export default function LoginPage() {
               </button>
               <div className='h-6' />
               <GoogleLoginButton
-                className='m-0'
+                align='center'
                 style={{ margin: '0px', width: '100%' }}
                 onClick={signInWithGmail}
               />
