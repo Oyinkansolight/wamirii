@@ -1,8 +1,10 @@
 import {
   confirmPasswordReset,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updatePassword,
 } from 'firebase/auth';
@@ -20,6 +22,24 @@ export class AuthService {
       const u = await createUserWithEmailAndPassword(auth, email, password);
       await FirestoreService.createNewUserDocument(u.user.uid, email, username);
       return u;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      throw { message: this.getErrorMessage(error.code), code: error.code };
+    }
+  }
+
+  static async signInWithGmail() {
+    try {
+      const provider = new GoogleAuthProvider();
+      auth.useDeviceLanguage();
+      const res = await signInWithPopup(auth, provider);
+      if (await FirestoreService.isUserExists(res.user.uid)) return res;
+      FirestoreService.createNewUserDocument(
+        res.user.uid,
+        res.user.email ?? undefined,
+        res.user.email?.split('@')[0]
+      );
+      return res;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       throw { message: this.getErrorMessage(error.code), code: error.code };

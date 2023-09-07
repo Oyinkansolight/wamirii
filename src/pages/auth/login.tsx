@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { GoogleLoginButton } from 'react-social-login-buttons';
 import { toast } from 'react-toastify';
 
 import ListingFoundCard from '@/components/cards/ListingFoundCard';
@@ -131,6 +132,9 @@ export default function LoginPage() {
               >
                 Login
               </button>
+              <GoogleLoginButton
+                onClick={() => AuthService.signInWithGmail()}
+              />
               <p className='text-sm font-light text-gray-500 '>
                 Don’t have an account yet?{' '}
                 <Link
