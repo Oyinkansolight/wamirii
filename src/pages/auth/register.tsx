@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { GoogleLoginButton } from 'react-social-login-buttons';
 import { toast } from 'react-toastify';
 
 import ListingFoundCard from '@/components/cards/ListingFoundCard';
@@ -34,6 +35,17 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+  const signInWithGmail = useCallback(async () => {
+    try {
+      const u = await AuthService.signInWithGmail();
+      FirestoreService.getUserDoc(u.user.uid, (user) => {
+        router.push(`/${user.role}`);
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }, [router]);
   return (
     <section className='relative'>
       <div className='absolute -z-10 h-screen w-screen'>
@@ -182,6 +194,12 @@ export default function LoginPage() {
               >
                 Create an account
               </button>
+              <div className='h-6' />
+              <GoogleLoginButton
+                className='m-0'
+                style={{ margin: '0px', width: '100%' }}
+                onClick={signInWithGmail}
+              />
               <p className='text-sm font-light text-gray-500 '>
                 Already have an account?{' '}
                 <Link
