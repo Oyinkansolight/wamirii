@@ -34,7 +34,7 @@ export class AuthService {
       auth.useDeviceLanguage();
       const res = await signInWithPopup(auth, provider);
       if (await FirestoreService.isUserExists(res.user.uid)) return res;
-      FirestoreService.createNewUserDocument(
+      await FirestoreService.createNewUserDocument(
         res.user.uid,
         res.user.email ?? undefined,
         res.user.email?.split('@')[0]
@@ -50,7 +50,7 @@ export class AuthService {
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       if (await FirestoreService.isUserExists(res.user.uid)) return res;
-      FirestoreService.createNewUserDocument(
+      await FirestoreService.createNewUserDocument(
         res.user.uid,
         res.user.email ?? undefined,
         res.user.email?.split('@')[0]
