@@ -52,7 +52,7 @@ export class FirestoreService {
   static getListingsConstraints(listing: Listing, excludeDeleted = true) {
     const q: QueryConstraint[] = [];
     const keys = Object.keys(listing) as (keyof Listing)[];
-    if (excludeDeleted) {
+    if (excludeDeleted && typeof listing.deleted === 'undefined') {
       q.push(where('deleted', '==', false));
     }
     for (let i = 0; i < keys.length; i++) {
@@ -289,7 +289,7 @@ export class FirestoreService {
     excludeDeleted = true
   ) {
     const q: QueryConstraint[] = [];
-    if (excludeDeleted) {
+    if (excludeDeleted && typeof submission.deleted === 'undefined') {
       q.push(where('deleted', '==', false));
     }
     const keys = Object.keys(submission) as (keyof Listing)[];
