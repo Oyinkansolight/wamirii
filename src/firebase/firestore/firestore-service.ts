@@ -38,6 +38,7 @@ export class FirestoreService {
       email: email ?? null,
       status: 'active',
       createdAt: serverTimestamp(),
+      role: 'user',
       ...extraData,
     };
     if (!id) {
