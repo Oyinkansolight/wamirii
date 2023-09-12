@@ -221,17 +221,17 @@ const allInputs: Record<
         },
       },
     },
-    {
-      placeholder: '',
-      title: 'Organization',
-      name: 'organizationId',
-      disabled: true,
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
-    },
+    // {
+    //   placeholder: '',
+    //   title: 'Organization',
+    //   name: 'organizationId',
+    //   disabled: true,
+    //   options: {
+    //     validate: {
+    //       notEmpty: (v) => v !== '' || 'This field must not be empty',
+    //     },
+    //   },
+    // },
     {
       placeholder: '',
       title: 'Password',
