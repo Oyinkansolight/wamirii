@@ -267,6 +267,7 @@ export default AuthGuardHOC(() => {
         const key = Object.keys(data)[i];
         if (
           data[key] === '' ||
+          typeof data[key] === 'undefined' ||
           (typeof data[key] === 'string' && data[key].split()[0] === 'Select')
         ) {
           data[key] = null;
@@ -300,7 +301,7 @@ export default AuthGuardHOC(() => {
               onSubmit(getValues());
             }}
             title='Submission Failed'
-            subtitle={error}
+            subtitle={error.message}
           />
         );
         generalModal.setIsOpen(true);
