@@ -164,6 +164,7 @@ export class FirestoreService {
           ? Number.parseInt(listing.missingAge)
           : null,
         createdAt: serverTimestamp(),
+        deleted: false,
       });
       return ref.id;
     }

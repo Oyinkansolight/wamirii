@@ -200,17 +200,17 @@ const allInputs: Record<
         },
       },
     },
-    {
-      placeholder: '',
-      title: 'Organization',
-      name: 'organizationId',
-      disabled: true,
-      options: {
-        validate: {
-          notEmpty: (v) => v !== '' || 'This field must not be empty',
-        },
-      },
-    },
+    // {
+    //   placeholder: '',
+    //   title: 'Organization',
+    //   name: 'organizationId',
+    //   disabled: true,
+    //   options: {
+    //     validate: {
+    //       notEmpty: (v) => v !== '' || 'This field must not be empty',
+    //     },
+    //   },
+    // },
     {
       placeholder: '',
       title: 'Password',
@@ -271,6 +271,7 @@ export default function CreateUserView({
       if (userToEdit) {
         delete data.password;
         await FirestoreService.updateUserDocument(data);
+        toast.success(`User ${userToEdit.username} updated successfully`);
       } else {
         if (role !== 'organization') {
           const f = httpsCallable(getFunctions(), 'createUser', {});
@@ -298,6 +299,7 @@ export default function CreateUserView({
       g?.error(() => onSubmit(data), error.message);
     } finally {
       setIsSubmitting(false);
+      onClose && onClose();
     }
   };
 
