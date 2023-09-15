@@ -3,7 +3,6 @@ import { QueryConstraint } from 'firebase/firestore';
 import { Select, TextInput } from 'flowbite-react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { BiEdit } from 'react-icons/bi';
 import { BsFillEyeFill } from 'react-icons/bs';
 import { ImInfo } from 'react-icons/im';
 import { SlOptions } from 'react-icons/sl';
@@ -21,6 +20,7 @@ import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import TabBar from '@/components/layout/TabBar';
 import CreateUserView from '@/components/modal-views/CreateUserView';
 import Role from '@/components/profile/Role';
+import { EditUserMenuItem } from '@/components/users/MenuItems';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
@@ -255,28 +255,3 @@ export default AuthGuardHOC(() => {
 //     </MenuItem>
 //   );
 // }
-
-export function EditUserMenuItem({ user, role }: { user?: User; role: R }) {
-  const g = useContext(GeneralModalContext);
-  return (
-    <MenuItem
-      onClick={() => {
-        if (g) {
-          g.setContent(
-            <CreateUserView
-              onClose={() => g.setIsOpen(false)}
-              role={role}
-              userToEdit={user}
-            />
-          );
-          g.setIsOpen(true);
-        }
-      }}
-    >
-      <div className='flex gap-2'>
-        <BiEdit />
-        <div>Edit</div>
-      </div>
-    </MenuItem>
-  );
-}

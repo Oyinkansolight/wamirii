@@ -16,7 +16,12 @@ export default function TabBar({
   inactiveItemClassName?: string;
 }) {
   return (
-    <div className={clsxm('flex overflow-hidden overflow-x-auto', className)}>
+    <div
+      className={clsxm(
+        'flex min-h-[48px] overflow-hidden overflow-x-auto',
+        className
+      )}
+    >
       {items.map((v, i) => (
         <div
           key={i}
