@@ -3,7 +3,7 @@ import { createAvatar } from '@dicebear/core';
 import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import { BiChevronRight } from 'react-icons/bi';
 
@@ -11,6 +11,11 @@ import clsxm from '@/lib/clsxm';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import GetDocumentHOC from '@/hocs/get-document';
+
+import Button from '../buttons/Button';
+import { GeneralModalContext } from '../layout/GeneralModalLayout';
+import { UserContext } from '../layout/GetAuthStatus';
+import DeleteSubmissionView from '../modal-views/DeleteSubmissionView';
 
 import { Listing, Status } from '@/types/listing';
 import { User } from '@/types/user';
@@ -34,6 +39,8 @@ const ListingCard2 = ({
   fromAlgolia?: boolean;
 }) => {
   const router = useRouter();
+  const user = useContext(UserContext);
+  const m = useContext(GeneralModalContext);
   const name =
     listing?.missingFirstName || listing?.missingLastName
       ? `${listing?.missingLastName} ${listing?.missingFirstName}`
@@ -50,10 +57,17 @@ const ListingCard2 = ({
       }, `users/${listing?.createdBy}`)
     : () => <div>Author [NULL]</div>;
 
+  const deleteListing = useCallback(() => {
+    m?.setContent(<DeleteSubmissionView submission={listing} />);
+    m?.setIsOpen(true);
+  }, [listing, m]);
+  const editListing = useCallback(() => {
+    router.push(`/manage-submissions/${listing?._id}?mode=edit`);
+  }, [listing, router]);
   return (
     <div
       className={clsxm(
-        'relative cursor-pointer overflow-hidden bg-white',
+        'group relative cursor-pointer overflow-hidden bg-white',
         size === 'sm' ? 'text-xs' : 'text-base',
         className
       )}
@@ -118,13 +132,33 @@ const ListingCard2 = ({
           <div className='font-normal text-[#04261466]'>Reported</div>
           <Author />
         </div>
-        <div className='flex items-end '>
+        <div className='flex items-end'>
           <div className='flex items-center rounded border border-[#91BC9F] bg-[#DFF5E6] font-normal text-[#13602C]'>
             <div>Read Info</div>
             <BiChevronRight className='h-6 w-6' />
           </div>
         </div>
       </div>
+      {(user?.id === listing?.createdBy || user?.role === 'admin') && (
+        <div className='absolute left-0 right-0 top-0 flex justify-end gap-2 p-2 opacity-0 transition-all group-hover:opacity-100'>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              editListing();
+            }}
+          >
+            Edit
+          </Button>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteListing();
+            }}
+          >
+            Delete
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
