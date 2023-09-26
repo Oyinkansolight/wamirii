@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { useCollectionInfinite } from '@/hooks/useCollectionInfinite';
 
-import { ListingCard } from '@/components/cards';
+import ListingCard2 from '@/components/cards/ListingCard2';
 import Loading from '@/components/generic/Loading';
 import SearchInput from '@/components/inputs/search-input';
 import Layout from '@/components/layout/Layout';
@@ -61,9 +61,9 @@ export default function Submissions() {
           </section>
         )}
 
-        <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4'>
           {listings?.map((listing, i) => (
-            <ListingCard key={i} listing={listing} />
+            <ListingCard2 key={i} listing={listing} size='sm' />
           ))}
         </div>
         {isLoading ? (

@@ -16,7 +16,7 @@ export default function VolunteerSubmissionByDate() {
   const [dates] = useCollection(query(collection(db, 'listings-by-date')));
 
   return (
-    <div className='flex flex-col gap-3 rounded-lg border border-dashed bg-[#EDF3F0] p-4'>
+    <div className='flex h-full max-h-[700px] flex-col gap-3 overflow-y-scroll rounded-lg border border-dashed bg-[#EDF3F0] p-4'>
       <div className='flex items-center justify-between'>
         <div className='font-bold'>Submissions</div>
         <TextInput type='date' />

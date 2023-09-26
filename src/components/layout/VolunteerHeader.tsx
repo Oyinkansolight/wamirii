@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useContext } from 'react';
 
 import { UserContext } from '@/components/layout/GetAuthStatus';
@@ -15,13 +16,22 @@ export default function VolunteerHeader({
   onProfileClicked: () => void;
 }) {
   const user = useContext(UserContext);
+
+  //useEffect(() => {
+  //  if (idx === 2) {
+  //    router.push('/submissions');
+  //  }
+  //}, [idx, router]);
+
   return (
     <div className='flex items-center justify-between py-6'>
-      <Image width={70} height={70} src='/images/logo.png' alt='' />
+      <Link href='/'>
+        <Image width={70} height={70} src='/images/logo.png' alt='' />
+      </Link>
       <div className='flex-1' />
       <TabBar
         items={[
-          { label: 'My Statistics' },
+          { label: 'Statistics' },
           { label: 'My Submissions' },
           { label: 'All Submissions' },
           { label: 'Found Persons' },

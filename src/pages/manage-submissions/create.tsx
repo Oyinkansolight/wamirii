@@ -14,7 +14,6 @@ import {
   useForm,
 } from 'react-hook-form';
 import { IoCaretBackOutline } from 'react-icons/io5';
-import { toast } from 'react-toastify';
 
 import clsxm from '@/lib/clsxm';
 
@@ -26,34 +25,41 @@ import { UserContext } from '@/components/layout/GetAuthStatus';
 import ActionFailedView from '@/components/modal-views/ActionFailed';
 import ActionSuccessView from '@/components/modal-views/ActionSuccess';
 
-import { allStates, status } from '@/constant/generic';
+import {
+  allStates,
+  channel,
+  reporterRelationship,
+  status,
+} from '@/constant/generic';
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 
-const missingPersonInputProps: (TextInputProps & {
+import { Role } from '@/types/user';
+
+const missingPersonInputProps: (TextInputProps & { roles?: Role[] } & {
   options?: RegisterOptions<FieldValues, string> | undefined;
 })[] = [
   {
     placeholder: 'Enter first name of missing person',
     title: 'First name',
     name: 'missingFirstName',
-    required: true,
-    options: {
-      validate: {
-        notEmpty: (v) => v !== '' || 'This field must not be empty',
-      },
-    },
+    //required: true,
+    //options: {
+    //  validate: {
+    //    notEmpty: (v) => v !== '' || 'This field must not be empty',
+    //  },
+    //},
   },
   {
     placeholder: 'Enter last name of missing person',
     title: 'Last name',
     name: 'missingLastName',
-    required: true,
-    options: {
-      validate: {
-        notEmpty: (v) => v !== '' || 'This field must not be empty',
-      },
-    },
+    //required: true,
+    //options: {
+    //  validate: {
+    //    notEmpty: (v) => v !== '' || 'This field must not be empty',
+    //  },
+    //},
   },
   // {
   //   placeholder: 'Select image of missing person',
@@ -76,12 +82,11 @@ const missingPersonInputProps: (TextInputProps & {
     title: 'Age when last seen',
     name: 'missingAge',
     type: 'number',
-    required: true,
-    options: {
-      validate: {
-        notEmpty: (v) => v !== '' || 'This field must not be empty',
-      },
-    },
+    //options: {
+    //  validate: {
+    //    notEmpty: (v) => v !== '' || 'This field must not be empty',
+    //  },
+    //},
   },
   {
     placeholder: 'Enter the date the missing person was last seen',
@@ -114,6 +119,23 @@ const missingPersonInputProps: (TextInputProps & {
     },
   },
   {
+    placeholder: 'Last Actual Location(Bus Stop, Workplace, Address, e.t.c)',
+    title: 'Last Actual Location',
+    name: 'missingLastKnownLocation',
+    required: false,
+  },
+  {
+    placeholder: "Reporter's relationship with victim'",
+    title: 'Relationship with victim',
+    name: 'missingReporterRelationship',
+    required: true,
+    options: {
+      validate: {
+        notEmpty: (v) => v !== 'select' || 'This field must not be empty',
+      },
+    },
+  },
+  {
     placeholder: '',
     title: 'Status',
     name: 'status',
@@ -124,13 +146,16 @@ const missingPersonInputProps: (TextInputProps & {
     },
   },
   {
-    placeholder: 'Enter more information about the missing person',
-    title: 'More Information',
+    placeholder:
+      'Additional Information (Physical feature, tribe, complextion e.t.c)',
+    title: 'Additional Information',
     name: 'missingMoreInformation',
   },
 ];
 
-const contactPersonInputProps: TextInputProps[] = [
+const contactPersonInputProps: (TextInputProps & { roles?: Role[] } & {
+  options?: RegisterOptions<FieldValues, string> | undefined;
+})[] = [
   {
     placeholder: 'Enter name of contact person',
     title: 'Name',
@@ -145,16 +170,46 @@ const contactPersonInputProps: TextInputProps[] = [
     placeholder: 'Enter phone number of contact person',
     title: 'Phone Number',
     name: 'contactPhone',
+    required: true,
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
   },
   {
     placeholder: 'Enter address of contact person',
     title: 'Address',
     name: 'contactAddress',
   },
+];
+
+const channelInputProps: (TextInputProps & { roles?: Role[] } & {
+  options?: RegisterOptions<FieldValues, string> | undefined;
+})[] = [
   {
-    placeholder: 'Relationship to missing person',
-    title: 'Relationship',
-    name: 'contactRelationship',
+    placeholder: 'Enter Channel',
+    title: 'Channel',
+    name: 'channel',
+    roles: ['volunteer', 'manager', 'admin'],
+    required: true,
+    options: {
+      validate: {
+        notEmpty: (v) => v !== 'select' || 'This field must not be empty',
+      },
+    },
+  },
+  {
+    placeholder: 'Channel Info (username, phone number, link e.t.c)',
+    title: 'Channel Info',
+    name: 'channelInfo',
+    roles: ['volunteer', 'manager', 'admin'],
+    required: true,
+    options: {
+      validate: {
+        notEmpty: (v) => v !== '' || 'This field must not be empty',
+      },
+    },
   },
 ];
 
@@ -180,27 +235,30 @@ export default AuthGuardHOC(() => {
         const key = Object.keys(data)[i];
         if (
           data[key] === '' ||
-          (typeof data[key] === 'string' && data[key].split()[0] === 'Select')
+          (typeof data[key] === 'string' &&
+            data[key].split()[0] === 'Select') ||
+          typeof data[key] === 'undefined'
         ) {
           data[key] = null;
         }
       }
-      if (!data['missingImageUrl']) {
-        toast.error('Please select an image to continue');
-        return;
-      }
-      await FirestoreService.createListing({
-        createdBy:
-          user?.role === 'manager' || user?.role === 'volunteer'
-            ? user?.organizationId || user?.id
-            : user?.id,
+      //if (!data['missingImageUrl']) {
+      //  toast.error('Please select an image to continue');
+      //  return;
+      //}
+      const id = await FirestoreService.createListing({
+        createdBy: user?.id,
         ...data,
         missingAge: data.missingAge ? Number.parseInt(data.missingAge) : null,
       });
+
       if (generalModal?.setContent) {
         generalModal.setContent(
           <ActionSuccessView
-            onClose={() => generalModal.setIsOpen(false)}
+            onClose={() => {
+              router.push(`/submissions/${id}`);
+              generalModal?.setIsOpen(false);
+            }}
             title='Submission Created'
             subtitle=''
           />
@@ -218,7 +276,7 @@ export default AuthGuardHOC(() => {
               onSubmit(getValues());
             }}
             title='Submission Failed'
-            subtitle={error}
+            subtitle={error.message}
           />
         );
         generalModal.setIsOpen(true);
@@ -292,6 +350,22 @@ export default AuthGuardHOC(() => {
                       accept='image/png, image/gif, image/jpeg'
                       {...register(v.name ?? `${i}`)}
                     />
+                  ) : v.name === 'missingReporterRelationship' ? (
+                    <Select
+                      className='capitalize'
+                      {...register(v.name, v.options)}
+                    >
+                      <option value='select'>
+                        Select Relationship with Missing person
+                      </option>
+                      {reporterRelationship.map((relationship, i) => {
+                        return (
+                          <option key={i} value={relationship}>
+                            {relationship}
+                          </option>
+                        );
+                      })}
+                    </Select>
                   ) : v.name === 'status' ? (
                     <Select
                       className='capitalize'
@@ -357,21 +431,108 @@ export default AuthGuardHOC(() => {
               ))}
             </div>
           </div>
-          <div className='w-full rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4 xl:max-w-sm'>
-            <div className='mb-2 text-lg font-bold md:text-xl'>
-              Contact Information{' '}
-              <span className='text-[#819289]'>(If Found)</span>
+          <div className='flex flex-col gap-4'>
+            <div className='w-full rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4 xl:max-w-sm'>
+              <div className='mb-2 text-lg font-bold md:text-xl'>
+                Contact Information{' '}
+                <span className='text-[#819289]'>(If Found)</span>
+              </div>
+              <div className='flex flex-col gap-y-6'>
+                {contactPersonInputProps
+                  .filter(
+                    (v) => !v.roles || v.roles.includes(user?.role ?? 'user')
+                  )
+                  .map((v, i) => (
+                    <div className='min-w-[15rem] flex-1' key={i}>
+                      <label htmlFor={`${i}`} className='text-[#819289]'>
+                        {v.title}
+                        {v.required && <span className='text-red-500'>*</span>}
+                      </label>
+                      {v.name === 'channel' ? (
+                        <Select
+                          key={i}
+                          className='capitalize'
+                          {...register(v.name, v.options)}
+                        >
+                          <option value='select'>Select Channel</option>
+                          {channel.map((channel, i) => {
+                            return (
+                              <option key={i} value={channel}>
+                                {channel}
+                              </option>
+                            );
+                          })}
+                        </Select>
+                      ) : (
+                        <TextInput
+                          id={v.name}
+                          type={v.type}
+                          placeholder={v.placeholder}
+                          {...register(v.name ?? `${i}`, v.options)}
+                        />
+                      )}
+                      {v.name && errors[v.name]?.message && (
+                        <div className='text-xs font-bold text-red-500'>
+                          {errors[v.name]?.message?.toString()}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
             </div>
-            <div className='flex flex-col gap-y-6'>
-              {contactPersonInputProps.map((v, i) => (
-                <div className='min-w-[15rem] flex-1' key={i}>
-                  <label htmlFor={`${i}`} className='text-[#819289]'>
-                    {v.title}
-                  </label>
-                  <TextInput {...v} {...register(v.name ?? `${i}`)} />
+            {channelInputProps.find(
+              (v) => v.roles && v.roles.includes(user?.role ?? 'admin')
+            ) && (
+              <div className='w-full rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4 xl:max-w-sm'>
+                <div className='mb-2 text-lg font-bold md:text-xl'>
+                  Data Source
                 </div>
-              ))}
-            </div>
+                <div className='flex flex-col gap-y-6'>
+                  {channelInputProps
+                    .filter(
+                      (v) => !v.roles || v.roles.includes(user?.role ?? 'user')
+                    )
+                    .map((v, i) => (
+                      <div className='min-w-[15rem] flex-1' key={i}>
+                        <label htmlFor={`${i}`} className='text-[#819289]'>
+                          {v.title}
+                          {v.required && (
+                            <span className='text-red-500'>*</span>
+                          )}
+                        </label>
+                        {v.name === 'channel' ? (
+                          <Select
+                            key={i}
+                            className='capitalize'
+                            {...register(v.name, v.options)}
+                          >
+                            <option value='select'>Select Channel</option>
+                            {channel.map((channel, i) => {
+                              return (
+                                <option key={i} value={channel}>
+                                  {channel}
+                                </option>
+                              );
+                            })}
+                          </Select>
+                        ) : (
+                          <TextInput
+                            id={v.name}
+                            type={v.type}
+                            placeholder={v.placeholder}
+                            {...register(v.name ?? `${i}`, v.options)}
+                          />
+                        )}
+                        {v.name && errors[v.name]?.message && (
+                          <div className='text-xs font-bold text-red-500'>
+                            {errors[v.name]?.message?.toString()}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </form>

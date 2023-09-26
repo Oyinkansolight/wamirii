@@ -2,6 +2,7 @@ import { Menu, MenuItem } from '@szhsin/react-menu';
 import { DocumentData, QueryConstraint } from 'firebase/firestore';
 import { Select, TextInput } from 'flowbite-react';
 import moment from 'moment';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
@@ -29,8 +30,9 @@ import AuthGuardHOC from '@/hocs/auth-guard-hoc';
 import GetDocumentHOC from '@/hocs/get-document';
 
 import { Listing } from '@/types/listing';
+import { User } from '@/types/user';
 
-const tableColumns: TableColumn<Listing>[] = [
+const tableColumns: TableColumn<Listing & { user: User | null }>[] = [
   {
     name: 'Date Posted',
     cell: (row) => (
@@ -99,19 +101,23 @@ const tableColumns: TableColumn<Listing>[] = [
             <div>View</div>
           </div>
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            if (window.location) {
-              window.location.href = `/manage-submissions/${row._id}?mode=edit`;
-            }
-          }}
-        >
-          <div className='flex gap-2'>
-            <BiEdit />
-            <div>Edit</div>
-          </div>
-        </MenuItem>
-        <DeleteMenuItem submission={row} />
+        {(row.user?.role === 'admin' || row.user?.id === row.createdBy) && (
+          <>
+            <MenuItem
+              onClick={() => {
+                if (window.location) {
+                  window.location.href = `/manage-submissions/${row._id}?mode=edit`;
+                }
+              }}
+            >
+              <div className='flex gap-2'>
+                <BiEdit />
+                <div>Edit</div>
+              </div>
+            </MenuItem>
+            <DeleteMenuItem submission={row} />
+          </>
+        )}
       </Menu>
     ),
   },
@@ -123,6 +129,11 @@ export default AuthGuardHOC(() => {
   const [mySubmissionsCount, setMySubmissionsCount] = useState(0);
   const [allSubmissionsCount, setAllSubmissionsCount] = useState(0);
   const router = useRouter();
+  const params = useSearchParams();
+
+  useEffect(() => {
+    setIdx(Number.parseInt(params.get('tab') ?? '0'));
+  }, [params]);
 
   useEffect(() => {
     const a = async () => {
@@ -165,7 +176,10 @@ export default AuthGuardHOC(() => {
         </div>
         <TabBar
           currentIdx={idx}
-          onChange={setIdx}
+          onChange={(index) => {
+            router.push(`${router.pathname}?tab=${index}`);
+            setIdx(index);
+          }}
           items={[
             { label: `My Submissions (${mySubmissionsCount})` },
             { label: `All Submissions (${allSubmissionsCount})` },
@@ -206,7 +220,9 @@ export default AuthGuardHOC(() => {
               });
             }}
             columns={tableColumns}
-            data={docs?.map((doc) => ({ _id: doc.id, ...doc.data() })) ?? []}
+            data={
+              docs?.map((doc) => ({ _id: doc.id, user, ...doc.data() })) ?? []
+            }
           />
         </div>
       </div>

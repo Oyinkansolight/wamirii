@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { useCollectionInfinite } from '@/hooks/useCollectionInfinite';
 
-import { ListingCard } from '@/components/cards';
+import ListingCard2 from '@/components/cards/ListingCard2';
 import Banner from '@/components/layout/Banner';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
@@ -43,9 +43,9 @@ export default function HomePage() {
         ) : (
           <div className='h3 mb-4 px-4 md:px-0'>Recent Submissions</div>
         )}
-        <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4'>
           {listings?.map((listing, i) => (
-            <ListingCard key={i} listing={listing} />
+            <ListingCard2 key={i} listing={listing} size='sm' />
           ))}
         </div>
       </div>

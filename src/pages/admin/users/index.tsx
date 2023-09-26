@@ -3,7 +3,6 @@ import { QueryConstraint } from 'firebase/firestore';
 import { Select, TextInput } from 'flowbite-react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { BiEdit } from 'react-icons/bi';
 import { BsFillEyeFill } from 'react-icons/bs';
 import { ImInfo } from 'react-icons/im';
 import { SlOptions } from 'react-icons/sl';
@@ -21,76 +20,89 @@ import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import TabBar from '@/components/layout/TabBar';
 import CreateUserView from '@/components/modal-views/CreateUserView';
 import Role from '@/components/profile/Role';
+import { EditUserMenuItem } from '@/components/users/MenuItems';
 
 import { FirestoreService } from '@/firebase/firestore/firestore-service';
 import AuthGuardHOC from '@/hocs/auth-guard-hoc';
+import GetDocumentHOC from '@/hocs/get-document';
 
 import { Role as R, User } from '@/types/user';
 
-const tableColumns: TableColumn<User>[] = [
-  {
-    name: 'Date Created',
-    cell: (row) => <div>{row.createdAt?.toDate().toDateString()}</div>,
-    sortable: true,
-    sortField: 'createdAt',
-  },
-  {
-    name: 'Full Name',
-    selector: (cell) => `${cell.username}`,
-    cell: (cell) => (
-      <div>
-        <div className='font-bold'>{cell.username}</div>
-      </div>
-    ),
-  },
-  {
-    name: 'Phone Number',
-    cell: (row) => <div>{row.phoneNumber}</div>,
-  },
-  {
-    name: 'Email',
-    cell: (row) => <div>{row.email}</div>,
-  },
-  {
-    name: 'Status',
-    cell: (row) => <Role role={row.status ?? 'active'} />,
-  },
-  {
-    width: '40px',
-    cell: (row) => (
-      <Menu
-        menuButton={
-          <div className='rounded bg-[#E7EFEA] py-1 px-1  text-[#819289]'>
-            <SlOptions />
-          </div>
-        }
-        transition
-      >
-        <MenuItem
-          onClick={() => {
-            if (window.location) {
-              // window.location.href = `/admin/submissions/${row.id}`;
-            }
-          }}
+function getTableColumns(roleUsers: R): TableColumn<User>[] {
+  return [
+    {
+      name: 'Date Created',
+      cell: (row) => <div>{row.createdAt?.toDate().toDateString()}</div>,
+      sortable: true,
+      sortField: 'createdAt',
+    },
+    {
+      name: 'Full Name',
+      selector: (cell) => `${cell.username}`,
+      cell: (cell) => (
+        <div>
+          <div className='font-bold'>{cell.username}</div>
+        </div>
+      ),
+    },
+    {
+      name:
+        roleUsers === 'volunteer' || roleUsers == 'manager'
+          ? 'Organization'
+          : 'Phone Number',
+      cell: (row) => {
+        const Org = GetDocumentHOC((props) => {
+          return (
+            <div>
+              {(props.doc as User).username} ({(props.doc as User).acronym})
+            </div>
+          );
+        }, `users/${row.organizationId}`);
+        return roleUsers === 'volunteer' || roleUsers == 'manager' ? (
+          <Org />
+        ) : (
+          <div>{row.phoneNumber}</div>
+        );
+      },
+    },
+    {
+      name: 'Email',
+      cell: (row) => <div>{row.email}</div>,
+    },
+    {
+      name: 'Status',
+      cell: (row) => <Role role={row.status ?? 'active'} />,
+    },
+    {
+      width: '40px',
+      cell: (row) => (
+        <Menu
+          menuButton={
+            <div className='rounded bg-[#E7EFEA] py-1 px-1  text-[#819289]'>
+              <SlOptions />
+            </div>
+          }
+          transition
         >
-          <div className='flex gap-2'>
-            <BsFillEyeFill />
-            <div>View</div>
-          </div>
-        </MenuItem>
-        <EditUserMenuItem role={row.role ?? 'user'} user={row} />
-        {/* <DeleteMenuItem submission={row} /> */}
-      </Menu>
-    ),
-  },
-];
-
-const possibleColumns = [
-  tableColumns,
-  tableColumns,
-  tableColumns,
-  tableColumns,
-];
+          <MenuItem
+            onClick={() => {
+              if (window.location) {
+                // window.location.href = `/admin/submissions/${row.id}`;
+              }
+            }}
+          >
+            <div className='flex gap-2'>
+              <BsFillEyeFill />
+              <div>View</div>
+            </div>
+          </MenuItem>
+          <EditUserMenuItem role={row.role ?? 'user'} user={row} />
+          {/* <DeleteMenuItem submission={row} /> */}
+        </Menu>
+      ),
+    },
+  ];
+}
 
 const addNewPrompt = ['User', 'Admin User', 'Manager', 'Volunteer'];
 const allRoles: R[] = ['user', 'admin', 'manager', 'volunteer'];
@@ -211,7 +223,7 @@ export default AuthGuardHOC(() => {
                 direction: dir,
               });
             }}
-            columns={possibleColumns[idx]}
+            columns={getTableColumns(allRoles[idx])}
             data={docs?.map((doc) => ({ id: doc.id, ...doc.data() })) ?? []}
           />
         </div>
@@ -243,28 +255,3 @@ export default AuthGuardHOC(() => {
 //     </MenuItem>
 //   );
 // }
-
-export function EditUserMenuItem({ user, role }: { user?: User; role: R }) {
-  const g = useContext(GeneralModalContext);
-  return (
-    <MenuItem
-      onClick={() => {
-        if (g) {
-          g.setContent(
-            <CreateUserView
-              onClose={() => g.setIsOpen(false)}
-              role={role}
-              userToEdit={user}
-            />
-          );
-          g.setIsOpen(true);
-        }
-      }}
-    >
-      <div className='flex gap-2'>
-        <BiEdit />
-        <div>Edit</div>
-      </div>
-    </MenuItem>
-  );
-}

@@ -26,6 +26,7 @@ export class Listing {
   reporterPhone?: string;
   createdAt?: Timestamp;
   status?: Status;
+  deleted?: boolean;
 }
 
 export type Status = (typeof status)[number];

@@ -10,8 +10,6 @@ import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 
 import Button from '@/components/buttons/Button';
 import ListingCard2 from '@/components/cards/ListingCard2';
-import SubmissionView from '@/components/cards/SubmissionView';
-import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import VolunteerHeader from '@/components/layout/VolunteerHeader';
 import SettingsView from '@/components/views/settings/SettingsView';
@@ -45,7 +43,6 @@ const labels = [
 ];
 function TabContent({ idx }: { idx: number }) {
   const user = useContext(UserContext);
-  const g = useContext(GeneralModalContext);
   const c = useMemo(() => {
     const constraints: QueryConstraint[][] = [
       [],
@@ -138,16 +135,6 @@ function TabContent({ idx }: { idx: number }) {
           <div className='grid grid-cols-5 gap-2'>
             {docs?.map((v, i) => (
               <ListingCard2
-                onClick={() => {
-                  g?.setContent(
-                    <SubmissionView
-                      onClose={() => g?.setIsOpen(false)}
-                      listing={{ ...v.data(), _id: v.id }}
-                    />,
-                    'lg'
-                  );
-                  g?.setIsOpen(true);
-                }}
                 size='sm'
                 key={i}
                 listing={{ ...v.data(), _id: v.id }}

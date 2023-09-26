@@ -3,6 +3,19 @@ const nextConfig = {
   eslint: {
     dirs: ['src'],
   },
+  headers: async () => {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+        ],
+      },
+    ];
+  },
 
   reactStrictMode: true,
   swcMinify: true,

@@ -1,7 +1,6 @@
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   FirestoreError,
   getCountFromServer,
@@ -28,23 +27,34 @@ import { Role, User } from '@/types/user';
 
 export class FirestoreService {
   static async createNewUserDocument(
-    id: string,
+    id?: string,
     email?: string,
-    username?: string
+    username?: string,
+    extraData?: { [x: string]: string | number | Timestamp | null }
   ) {
-    await setDoc(doc(db, `users/${id}`), {
-      id,
-      username,
-      email,
-      role: 'user',
+    const data = {
+      id: id ?? null,
+      username: username ?? null,
+      email: email ?? null,
       status: 'active',
       createdAt: serverTimestamp(),
-    });
+      role: 'user',
+      ...extraData,
+    };
+    if (!id) {
+      const ref = await addDoc(collection(db, `users`), data);
+      await updateDoc(doc(db, `users/${ref.id}`), { id: ref.id });
+    } else {
+      await setDoc(doc(db, `users/${id}`), data);
+    }
   }
 
-  static getListingsConstraints(listing: Listing) {
+  static getListingsConstraints(listing: Listing, excludeDeleted = true) {
     const q: QueryConstraint[] = [];
     const keys = Object.keys(listing) as (keyof Listing)[];
+    if (excludeDeleted && typeof listing.deleted === 'undefined') {
+      q.push(where('deleted', '==', false));
+    }
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       if (listing[key]) {
@@ -147,19 +157,21 @@ export class FirestoreService {
           : null,
       });
     } else {
-      return await addDoc(collection(db, 'listings'), {
+      const ref = await addDoc(collection(db, 'listings'), {
         ...listing,
         status: 'active',
         missingAge: listing.missingAge
           ? Number.parseInt(listing.missingAge)
           : null,
         createdAt: serverTimestamp(),
+        deleted: false,
       });
+      return ref.id;
     }
   }
 
   static async deleteListing(id: string) {
-    await deleteDoc(doc(db, `listings/${id}`));
+    await updateDoc(doc(db, `listings/${id}`), { deleted: true });
   }
 
   static async userDocExists(id: string) {
@@ -272,8 +284,15 @@ export class FirestoreService {
     return await getCountFromServer(query(collection(db, 'users'), ...q));
   }
 
-  static async getSubmissionCountWhere(submission: Listing, month?: string) {
+  static async getSubmissionCountWhere(
+    submission: Listing,
+    month?: string,
+    excludeDeleted = true
+  ) {
     const q: QueryConstraint[] = [];
+    if (excludeDeleted && typeof submission.deleted === 'undefined') {
+      q.push(where('deleted', '==', false));
+    }
     const keys = Object.keys(submission) as (keyof Listing)[];
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
