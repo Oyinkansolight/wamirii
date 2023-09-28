@@ -228,7 +228,6 @@ function TotalVolunteers({ count }: { count: number }) {
         </div>
         <div>
           <div className='text-xl font-bold'>Total No of Volunteers</div>
-          <div className='text-[#819289]'>10% increase from last month</div>
           <div className='h-5' />
           <div className='text-5xl font-bold'>{count.toLocaleString()}</div>
         </div>
