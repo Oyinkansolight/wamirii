@@ -64,6 +64,11 @@ const ListingCard2 = ({
   const editListing = useCallback(() => {
     router.push(`/manage-submissions/${listing?._id}?mode=edit`);
   }, [listing, router]);
+
+  const createFollowUp = useCallback(() => {
+    router.push(`/manage-submissions/${listing?._id}?followUp=create`);
+  }, [listing, router]);
+
   return (
     <div
       className={clsxm(
@@ -141,6 +146,14 @@ const ListingCard2 = ({
       </div>
       {(user?.id === listing?.createdBy || user?.role === 'admin') && (
         <div className='absolute left-0 right-0 top-0 flex justify-end gap-2 p-2 opacity-0 transition-all group-hover:opacity-100'>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              createFollowUp();
+            }}
+          >
+            Follow Up
+          </Button>
           <Button
             onClick={(e) => {
               e.stopPropagation();

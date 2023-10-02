@@ -5,6 +5,7 @@ import {
   FirestoreError,
   getCountFromServer,
   getDoc,
+  limit,
   onSnapshot,
   orderBy,
   OrderByDirection,
@@ -47,6 +48,29 @@ export class FirestoreService {
     } else {
       await setDoc(doc(db, `users/${id}`), data);
     }
+  }
+
+  static async createFollowUp({
+    comment,
+    user,
+    submissionId,
+  }: {
+    comment: string;
+    user: User;
+    submissionId: string;
+  }) {
+    await addDoc(collection(db, `listings/${submissionId}/follow_ups`), {
+      comment,
+      createdBy: user.id,
+      submissionId,
+      createdAt: serverTimestamp(),
+    });
+    await updateDoc(doc(db, `listings/${submissionId}`), {
+      hasFollowUp: true,
+      followUpUpdatedBy: user.id,
+      followUpUpdatedByRole: user.role,
+      followUpUpdatedAt: serverTimestamp(),
+    });
   }
 
   static getListingsConstraints(listing: Listing, excludeDeleted = true) {
@@ -188,6 +212,17 @@ export class FirestoreService {
 
   static getDateGroup() {
     return query(collection(db, 'listings-by-date'), orderBy('date', 'desc'));
+  }
+
+  static getFollowUpsQuery(listing?: Listing, limitNum?: number) {
+    const constraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
+    if (limitNum) {
+      constraints.push(limit(limitNum));
+    }
+    return query(
+      collection(db, `listings/${listing?._id}/follow_ups`),
+      ...constraints
+    );
   }
 
   static getGroupedUsers(group: string, orderByField?: OrderByField) {

@@ -6,6 +6,12 @@ service cloud.firestore {
       allow create: if request.auth != null
       allow update: if request.auth != null && (request.resource.data.createdBy == request.auth.uid || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
       allow delete: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      match /follow_ups/{follow_up}{
+        allow read;
+        allow create: if request.auth != null
+        allow update: if request.auth != null && (request.resource.data.createdBy == request.auth.uid || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
+        allow delete: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      }
     }
     match /users/{user}{
       allow read;

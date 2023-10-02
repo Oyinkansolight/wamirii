@@ -62,6 +62,12 @@ const NavItems = [
     roles: ['admin', 'manager'],
   },
   {
+    icon: <RiSettings4Fill className='h-6 w-6 md:h-auto md:w-auto' />,
+    label: 'Follow Up',
+    link: '/admin/follow-ups',
+    roles: ['admin', 'manager'],
+  },
+  {
     icon: <IoLogOut className='h-6 w-6 rotate-180 md:h-auto md:w-auto' />,
     label: 'Logout',
     link: '/logout',

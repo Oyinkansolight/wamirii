@@ -2,6 +2,8 @@ import { Timestamp } from 'firebase/firestore';
 
 import { status } from '@/constant/generic';
 
+import { Role } from '@/types/user';
+
 export class Listing {
   _id?: string;
   createdBy?: string;
@@ -27,6 +29,10 @@ export class Listing {
   createdAt?: Timestamp;
   status?: Status;
   deleted?: boolean;
+  hasFollowUp?: boolean;
+  followUpUpdatedAt?: Timestamp;
+  followUpUpdatedBy?: string;
+  followUpUpdatedRole?: Role;
 }
 
 export type Status = (typeof status)[number];

@@ -7,7 +7,7 @@ import {
 } from 'flowbite-react';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import {
   Controller,
@@ -26,7 +26,11 @@ import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import ActionFailedView from '@/components/modal-views/ActionFailed';
 import ActionSuccessView from '@/components/modal-views/ActionSuccess';
+import CreateFollowUpComment from '@/components/modal-views/CreateFollowUpComment';
 import DeleteSubmissionView from '@/components/modal-views/DeleteSubmissionView';
+import ViewFollowUpComment, {
+  ViewSingleFollowUpComment,
+} from '@/components/modal-views/ViewFollowUpComment';
 
 import {
   allStates,
@@ -219,8 +223,9 @@ const contactPersonInputProps: (TextInputProps & { roles?: Role[] } & {
 
 export default AuthGuardHOC(() => {
   const user = useContext(UserContext);
+  const g = useContext(GeneralModalContext);
   const router = useRouter();
-  const { id, mode } = router.query;
+  const { id, mode, followUp } = router.query;
   const [submissionDoc, , error] = useDocument(
     id ? FirestoreService.getDocRef(`listings/${id}`) : undefined,
     {}
@@ -231,11 +236,41 @@ export default AuthGuardHOC(() => {
   );
   const [isEditing, setIsEditing] = useState(false);
 
+  const openCreateFollowUps = useCallback(() => {
+    if (g) {
+      g.setContent(<CreateFollowUpComment />);
+      g.setIsOpen(true);
+    }
+  }, [g]);
+
+  const openViewFollowUps = useCallback(() => {
+    if (g) {
+      g.setContent(<ViewFollowUpComment l={submission} />);
+      g.setIsOpen(true);
+    }
+  }, [submission, g]);
+
   useEffect(() => {
     if (mode) {
       setIsEditing(mode === 'edit');
     }
   }, [mode]);
+
+  useEffect(() => {
+    if (g) {
+      if (followUp === 'create') {
+        openCreateFollowUps();
+      }
+    }
+  }, [followUp, g, openCreateFollowUps]);
+
+  useEffect(() => {
+    if (g) {
+      if (submission && followUp === 'view') {
+        openCreateFollowUps();
+      }
+    }
+  }, [followUp, submission, g, openCreateFollowUps]);
 
   const {
     register,
@@ -379,6 +414,13 @@ export default AuthGuardHOC(() => {
               >
                 Edit Information
               </Button>
+              <Button
+                type='button'
+                onClick={openCreateFollowUps}
+                variant='outline'
+              >
+                Create Follow Ups
+              </Button>
             </div>
           )}
         </div>
@@ -515,55 +557,61 @@ export default AuthGuardHOC(() => {
               ))}
             </div>
           </div>
-          <div className='w-full rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4 xl:max-w-sm'>
-            <div className='mb-2 text-lg font-bold md:text-xl'>
-              Contact Information{' '}
-              <span className='text-[#819289]'>(If Found)</span>
+          <div className='flex w-full flex-col gap-4 xl:max-w-sm'>
+            <div className='rounded border-2 border-[#DAE9E0] bg-[#FDFFFE] p-4'>
+              <div className='mb-4 text-lg font-bold md:text-xl'>
+                Contact Information{' '}
+                <span className='text-[#819287]'>(If Found)</span>
+              </div>
+              <div className='flex flex-col gap-y-8'>
+                {contactPersonInputProps
+                  .filter(
+                    (v) => !v.roles || v.roles.includes(user?.role ?? 'user')
+                  )
+                  .map((v, i) => (
+                    <div className='min-w-[13rem] flex-1' key={i}>
+                      <label htmlFor={`${i}`} className='text-[#819287]'>
+                        {v.title}
+                        {v.required && <span className='text-red-502'>*</span>}
+                      </label>
+                      {v.name === 'channel' ? (
+                        <Select
+                          disabled={!isEditing}
+                          key={i}
+                          className='capitalize'
+                          {...register(v.name, v.options)}
+                        >
+                          <option value='select'>Select Channel</option>
+                          {channel.map((channel, i) => {
+                            return (
+                              <option key={i} value={channel}>
+                                {channel}
+                              </option>
+                            );
+                          })}
+                        </Select>
+                      ) : (
+                        <TextInput
+                          disabled={!isEditing}
+                          id={v.name}
+                          type={v.type}
+                          placeholder={v.placeholder}
+                          {...register(v.name ?? `${i}`, v.options)}
+                        />
+                      )}
+                      {v.name && errors[v.name]?.message && (
+                        <div className='text-red-502 text-xs font-bold'>
+                          {errors[v.name]?.message?.toString()}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
             </div>
-            <div className='flex flex-col gap-y-6'>
-              {contactPersonInputProps
-                .filter(
-                  (v) => !v.roles || v.roles.includes(user?.role ?? 'user')
-                )
-                .map((v, i) => (
-                  <div className='min-w-[15rem] flex-1' key={i}>
-                    <label htmlFor={`${i}`} className='text-[#819289]'>
-                      {v.title}
-                      {v.required && <span className='text-red-500'>*</span>}
-                    </label>
-                    {v.name === 'channel' ? (
-                      <Select
-                        disabled={!isEditing}
-                        key={i}
-                        className='capitalize'
-                        {...register(v.name, v.options)}
-                      >
-                        <option value='select'>Select Channel</option>
-                        {channel.map((channel, i) => {
-                          return (
-                            <option key={i} value={channel}>
-                              {channel}
-                            </option>
-                          );
-                        })}
-                      </Select>
-                    ) : (
-                      <TextInput
-                        disabled={!isEditing}
-                        id={v.name}
-                        type={v.type}
-                        placeholder={v.placeholder}
-                        {...register(v.name ?? `${i}`, v.options)}
-                      />
-                    )}
-                    {v.name && errors[v.name]?.message && (
-                      <div className='text-xs font-bold text-red-500'>
-                        {errors[v.name]?.message?.toString()}
-                      </div>
-                    )}
-                  </div>
-                ))}
-            </div>
+            <ViewSingleFollowUpComment
+              l={submission}
+              viewMoreClicked={openViewFollowUps}
+            />
           </div>
         </div>
       </form>
