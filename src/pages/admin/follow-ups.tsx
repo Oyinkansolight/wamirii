@@ -168,7 +168,8 @@ export default AuthGuardHOC(() => {
     } else {
       setSortByField({ fieldName: 'createdAt', direction: 'desc' });
     }
-  }, [idx, setSortByField]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idx]);
 
   return (
     <DashboardLayout2>

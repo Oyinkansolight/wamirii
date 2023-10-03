@@ -262,7 +262,8 @@ export default AuthGuardHOC(() => {
         openCreateFollowUps();
       }
     }
-  }, [followUp, g, openCreateFollowUps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [followUp]);
 
   useEffect(() => {
     if (g) {
@@ -270,7 +271,8 @@ export default AuthGuardHOC(() => {
         openCreateFollowUps();
       }
     }
-  }, [followUp, submission, g, openCreateFollowUps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [followUp, submission]);
 
   const {
     register,
