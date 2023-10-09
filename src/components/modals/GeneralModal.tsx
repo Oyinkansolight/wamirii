@@ -50,7 +50,7 @@ export default function GeneralModal({
                 <Dialog.Panel
                   className={clsxm(
                     'w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all',
-                    size === 'lg' ? 'max-w-4xl' : ''
+                    size === 'lg' ? 'max-w-6xl' : ''
                   )}
                 >
                   <div className=' flex min-h-[15rem] flex-col'>

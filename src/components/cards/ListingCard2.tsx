@@ -30,9 +30,11 @@ export const ListingCardFromId2 = ({ listingId }: { listingId: string }) => {
 const ListingCard2 = ({
   listing,
   className,
+  onClick,
   size = 'lg',
   fromAlgolia = false,
 }: {
+  onClick?: () => void;
   listing?: Listing;
   size?: 'sm' | 'lg';
   className?: string;
@@ -76,7 +78,13 @@ const ListingCard2 = ({
         size === 'sm' ? 'text-xs' : 'text-base',
         className
       )}
-      onClick={() => router.push(`/submissions/${listing?._id}`)}
+      onClick={() => {
+        if (onClick) {
+          onClick();
+          return;
+        }
+        router.push(`/submissions/${listing?._id}`);
+      }}
     >
       <div
         style={{ aspectRatio: 0.8897, position: 'relative' }}

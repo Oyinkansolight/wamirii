@@ -1,6 +1,8 @@
 import { QueryConstraint } from 'firebase/firestore';
 import Link from 'next/link';
-import { useContext, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BsFillCalendarFill, BsSearch } from 'react-icons/bs';
 import { IoLocation } from 'react-icons/io5';
@@ -10,6 +12,8 @@ import { useCollectionPaginated } from '@/hooks/useCollectionPaginated';
 
 import Button from '@/components/buttons/Button';
 import ListingCard2 from '@/components/cards/ListingCard2';
+import SubmissionView from '@/components/cards/SubmissionView';
+import { GeneralModalContext } from '@/components/layout/GeneralModalLayout';
 import { UserContext } from '@/components/layout/GetAuthStatus';
 import VolunteerHeader from '@/components/layout/VolunteerHeader';
 import SettingsView from '@/components/views/settings/SettingsView';
@@ -22,13 +26,22 @@ import Genders from '../../../public/svg/genders.svg';
 
 export default AuthGuardHOC(() => {
   const [idx, setIdx] = useState<number>(0);
+  const router = useRouter();
+  const params = useSearchParams();
+
+  useEffect(() => {
+    setIdx(Number.parseInt(params.get('tab') ?? '0'));
+  }, [params]);
 
   return (
     <div className='px-24'>
       <VolunteerHeader
         onProfileClicked={() => setIdx(4)}
         idx={idx}
-        setIdx={setIdx}
+        setIdx={(index) => {
+          router.push(`${router.pathname}?tab=${index}`);
+          setIdx(index);
+        }}
       />
       <TabContent idx={idx} />
     </div>
@@ -38,15 +51,21 @@ export default AuthGuardHOC(() => {
 const labels = [
   'My Statistics',
   'My Submissions',
+  'Follow Up',
   'All Submissions',
   'Found Persons',
 ];
 function TabContent({ idx }: { idx: number }) {
   const user = useContext(UserContext);
+  const g = useContext(GeneralModalContext);
   const c = useMemo(() => {
     const constraints: QueryConstraint[][] = [
       [],
       FirestoreService.getListingsConstraints({ createdBy: user?.id }),
+      FirestoreService.getListingsConstraints({
+        hasFollowUp: true,
+        createdBy: user?.id,
+      }),
       [],
       FirestoreService.getListingsConstraints({ status: 'found-alive' }),
     ];
@@ -67,7 +86,7 @@ function TabContent({ idx }: { idx: number }) {
       )}
       {idx === 0 ? (
         <VolunteerStatistics />
-      ) : idx === 4 ? (
+      ) : idx === 5 ? (
         <SettingsView />
       ) : (
         <div>
@@ -137,6 +156,16 @@ function TabContent({ idx }: { idx: number }) {
               <ListingCard2
                 size='sm'
                 key={i}
+                onClick={() => {
+                  g?.setContent(
+                    <SubmissionView
+                      listing={{ ...v.data(), _id: v.id }}
+                      onClose={() => g.setIsOpen(false)}
+                    />,
+                    'lg'
+                  );
+                  g?.setIsOpen(true);
+                }}
                 listing={{ ...v.data(), _id: v.id }}
               />
             ))}

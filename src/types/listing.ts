@@ -43,6 +43,7 @@ export function toLocalListings(l: Listing) {
     missingSince: l.missingSince?.toDate()?.toISOString() ?? null,
     missingDateReported: l.missingDateReported?.toDate()?.toISOString() ?? null,
     createdAt: l.createdAt?.toDate()?.toISOString() ?? null,
+    followUpUpdatedAt: l.followUpUpdatedAt?.toDate().toISOString() ?? null,
   };
   return c;
 }

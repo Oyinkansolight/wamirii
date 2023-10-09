@@ -33,6 +33,7 @@ export default function VolunteerHeader({
         items={[
           { label: 'Statistics' },
           { label: 'My Submissions' },
+          { label: 'Follow Ups' },
           { label: 'All Submissions' },
           { label: 'Found Persons' },
         ]}

@@ -46,7 +46,7 @@ export function ViewSingleFollowUpComment({
 }) {
   const [data] = useCollectionData(FirestoreService.getFollowUpsQuery(l, 1));
 
-  return (
+  return data?.length ? (
     <div className='flex flex-col gap-2'>
       <div className='flex items-center justify-between'>
         <div className='text-lg font-bold'>Comments</div>
@@ -60,6 +60,8 @@ export function ViewSingleFollowUpComment({
         ))}
       </div>
     </div>
+  ) : (
+    <div />
   );
 }
 
